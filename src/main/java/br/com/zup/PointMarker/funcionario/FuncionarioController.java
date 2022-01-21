@@ -27,7 +27,7 @@ public class FuncionarioController {
         this.modelMapper = modelMapper;
     }
 
-    @PutMapping("/cargo/{id}")
+    @PutMapping("/salario/{id}")
     @ResponseStatus(HttpStatus.OK)
     public AtualizarSalarioSaidaDTO atualizarSalarioDTO (@PathVariable int id, @RequestBody AtualizarSalarioEntradaDTO atualizarSalarioEntradaDTO){
 
