@@ -1,5 +1,10 @@
 package br.com.zup.PointMarker.funcionario;
 
+import org.springframework.data.repository.CrudRepository;
 
-public class FuncionarioRepository {
+import java.util.List;
+
+public interface FuncionarioRepository extends CrudRepository<Funcionario, Integer> {
+
+    List<Funcionario> findAllById (Integer id);
 }
