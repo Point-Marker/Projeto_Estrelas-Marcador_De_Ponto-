@@ -9,8 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AtualizarSalarioDTO {
+public class AtualizarSalarioEntradaDTO {
 
     private double salario;
-
 }
