@@ -9,8 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AtualizarFuncionarioDTO {
+public class AtualizarSalarioDTO {
 
-    private Cargo cargo;
-    private Status status;
+    private double salario;
+
 }
