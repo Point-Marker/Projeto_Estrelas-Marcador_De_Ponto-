@@ -1,7 +1,7 @@
 # Projeto_Estrelas-Marcador_De_Pontos
 <hr/>
 
-#Cadastro de Funcionários
+# Cadastro de Funcionários
 <hr/>
 
 - /funcionario
