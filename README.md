@@ -1,2 +1,27 @@
-# Projeto_Estrelas-Marcador_De_Ponto-
-Este repositório se trata do último projeto feito no Estrelas do dia 20.01.2022 - 11.02.2022
+# Projeto_Estrelas-Marcador_De_Pontos
+<hr/>
+
+#Cadastro de Funcionários
+<hr/>
+
+- /funcionario
+- POST
+- JSON
+
+
+    {
+        "nome":"John",
+        "cpf":"235.957.810-31",
+        "salario":900,
+        "dataDeNascimento":"1999-01-01",
+        "cargo": {
+        "id":1
+        }
+    }
+
+
+- Resposta 201
+
+<hr/>
+
+
