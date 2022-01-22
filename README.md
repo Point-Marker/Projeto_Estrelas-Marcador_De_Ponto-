@@ -8,7 +8,7 @@
 - POST
 - JSON
 
- ```
+ ```json
    {
         "nome":"John",
         "cpf":"235.957.810-31",
