@@ -48,9 +48,19 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void buscarFuncionarioPorIdTeste (){
-        Mockito.when(funcionarioRepository.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(funcionario));
+    public void given_repository_returns_employ_when_buscarFuncionario_called_then_expected_employ_must_be_equals_returned_employed() {
+        // Given - Arrange
+        Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
+
+        // When - Act
         Funcionario funcionarioEncontrado = funcionarioService.buscarFuncionario(1);
-        Assertions.assertNotEquals(funcionarioEncontrado, null);
+
+        // Then - Assert
+        Assertions.assertEquals(funcionarioEncontrado, funcionario);
+    }
+
+    @Test
+    public void given_repository_returns_empty_when_buscarFuncionario_called_then_expected_throw_exception() {
+
     }
 }
