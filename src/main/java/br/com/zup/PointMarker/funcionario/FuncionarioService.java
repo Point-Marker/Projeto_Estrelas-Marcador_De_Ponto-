@@ -8,4 +8,8 @@ public class FuncionarioService {
 
   @Autowired
     private FuncionarioRepository funcionarioRepository;
+
+  public Iterable<Funcionario> exibirFuncionarios(){
+    return funcionarioRepository.findAll();
+  }
 }
