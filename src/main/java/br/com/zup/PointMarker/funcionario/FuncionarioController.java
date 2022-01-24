@@ -29,7 +29,7 @@ public class FuncionarioController {
 
     @PutMapping("/salario/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public AtualizarSalarioSaidaDTO atualizarSalarioDTO (@PathVariable int id, @RequestBody AtualizarSalarioEntradaDTO atualizarSalarioEntradaDTO){
+    public AtualizarSalarioSaidaDTO atualizarSalario (@PathVariable int id, @RequestBody AtualizarSalarioEntradaDTO atualizarSalarioEntradaDTO){
 
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
          if (funcionario != null){
@@ -37,4 +37,8 @@ public class FuncionarioController {
          }
          return modelMapper.map(funcionario, AtualizarSalarioSaidaDTO.class);
     }
+
+    @PutMapping("/cargo/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AtualizarCargoSaidaDTO atualizarCargo
 }
