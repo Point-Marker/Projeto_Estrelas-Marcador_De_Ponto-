@@ -12,4 +12,9 @@ public class FuncionarioController {
     @Autowired
     private FuncionarioService funcionarioService;
 
+    @GetMapping
+    public Iterable<Funcionario> exibirTodosFuncionarios() {
+        return funcionarioService.exibirFuncionarios();
+    }
+
 }
