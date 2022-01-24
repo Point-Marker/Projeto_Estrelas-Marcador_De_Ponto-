@@ -1,5 +1,8 @@
 package br.com.zup.PointMarker.funcionario;
 
+import br.com.zup.PointMarker.cargo.Cargo;
+import br.com.zup.PointMarker.dtos.AtualizarCargoEntradaDTO;
+import br.com.zup.PointMarker.dtos.AtualizarCargoSaidaDTO;
 import br.com.zup.PointMarker.dtos.AtualizarSalarioEntradaDTO;
 import br.com.zup.PointMarker.dtos.AtualizarSalarioSaidaDTO;
 import org.modelmapper.ModelMapper;
@@ -29,16 +32,21 @@ public class FuncionarioController {
 
     @PutMapping("/salario/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public AtualizarSalarioSaidaDTO atualizarSalario (@PathVariable int id, @RequestBody AtualizarSalarioEntradaDTO atualizarSalarioEntradaDTO){
+    public AtualizarSalarioSaidaDTO atualizarSalario(@PathVariable int id, @RequestBody AtualizarSalarioEntradaDTO atualizarSalarioEntradaDTO) {
 
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
-         if (funcionario != null){
+        if (funcionario != null) {
             funcionario.setSalario(atualizarSalarioEntradaDTO.getSalario());
-         }
-         return modelMapper.map(funcionario, AtualizarSalarioSaidaDTO.class);
+        }
+        return modelMapper.map(funcionario, AtualizarSalarioSaidaDTO.class);
     }
 
     @PutMapping("/cargo/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public AtualizarCargoSaidaDTO atualizarCargo
+    public AtualizarCargoSaidaDTO atualizarCargo(@PathVariable int id, @RequestBody AtualizarCargoEntradaDTO atualizarCargoEntradaDTO) {
+
+        Funcionario funcionario = funcionarioService.atualizarCargo(id, atualizarCargoEntradaDTO.getCargo());
+
+        return modelMapper.map(funcionario, AtualizarCargoSaidaDTO.class);
+    }
 }
