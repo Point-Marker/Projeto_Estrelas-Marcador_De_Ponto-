@@ -2,6 +2,7 @@ package br.com.zup.PointMarker.funcionario;
 
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
+import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,6 @@ public class FuncionarioServiceTeste {
 
     private Funcionario funcionario;
     private Cargo cargo;
-    private Status status;
 
 
     @BeforeEach
@@ -48,7 +48,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void given_repository_returns_employ_when_buscarFuncionario_called_then_expected_employ_must_be_equals_returned_employed() {
+    public void buscarFuncionarioCaminhoVerdadeiro() {
         // Given - Arrange
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
 
@@ -60,7 +60,13 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void given_repository_returns_empty_when_buscarFuncionario_called_then_expected_throw_exception() {
+    public void buscarFuncionarioCaminhoFalso() {
+        Mockito.when(funcionarioRepository.findById(2)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(FuncionarioNaoEncontradoException.class, () -> {
+            funcionarioService.buscarFuncionario(2);
+        });
+
 
     }
 }
