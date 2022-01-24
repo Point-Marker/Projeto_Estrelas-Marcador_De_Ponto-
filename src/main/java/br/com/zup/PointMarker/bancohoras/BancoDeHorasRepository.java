@@ -1,4 +1,6 @@
 package br.com.zup.PointMarker.bancohoras;
 
-public class BancoDeHorasRepository {
+import org.springframework.data.repository.CrudRepository;
+
+public interface BancoDeHorasRepository extends CrudRepository<BancoDeHoras, Integer> {
 }

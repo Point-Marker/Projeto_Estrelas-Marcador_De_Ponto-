@@ -1,5 +1,6 @@
 package br.com.zup.PointMarker.funcionario;
 
+import br.com.zup.PointMarker.bancohoras.BancoDeHoras;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
 import lombok.Getter;
@@ -27,5 +28,5 @@ public class Funcionario {
     private LocalDate dataDeNascimento;
     @OneToOne
     private Cargo cargo;
-    private Status status; //No Cadastrado o status fica como true (padrao)
+    private Status status;
 }
