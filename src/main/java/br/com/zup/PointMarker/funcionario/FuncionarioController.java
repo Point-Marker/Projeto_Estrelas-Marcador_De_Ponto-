@@ -59,7 +59,7 @@ public class FuncionarioController {
 
         Status status = modelMapper.map(atualizarStatusEntradaDTO, Status.class);
 
-        Funcionario funcionario = funcionarioService.atualizarStatus(id, status);
+        funcionarioService.atualizarStatus(id, status);
 
         return modelMapper.map(status, AtualizarStatusSaidaDTO.class);
     }
