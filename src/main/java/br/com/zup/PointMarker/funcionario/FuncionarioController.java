@@ -5,6 +5,9 @@ import br.com.zup.PointMarker.dtos.AtualizarCargoEntradaDTO;
 import br.com.zup.PointMarker.dtos.AtualizarCargoSaidaDTO;
 import br.com.zup.PointMarker.dtos.AtualizarSalarioEntradaDTO;
 import br.com.zup.PointMarker.dtos.AtualizarSalarioSaidaDTO;
+import br.com.zup.PointMarker.dtos.AtualizarStatusEntradaDTO;
+import br.com.zup.PointMarker.dtos.AtualizarStatusSaidaDTO;
+import br.com.zup.PointMarker.enums.Status;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,5 +51,16 @@ public class FuncionarioController {
         Funcionario funcionario = funcionarioService.atualizarCargo(id, atualizarCargoEntradaDTO.getCargo());
 
         return modelMapper.map(funcionario, AtualizarCargoSaidaDTO.class);
+    }
+
+    @PutMapping("/status/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AtualizarStatusSaidaDTO atualizarStatus(@PathVariable int id, @RequestBody AtualizarStatusEntradaDTO atualizarStatusEntradaDTO){
+
+        Status status = modelMapper.map(atualizarStatusEntradaDTO, Status.class);
+
+        Funcionario funcionario = funcionarioService.atualizarStatus(id, status);
+
+        return modelMapper.map(status, AtualizarStatusSaidaDTO.class);
     }
 }
