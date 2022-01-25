@@ -110,4 +110,16 @@ public class FuncionarioControllerTeste {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
+    @Test
+    public void atualizarStatusCaminhoPositivo() throws Exception {
+        String json = objectMapper.writeValueAsString(funcionario);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/funcionario/status/{id}", 1)
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }
