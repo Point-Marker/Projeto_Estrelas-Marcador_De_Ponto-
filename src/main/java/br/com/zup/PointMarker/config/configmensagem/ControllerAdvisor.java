@@ -38,15 +38,15 @@ public class ControllerAdvisor {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public MensagemDeErro manipularMensagegParaDataDeNascimentoForaDoPadraoBrasileiro() {
 
         return new MensagemDeErro("Digite a sua data de nascimento, " +
-                "de acordo com o exemplo a seguir: 23/06/2001.");
+                "de acordo com o seguinte formato: 23/06/2001 -> dd/MM/AAAA.");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public MensagemDeErro manipularMensagegParaCPFRepetido() {
 
         return new MensagemDeErro("Este CPF Já Está Cadastrado.");
