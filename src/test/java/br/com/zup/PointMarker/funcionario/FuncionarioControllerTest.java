@@ -17,9 +17,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDate;
-import java.time.Month;
-
 @WebMvcTest({FuncionarioController.class, Conversor.class})
 public class FuncionarioControllerTest {
 
@@ -50,7 +47,7 @@ public class FuncionarioControllerTest {
         funcionario = new Funcionario();
         funcionario.setNome("Afonso");
         funcionario.setCpf("159.307.330-58");
-        funcionario.setDataDeNascimento(LocalDate.of(1999, Month.JULY, 12));
+//        funcionario.setDataDeNascimento(LocalDate.of(1999, Month.JULY, 12));
         funcionario.setSalario(cargo.getSalario());
         funcionario.setCargo(cargo);
         funcionario.setStatus(Status.ATIVO);
