@@ -2,10 +2,10 @@ package br.com.zup.PointMarker.funcionario;
 
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -22,10 +22,11 @@ public class Funcionario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
+    @Column(unique = true)
     private String cpf;
     private double salario;
     private LocalDate dataDeNascimento;
-    @OneToOne
+    @OneToOne(targetEntity = Cargo.class)
     private Cargo cargo;
-    private Status status; //No Cadastrado o status fica como true (padrao)
+    private Status status;
 }
