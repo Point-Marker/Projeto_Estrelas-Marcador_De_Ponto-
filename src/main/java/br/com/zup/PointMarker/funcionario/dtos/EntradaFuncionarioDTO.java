@@ -20,7 +20,7 @@ import java.time.LocalDate;
 public class EntradaFuncionarioDTO {
 
     @NotBlank(message = "{nome.null}")
-    @Size(min = 20, max = 30, message = "{nome.size}")
+    @Size(min = 10, max = 30, message = "{nome.size}")
     private String nome;
     @CPF
     private String cpf;
