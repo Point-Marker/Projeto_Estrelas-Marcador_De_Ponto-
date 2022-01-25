@@ -64,4 +64,13 @@ public class FuncionarioServiceTeste {
             funcionarioService.buscarFuncionario(2);
         });
     }
+
+    @Test
+    public void atualizarSalarioCaminhoPositivo() {
+        Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
+
+        Funcionario funcionario = funcionarioService.atualizarSalario(1, 700);
+
+        Assertions.assertEquals(funcionario.getSalario(),700);
+    }
 }

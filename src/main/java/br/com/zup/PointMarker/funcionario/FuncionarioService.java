@@ -30,8 +30,11 @@ public class FuncionarioService {
 
     public Funcionario atualizarSalario(int id, double salario) {
 
-        Funcionario funcionario = buscarFuncionario(id);
-        funcionario.setSalario(salario);
+       Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
+       optionalFuncionario.orElseThrow( () -> new FuncionarioNaoEncontradoException("Funcionário não encontrado."));
+
+       Funcionario funcionario = optionalFuncionario.get();
+       funcionario.setSalario(salario);
 
         return funcionario;
     }
