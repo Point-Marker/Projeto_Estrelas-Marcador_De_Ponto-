@@ -1,6 +1,7 @@
 package br.com.zup.PointMarker.funcionario;
 
 import br.com.zup.PointMarker.cargo.Cargo;
+import br.com.zup.PointMarker.dtos.AtualizarSalarioSaidaDTO;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,16 @@ public class FuncionarioService {
             throw new FuncionarioNaoEncontradoException("Funcionário não encontrado.");
         }
         return optionalFuncionario.get();
+    }
+
+    public Funcionario atualizarStatus(int id, double salario) {
+
+        Funcionario funcionario = buscarFuncionario(id);
+
+        if (funcionario != null) {
+            funcionario.setSalario(salario);
+        }
+        return funcionario;
     }
 
     public Funcionario atualizarCargo(int idFuncionario, Cargo idCargo) {
