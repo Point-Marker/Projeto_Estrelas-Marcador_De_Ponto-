@@ -31,17 +31,17 @@ public class FuncionarioService {
     public Funcionario atualizarSalario(int id, double salario) {
 
         Funcionario funcionario = buscarFuncionario(id);
+        funcionario.setSalario(salario);
 
-        if (funcionario != null) {
-            funcionario.setSalario(salario);
-        }
         return funcionario;
     }
 
     public Funcionario atualizarCargo(int idFuncionario, Cargo idCargo) {
         Funcionario funcionario = buscarFuncionario(idFuncionario);
-        funcionario.setCargo(idCargo);
 
+        if (funcionario != null) {
+            funcionario.setSalario(idCargo.getSalario());
+        }
         return funcionario;
     }
 

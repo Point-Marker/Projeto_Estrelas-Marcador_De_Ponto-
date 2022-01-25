@@ -49,13 +49,10 @@ public class FuncionarioServiceTeste {
 
     @Test
     public void buscarFuncionarioCaminhoVerdadeiro() {
-        // Given - Arrange
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
 
-        // When - Act
         Funcionario funcionarioEncontrado = funcionarioService.buscarFuncionario(1);
 
-        // Then - Assert
         Assertions.assertEquals(funcionarioEncontrado, funcionario);
     }
 
@@ -66,7 +63,5 @@ public class FuncionarioServiceTeste {
         Assertions.assertThrows(FuncionarioNaoEncontradoException.class, () -> {
             funcionarioService.buscarFuncionario(2);
         });
-
-
     }
 }
