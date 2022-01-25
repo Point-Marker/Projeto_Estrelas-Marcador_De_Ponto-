@@ -17,6 +17,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.LocalDate;
+import java.time.Month;
+
 @WebMvcTest({FuncionarioController.class, Conversor.class})
 public class FuncionarioControllerTest {
 
@@ -45,9 +48,9 @@ public class FuncionarioControllerTest {
         cargo.setId(1);
 
         funcionario = new Funcionario();
-        funcionario.setNome("Afonso");
+        funcionario.setNome("Afonso J. de Andrade");
         funcionario.setCpf("159.307.330-58");
-//        funcionario.setDataDeNascimento(LocalDate.of(1999, Month.JULY, 12));
+        funcionario.setDataDeNascimento(LocalDate.of(1999, Month.JULY, 12));
         funcionario.setSalario(cargo.getSalario());
         funcionario.setCargo(cargo);
         funcionario.setStatus(Status.ATIVO);
@@ -59,11 +62,60 @@ public class FuncionarioControllerTest {
 
         String json = objectMapper.writeValueAsString(funcionario);
 
-        ResultActions resultadoDaRequisicao = mockMvc.
-                perform(MockMvcRequestBuilders.post("/funcionario")
-                        .content(json)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+        ResultActions resultadoDaRequisicao =
+                mockMvc.perform(MockMvcRequestBuilders.post("/funcionario")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isCreated());
     }
+
+    @Test
+    public void testarCadastroDeFuncionario_QuandoOCampoNomeEstiverVazioNaoDeveCadastrarOFuncionario() throws Exception {
+
+        Mockito.when(funcionarioService.salvarFuncionario(funcionario)).thenReturn(funcionario);
+        funcionario.setNome("");
+
+        String json = objectMapper.writeValueAsString(funcionario);
+
+
+        ResultActions resultActions =
+                mockMvc.perform(MockMvcRequestBuilders.post("/funcionario")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void testarCadastroDeFuncionario_QuandoONomeNaoEstiverComDezCaracters() throws Exception {
+
+        Mockito.when(funcionarioService.salvarFuncionario(funcionario)).thenReturn(funcionario);
+        funcionario.setNome("Alonso");
+
+        String json = objectMapper.writeValueAsString(funcionario);
+
+
+        ResultActions resultActions =
+                mockMvc.perform(MockMvcRequestBuilders.post("/funcionario")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void testarCadastroDeFuncionario_QuandoONomeNaoEstiverComMenosDoQueTrintaCaracters() throws Exception {
+
+        Mockito.when(funcionarioService.salvarFuncionario(funcionario)).thenReturn(funcionario);
+        funcionario.setNome("Alonso Conrado Francisco De Juapinba Nevez Meireles");
+
+        String json = objectMapper.writeValueAsString(funcionario);
+
+
+        ResultActions resultActions =
+                mockMvc.perform(MockMvcRequestBuilders.post("/funcionario")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
+    }
+
 
 }
