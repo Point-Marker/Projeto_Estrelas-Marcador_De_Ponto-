@@ -28,7 +28,7 @@ public class FuncionarioService {
         return optionalFuncionario.get();
     }
 
-    public Funcionario atualizarStatus(int id, double salario) {
+    public Funcionario atualizarSalario(int id, double salario) {
 
         Funcionario funcionario = buscarFuncionario(id);
 
