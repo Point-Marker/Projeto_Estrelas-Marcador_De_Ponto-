@@ -1,6 +1,5 @@
-package br.com.zup.PointMarker.funcionario;
+package br.com.zup.PointMarker.funcionario.dtos;
 
-import br.com.zup.PointMarker.bancohoras.BancoDeHoras;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -8,28 +7,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
-
 
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
-@Table(name = "funcionarios")
-public class Funcionario {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @NotBlank(message = "{nome.null}")
+public class FuncionarioSaidaDTO {
     private String nome;
-    @Column(unique = true)
     private String cpf;
     private double salario;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataDeNascimento;
-    @ManyToOne
     private Cargo cargo;
     private Status status;
+
 }

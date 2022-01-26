@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface FuncionarioRepository extends CrudRepository<Funcionario, Integer> {
 
-    List<Funcionario> findAllById (Integer id);
 }
