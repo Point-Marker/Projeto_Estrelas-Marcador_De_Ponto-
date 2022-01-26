@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.zup.PointMarker.cargo.CargoRepository;
-import br.com.zup.PointMarker.enums.Status;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.List;
 
 @Service
 public class FuncionarioService {
-
+  
     private FuncionarioRepository funcionarioRepository;
     private CargoRepository cargoRepository;
 
@@ -35,7 +35,15 @@ public class FuncionarioService {
         return funcionarioRepository.save(entradafuncionario);
     }
   
-      public Funcionario buscarFuncionario(int id) {
+    public List<Funcionario> exibirFuncionarios(Status status) {
+        if (status != null){
+            return funcionarioRepository.findAllByStatus(status);
+        }
+
+        return (List<Funcionario>) funcionarioRepository.findAll();
+    }
+  
+     public Funcionario buscarFuncionario(int id) {
         Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
 
         if (optionalFuncionario.isEmpty()) {
@@ -63,6 +71,7 @@ public class FuncionarioService {
         }
         return funcionario;
     }
+  
     public Funcionario atualizarStatus(int id, Status status) {
 
         Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);

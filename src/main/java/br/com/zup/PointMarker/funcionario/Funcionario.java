@@ -32,4 +32,5 @@ public class Funcionario {
     @ManyToOne
     private Cargo cargo;
     private Status status;
+
 }

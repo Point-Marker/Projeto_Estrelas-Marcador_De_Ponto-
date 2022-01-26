@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import java.util.Optional;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/funcionario")
@@ -46,6 +51,12 @@ public class FuncionarioController {
         funcionarioService.salvarFuncionario(funcionario);
         return modelMapper.map(funcionario, FuncionarioSaidaDTO.class);
     }
+
+     @GetMapping
+     public List<Funcionario> exibirFuncionariosAtivos(@RequestParam (required = false) Status status) {
+        return funcionarioService.exibirFuncionarios(status);
+    }
+
   
     @PutMapping("/salario/{id}")
     @ResponseStatus(HttpStatus.OK)
