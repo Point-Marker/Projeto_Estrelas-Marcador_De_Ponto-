@@ -29,4 +29,5 @@ public class Funcionario {
     @OneToOne
     private Cargo cargo;
     private Status status;
+
 }
