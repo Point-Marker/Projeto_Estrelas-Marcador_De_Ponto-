@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 @SpringBootTest
 public class FuncionarioServiceTest {
@@ -49,8 +50,14 @@ public class FuncionarioServiceTest {
     }
 
     @Test
-    public void testarExibicaoDeFuncionarios(){
-        Mockito.when(funcionarioRepository.findAll()).thenReturn((Iterable<Funcionario>) funcionario);
+    public void testarExibicaoDeFuncionarios() {
+        status = null;
+        Mockito.when(funcionarioRepository.findAll()).thenReturn(List.of(funcionario));
+
+        List<Funcionario> funcionariosExibidos = funcionarioService.exibirFuncionarios(status);
+        for (Funcionario funcionarioReferencia : funcionariosExibidos) {
+            Assertions.assertEquals(funcionarioReferencia,funcionario);
         }
+    }
 
 }
