@@ -75,5 +75,4 @@ public class FuncionarioServiceTest {
         Mockito.verify(funcionarioRepository, Mockito.times(0)).save(funcionario);
 
     }
-
 }
