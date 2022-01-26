@@ -66,11 +66,28 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void atualizarSalarioCaminhoPositivo() {
+    public void atualizarSalarioCaminhoVerdadeiro() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
 
         Funcionario funcionario = funcionarioService.atualizarSalario(1, 700);
 
         Assertions.assertEquals(funcionario.getSalario(),700);
+    }
+
+    @Test
+    public void atualizarStatusCaminhoVerdadeiro() {
+        Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
+
+        Funcionario funcionario = funcionarioService.atualizarStatus(1, Status.ATIVO);
+
+        Assertions.assertEquals(funcionario.getStatus(), Status.ATIVO);
+    }
+
+    @Test
+    public void atualizarStatusCaminhoFalso() {
+        Mockito.when(funcionarioRepository.findById(2)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(FuncionarioNaoEncontradoException.class, () ->
+                funcionarioService.atualizarStatus(Mockito.anyInt(), Status.ATIVO));
     }
 }

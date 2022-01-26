@@ -47,11 +47,15 @@ public class FuncionarioService {
         }
         return funcionario;
     }
-
     public Funcionario atualizarStatus(int id, Status status) {
-        Funcionario funcionario = buscarFuncionario(id);
+
+        Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
+        optionalFuncionario.orElseThrow( () -> new FuncionarioNaoEncontradoException("Funcionário não encontrado."));
+
+        Funcionario funcionario = optionalFuncionario.get();
         funcionario.setStatus(status);
 
         return funcionario;
     }
+
 }
