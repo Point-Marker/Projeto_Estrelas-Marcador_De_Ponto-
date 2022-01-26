@@ -1,35 +1,30 @@
-package br.com.zup.PointMarker.funcionario;
+package br.com.zup.PointMarker.funcionario.dtos;
 
-import br.com.zup.PointMarker.bancohoras.BancoDeHoras;
 import br.com.zup.PointMarker.cargo.Cargo;
-import br.com.zup.PointMarker.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.br.CPF;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
-
 
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
-@Table(name = "funcionarios")
-public class Funcionario {
+public class EntradaFuncionarioDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     @NotBlank(message = "{nome.null}")
+    @Size(min = 10, max = 30, message = "{nome.size}")
     private String nome;
-    @Column(unique = true)
+    @CPF
     private String cpf;
-    private double salario;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataDeNascimento;
-    @ManyToOne
     private Cargo cargo;
-    private Status status;
 }

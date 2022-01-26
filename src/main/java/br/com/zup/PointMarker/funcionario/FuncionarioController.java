@@ -5,31 +5,46 @@ import br.com.zup.PointMarker.dtos.AtualizarCargoEntradaDTO;
 import br.com.zup.PointMarker.dtos.AtualizarCargoSaidaDTO;
 import br.com.zup.PointMarker.dtos.AtualizarSalarioEntradaDTO;
 import br.com.zup.PointMarker.dtos.AtualizarSalarioSaidaDTO;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import br.com.zup.PointMarker.funcionario.dtos.EntradaFuncionarioDTO;
+import br.com.zup.PointMarker.funcionario.dtos.FuncionarioSaidaDTO;
+
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/funcionario")
 public class FuncionarioController {
-
+   
     private FuncionarioService funcionarioService;
-    private ModelMapper modelMapper;
 
+    private ModelMapper modelMapper;
+      
     @Autowired
-    public FuncionarioController(FuncionarioService funcionarioService, ModelMapper modelMapper) {
+     public FuncionarioController(FuncionarioService funcionarioService, ModelMapper modelMapper) {
         this.funcionarioService = funcionarioService;
         this.modelMapper = modelMapper;
     }
 
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public FuncionarioSaidaDTO cadastrarFuncionario(@RequestBody @Valid EntradaFuncionarioDTO entradaFuncionarioDTO) {
+        Funcionario funcionario = modelMapper.map(entradaFuncionarioDTO, Funcionario.class);
+        funcionarioService.salvarFuncionario(funcionario);
+        return modelMapper.map(funcionario, FuncionarioSaidaDTO.class);
+    }
+  
     @PutMapping("/salario/{id}")
     @ResponseStatus(HttpStatus.OK)
     public AtualizarSalarioSaidaDTO atualizarSalario(@PathVariable int id, @RequestBody AtualizarSalarioEntradaDTO atualizarSalarioEntradaDTO) {
@@ -48,5 +63,6 @@ public class FuncionarioController {
         Funcionario funcionario = funcionarioService.atualizarCargo(id, atualizarCargoEntradaDTO.getCargo());
 
         return modelMapper.map(funcionario, AtualizarCargoSaidaDTO.class);
-    }
-}
+  }
+  
+} 
