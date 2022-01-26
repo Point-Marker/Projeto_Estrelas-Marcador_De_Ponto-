@@ -1,14 +1,18 @@
-package br.com.zup.PointMarker;
+package br.com.zup.PointMarker.funcionarioTest;
 
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -43,5 +47,10 @@ public class FuncionarioServiceTest {
         funcionario.setCargo(cargo);
         funcionario.setStatus(Status.ATIVO);
     }
+
+    @Test
+    public void testarExibicaoDeFuncionarios(){
+        Mockito.when(funcionarioRepository.findAll()).thenReturn((Iterable<Funcionario>) funcionario);
+        }
 
 }
