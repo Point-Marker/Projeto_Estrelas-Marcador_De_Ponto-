@@ -75,6 +75,14 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
+    public void atualizarSalarioCaminhoFalso() {
+        Mockito.when(funcionarioRepository.findById(2)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(FuncionarioNaoEncontradoException.class, () ->
+                funcionarioService.atualizarSalario(1, 700));
+    }
+
+    @Test
     public void atualizarStatusCaminhoVerdadeiro() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
 
