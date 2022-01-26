@@ -5,9 +5,11 @@ import br.com.zup.PointMarker.dtos.AtualizarCargoEntradaDTO;
 import br.com.zup.PointMarker.dtos.AtualizarCargoSaidaDTO;
 import br.com.zup.PointMarker.dtos.AtualizarSalarioEntradaDTO;
 import br.com.zup.PointMarker.dtos.AtualizarSalarioSaidaDTO;
+import br.com.zup.PointMarker.dtos.AtualizarStatusEntradaDTO;
+import br.com.zup.PointMarker.dtos.AtualizarStatusSaidaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.EntradaFuncionarioDTO;
 import br.com.zup.PointMarker.funcionario.dtos.FuncionarioSaidaDTO;
-
+import br.com.zup.PointMarker.enums.Status;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,9 +52,9 @@ public class FuncionarioController {
     public AtualizarSalarioSaidaDTO atualizarSalario(@PathVariable int id, @RequestBody AtualizarSalarioEntradaDTO atualizarSalarioEntradaDTO) {
 
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
-        if (funcionario != null) {
-            funcionario.setSalario(atualizarSalarioEntradaDTO.getSalario());
-        }
+
+        funcionarioService.atualizarSalario(id, atualizarSalarioEntradaDTO.getSalario());
+
         return modelMapper.map(funcionario, AtualizarSalarioSaidaDTO.class);
     }
 
@@ -63,6 +65,16 @@ public class FuncionarioController {
         Funcionario funcionario = funcionarioService.atualizarCargo(id, atualizarCargoEntradaDTO.getCargo());
 
         return modelMapper.map(funcionario, AtualizarCargoSaidaDTO.class);
-  }
-  
-} 
+    }
+
+    @PutMapping("/status/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AtualizarStatusSaidaDTO atualizarStatus(@PathVariable int id, @RequestBody AtualizarStatusEntradaDTO atualizarStatusEntradaDTO){
+
+        Status status = modelMapper.map(atualizarStatusEntradaDTO, Status.class);
+
+        funcionarioService.atualizarStatus(id, status);
+
+        return modelMapper.map(status, AtualizarStatusSaidaDTO.class);
+    }
+}

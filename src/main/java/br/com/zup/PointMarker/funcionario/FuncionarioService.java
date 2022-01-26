@@ -1,6 +1,8 @@
 package br.com.zup.PointMarker.funcionario;
 
 import br.com.zup.PointMarker.cargo.Cargo;
+import br.com.zup.PointMarker.dtos.AtualizarSalarioSaidaDTO;
+import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,10 +44,34 @@ public class FuncionarioService {
         return optionalFuncionario.get();
     }
 
-    public Funcionario atualizarCargo(int idFuncionario, Cargo idCargo) {
-        Funcionario funcionario = buscarFuncionario(idFuncionario);
-        funcionario.setCargo(idCargo);
+    public Funcionario atualizarSalario(int id, double salario) {
+
+       Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
+       optionalFuncionario.orElseThrow( () -> new FuncionarioNaoEncontradoException("Funcionário não encontrado."));
+
+       Funcionario funcionario = optionalFuncionario.get();
+       funcionario.setSalario(salario);
 
         return funcionario;
     }
+
+    public Funcionario atualizarCargo(int idFuncionario, Cargo idCargo) {
+        Funcionario funcionario = buscarFuncionario(idFuncionario);
+
+        if (funcionario != null) {
+            funcionario.setSalario(idCargo.getSalario());
+        }
+        return funcionario;
+    }
+    public Funcionario atualizarStatus(int id, Status status) {
+
+        Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
+        optionalFuncionario.orElseThrow( () -> new FuncionarioNaoEncontradoException("Funcionário não encontrado."));
+
+        Funcionario funcionario = optionalFuncionario.get();
+        funcionario.setStatus(status);
+
+        return funcionario;
+    }
+
 }

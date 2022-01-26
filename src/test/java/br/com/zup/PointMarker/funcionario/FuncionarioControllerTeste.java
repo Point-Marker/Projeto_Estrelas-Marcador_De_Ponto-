@@ -86,4 +86,52 @@ public class FuncionarioControllerTeste {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
+    @Test
+    public void atualizarCargoCaminhoPositivo() throws Exception {
+        String json = objectMapper.writeValueAsString(funcionario);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/funcionario/cargo/{id}", 1)
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void atualizarCargoCaminhoNegativo() throws Exception {
+        String json = objectMapper.writeValueAsString(funcionario);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/funcionario/cargo/{id}", "")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void atualizarStatusCaminhoPositivo() throws Exception {
+        String json = objectMapper.writeValueAsString(funcionario);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/funcionario/status/{id}", 1)
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void atualizarStatusCaminhoNegativo() throws Exception {
+        String json = objectMapper.writeValueAsString(funcionario);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/funcionario/status/{id}", "")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }
