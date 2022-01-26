@@ -29,7 +29,7 @@ public class Funcionario {
     private String cpf;
     private double salario;
     private LocalDate dataDeNascimento;
-    @OneToOne(targetEntity = Cargo.class)
+    @ManyToOne
     private Cargo cargo;
     private Status status;
 }
