@@ -12,4 +12,5 @@ public class FuncionarioService {
   public Iterable<Funcionario> exibirFuncionarios(){
     return funcionarioRepository.findAll();
   }
+
 }
