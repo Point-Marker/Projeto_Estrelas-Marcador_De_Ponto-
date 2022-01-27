@@ -1,13 +1,11 @@
 package br.com.zup.PointMarker.bancohoras;
 
 
+import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class BancoDeHorasService {
@@ -22,52 +20,60 @@ public class BancoDeHorasService {
 
 
     public BancoDeHoras salvarHorasTrabalhadas(BancoDeHoras bancoDeHoras) {
-        Funcionario funcionario = funcionarioService.buscarFuncionario(bancoDeHoras.getId_funcionario().getId());
 
-        try {
-            if (verificarHorasTrabalhadadas(bancoDeHoras.getId_funcionario().getId(), bancoDeHoras)) {
-                bancoDeHoras.setId_funcionario(funcionario);
-            }
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Você já excedeu as horas trabalhadas.");
-        }
+        Funcionario funcionario = funcionarioService.buscarFuncionario(bancoDeHoras.getId_funcionario().getId());
+        if (verificarHorasTrabalhadadas(bancoDeHoras.getId_funcionario().getId(), bancoDeHoras))
+            bancoDeHoras.setId_funcionario(funcionario);
+
         return bancoDeHorasRepository.save(bancoDeHoras);
+
     }
 
     public boolean verificarHorasTrabalhadadas(int id, BancoDeHoras bancoDeHoras) {
-        List<BancoDeHoras> listaDeHorasTrabalhadas = new ArrayList<>();
 
-        for (BancoDeHoras referencia : listaDeHorasTrabalhadas) {
-            if (bancoDeHoras.getId() == id) {
-                listaDeHorasTrabalhadas.add(bancoDeHoras);
-                return true;
-            } else {
-                if (calcularHorasDeTrabalho(bancoDeHoras) > 10) {
-                    return false;
-                }
-            }
+        if (calcularHorasDeTrabalho(bancoDeHoras) <= 50) {
+            return true;
+        } else {
+            return false;
         }
-        return true;
     }
 
     public int calcularHorasDeTrabalho(BancoDeHoras bancoDeHoras) {
-        final int LIMITE_DE_HORAS_TRABALHADAS = 30;
 
-        int entrada = bancoDeHoras.getEntrada().getHour();
-        int saida = bancoDeHoras.getSaida().getHour();
-        int horasTrabalhadas = 0;
-        int capturarHoras = 0;
+        try {
+            if (validarHorasLancadas(bancoDeHoras)) {
+                final int LIMITE_DE_HORAS_TRABALHADAS = 50;
+                int entrada = bancoDeHoras.getEntrada().getHour();
+                int saida = bancoDeHoras.getSaida().getHour();
+                int horasTrabalhadas = 0;
+                int capturarHoras = 0;
 
-        for (int i = entrada; i <= saida; i++) {
-            horasTrabalhadas += 1;
-            capturarHoras = horasTrabalhadas;
-        }
-        totalHorasTrabalhadas += capturarHoras;
+                for (int i = entrada; i <= saida; i++) {
+                    horasTrabalhadas += 1;
+                    if (horasTrabalhadas > 8) {
+                        throw new RuntimeException("Não É Permitido Cadastrar Mais Do Que 8 Horas Trabalhadas.");
+                    }
+                    capturarHoras = horasTrabalhadas;
+                }
+                totalHorasTrabalhadas += capturarHoras;
 
-        if (totalHorasTrabalhadas <= LIMITE_DE_HORAS_TRABALHADAS) {
+                if (totalHorasTrabalhadas > LIMITE_DE_HORAS_TRABALHADAS) {
+                    throw new RuntimeException("Você já excedeu as horas trabalhadas.");
+                }
+            }
             return totalHorasTrabalhadas;
+        } catch (HorarioInvalidoException horarioInvalido) {
+            throw new HorarioInvalidoException(horarioInvalido.getMessage());
+        } catch (RuntimeException exception) {
+            throw new RuntimeException(exception.getMessage());
         }
+    }
 
-        throw new RuntimeException("Você já excedeu as horas trabalhadas.");
+    public boolean validarHorasLancadas(BancoDeHoras bancoDeHoras) {
+
+        if (bancoDeHoras.getEntrada().isAfter(bancoDeHoras.getSaida())) {
+            throw new HorarioInvalidoException("A Hora De Entrada Não Pode ser Depois da Hora de Saida Do Trabalho.");
+        }
+        return true;
     }
 }
