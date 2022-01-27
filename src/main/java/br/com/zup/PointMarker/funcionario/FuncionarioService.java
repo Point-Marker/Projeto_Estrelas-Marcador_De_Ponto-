@@ -53,10 +53,7 @@ public class FuncionarioService {
 
     public Funcionario atualizarSalario(int id, double salario) {
 
-        Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
-        optionalFuncionario.orElseThrow(() -> new FuncionarioNaoEncontradoException("Funcionário não encontrado."));
-
-        Funcionario funcionario = optionalFuncionario.get();
+        Funcionario funcionario = buscarFuncionario(id);
         funcionario.setSalario(salario);
 
         funcionarioRepository.save(funcionario);
@@ -82,10 +79,7 @@ public class FuncionarioService {
 
     public Funcionario atualizarStatus(int id, Status status) {
 
-        Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
-        optionalFuncionario.orElseThrow(() -> new FuncionarioNaoEncontradoException("Funcionário não encontrado."));
-
-        Funcionario funcionario = optionalFuncionario.get();
+        Funcionario funcionario = buscarFuncionario(id);
         funcionario.setStatus(status);
 
         funcionarioRepository.save(funcionario);
