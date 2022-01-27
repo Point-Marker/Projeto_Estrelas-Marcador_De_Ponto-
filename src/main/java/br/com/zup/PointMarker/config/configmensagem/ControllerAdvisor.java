@@ -1,5 +1,6 @@
 package br.com.zup.PointMarker.config.configmensagem;
 
+import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativo;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -50,6 +51,12 @@ public class ControllerAdvisor {
     public MensagemDeErro manipularMensagegParaCPFRepetido() {
 
         return new MensagemDeErro("Este CPF Já Está Cadastrado.");
+    }
+
+    @ExceptionHandler(FuncionarioComStatusInativo.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro manipularMensagemDeErroParaFuncionarioComStatusInativ(FuncionarioComStatusInativo statusInativo) {
+        return new MensagemDeErro(statusInativo.getMessage());
     }
 
 }
