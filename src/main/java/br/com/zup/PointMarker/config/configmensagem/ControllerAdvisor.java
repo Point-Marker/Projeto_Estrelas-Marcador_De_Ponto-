@@ -3,6 +3,7 @@ package br.com.zup.PointMarker.config.configmensagem;
 import br.com.zup.PointMarker.exceptions.AumentoDeSalarioInvalidoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
+import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -71,5 +72,11 @@ public class ControllerAdvisor {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public MensagemDeErro manipularMensagemDeErroParaFuncionarioComStatusInativ(AumentoDeSalarioInvalidoException valorInvalido) {
         return new MensagemDeErro(valorInvalido.getMessage());
+    }
+
+    @ExceptionHandler(HorarioInvalidoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro manipularMensagemDeErroParaHorarioInvalido(HorarioInvalidoException horarioInvalido) {
+        return new MensagemDeErro(horarioInvalido.getMessage());
     }
 }
