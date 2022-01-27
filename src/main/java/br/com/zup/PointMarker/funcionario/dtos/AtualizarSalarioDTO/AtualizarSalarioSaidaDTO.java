@@ -1,4 +1,4 @@
-package br.com.zup.PointMarker.dtos;
+package br.com.zup.PointMarker.funcionario.dtos.AtualizarSalarioDTO;
 
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;

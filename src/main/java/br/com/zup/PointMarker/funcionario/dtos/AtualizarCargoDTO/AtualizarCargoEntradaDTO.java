@@ -1,4 +1,4 @@
-package br.com.zup.PointMarker.dtos;
+package br.com.zup.PointMarker.funcionario.dtos.AtualizarCargoDTO;
 
 import br.com.zup.PointMarker.cargo.Cargo;
 import lombok.Getter;
