@@ -1,4 +1,4 @@
-package br.com.zup.PointMarker.dtos;
+package br.com.zup.PointMarker.funcionario.dtos;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
