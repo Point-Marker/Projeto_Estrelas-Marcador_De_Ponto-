@@ -31,6 +31,7 @@ public class Funcionario {
     private LocalDate dataDeNascimento;
     @ManyToOne
     private Cargo cargo;
+    @Enumerated(EnumType.STRING)
     private Status status;
 
 }

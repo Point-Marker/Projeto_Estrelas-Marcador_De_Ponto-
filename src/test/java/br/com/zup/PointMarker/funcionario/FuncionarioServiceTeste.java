@@ -1,6 +1,7 @@
 package br.com.zup.PointMarker.funcionario;
 
 import br.com.zup.PointMarker.cargo.Cargo;
+import br.com.zup.PointMarker.cargo.CargoRepository;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +15,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @SpringBootTest
@@ -22,11 +25,15 @@ public class FuncionarioServiceTeste {
     @MockBean
     private FuncionarioRepository funcionarioRepository;
 
+    @MockBean
+    private CargoRepository cargoRepository;
+
     @Autowired
     private FuncionarioService funcionarioService;
 
     private Funcionario funcionario;
     private Cargo cargo;
+    private Status status;
 
 
     @BeforeEach
@@ -46,6 +53,34 @@ public class FuncionarioServiceTeste {
         funcionario.setSalario(cargo.getSalario());
         funcionario.setCargo(cargo);
         funcionario.setStatus(Status.ATIVO);
+    }
+
+    @Test
+    public void testarCadastroDeFuncionarioCaminhoBom() {
+        Mockito.when(cargoRepository.findById(1)).thenReturn(Optional.of(cargo));
+        Mockito.when(funcionarioRepository.save(Mockito.any(Funcionario.class))).thenReturn(funcionario);
+
+        Funcionario funcionarioCadastrado = funcionarioService.salvarFuncionario(funcionario);
+
+        Mockito.verify(funcionarioRepository, Mockito.times(1)).save(funcionario);
+        Assertions.assertEquals(funcionarioCadastrado, funcionario);
+    }
+
+    @Test
+    public void testarCadastroDeFuncionarioCaminhoRuim_CargoNaoEncontrado() {
+        var cargoNaoCadastrado = new Cargo();
+        cargoNaoCadastrado.setId(2);
+
+        funcionario.setCargo(cargoNaoCadastrado);
+
+        Mockito.when(cargoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+
+        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
+            funcionarioService.salvarFuncionario(funcionario);
+        });
+
+        Mockito.verify(funcionarioRepository, Mockito.times(0)).save(funcionario);
+
     }
 
     @Test
@@ -117,5 +152,29 @@ public class FuncionarioServiceTeste {
 
         Assertions.assertThrows(FuncionarioNaoEncontradoException.class, () ->
                 funcionarioService.atualizarStatus(Mockito.anyInt(), Status.ATIVO));
+    }
+
+    @Test
+    public void testarExibicaoDeFuncionarios_quandoStatusForNulo() {
+        status = null;
+        Mockito.when(funcionarioRepository.findAll()).thenReturn(List.of(funcionario));
+
+        List<Funcionario> funcionariosExibidos = funcionarioService.exibirFuncionarios(status);
+        for (Funcionario funcionarioReferencia : funcionariosExibidos) {
+            Assertions.assertEquals(funcionarioReferencia, funcionario);
+        }
+        Mockito.verify(funcionarioRepository, Mockito.times(0)).findAllByStatus(status);
+    }
+
+    @Test
+    public void testarExibicaDeFuncionarios_quandoStatusNaoForNulo(){
+        status = Status.ATIVO;
+        Mockito.when(funcionarioRepository.findAllByStatus(status)).thenReturn(List.of(funcionario));
+
+        List<Funcionario> funcionariosAtivos = funcionarioService.exibirFuncionarios(status);
+        for (Funcionario funcionarioReferencia: funcionariosAtivos) {
+            Assertions.assertEquals(funcionarioReferencia.getStatus(), Status.ATIVO);
+        }
+        Mockito.verify(funcionarioRepository, Mockito.times(0)).findAll();
     }
 }

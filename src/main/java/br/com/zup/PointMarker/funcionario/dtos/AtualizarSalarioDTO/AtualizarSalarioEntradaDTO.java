@@ -1,3 +1,4 @@
+
 package br.com.zup.PointMarker.funcionario.dtos.AtualizarSalarioDTO;
 
 import lombok.Getter;
