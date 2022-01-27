@@ -24,6 +24,7 @@ public class FuncionarioController {
     public FuncionarioSaidaDTO cadastrarFuncionario(@RequestBody @Valid EntradaFuncionarioDTO entradaFuncionarioDTO) {
         Funcionario funcionario = modelMapper.map(entradaFuncionarioDTO, Funcionario.class);
         funcionarioService.salvarFuncionario(funcionario);
-        return modelMapper.map(funcionario, FuncionarioSaidaDTO.class);
+        FuncionarioSaidaDTO funcionarioSaidaDTO = modelMapper.map(funcionario, FuncionarioSaidaDTO.class);
+        return funcionarioSaidaDTO;
     }
 }
