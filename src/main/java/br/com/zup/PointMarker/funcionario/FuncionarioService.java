@@ -6,7 +6,6 @@ import br.com.zup.PointMarker.enums.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -20,7 +19,7 @@ public class FuncionarioService {
     public Funcionario salvarFuncionario(Funcionario entradafuncionario) {
         Optional<Cargo> cargoOptional = cargoRepository.findById(entradafuncionario.getCargo().getId());
         entradafuncionario.setCargo(cargoOptional.get());
-        cargoOptional.orElseThrow(NoSuchElementException::new);
+        cargoOptional.orElseThrow();
 
         entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
         entradafuncionario.setStatus(Status.ATIVO);
