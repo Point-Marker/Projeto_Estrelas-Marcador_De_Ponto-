@@ -1,7 +1,6 @@
 package br.com.zup.PointMarker.funcionario;
 
 import br.com.zup.PointMarker.cargo.Cargo;
-import br.com.zup.PointMarker.component.Conversor;
 import br.com.zup.PointMarker.enums.Status;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,25 +19,24 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 import java.time.Month;
 
-@WebMvcTest({FuncionarioController.class, Conversor.class})
-public class FuncionarioControllerTest {
+@WebMvcTest(FuncionarioController.class)
+public class FuncionarioControllerTeste {
 
     @MockBean
     private FuncionarioService funcionarioService;
+    @MockBean
+    private ModelMapper modelMapper;
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private ModelMapper modelMapper;
-
     private ObjectMapper objectMapper;
     private Funcionario funcionario;
     private Cargo cargo;
-    private Status status;
 
     @BeforeEach
     public void setUp() {
+
         objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
 
@@ -48,7 +46,8 @@ public class FuncionarioControllerTest {
         cargo.setId(1);
 
         funcionario = new Funcionario();
-        funcionario.setNome("Afonso J. de Andrade");
+        funcionario.setId(1);
+        funcionario.setNome("Afonso Benedito de Souza   ");
         funcionario.setCpf("159.307.330-58");
         funcionario.setDataDeNascimento(LocalDate.of(1999, Month.JULY, 12));
         funcionario.setSalario(cargo.getSalario());
@@ -117,5 +116,75 @@ public class FuncionarioControllerTest {
                         .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
     }
 
+    @Test
+    public void atualizarSalarioCaminhoPositivo() throws Exception {
+        String json = objectMapper.writeValueAsString(funcionario);
 
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/funcionario/salario/{id}", 1)
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void atualizarSalarioCaminhoNegativo() throws Exception {
+        String json = objectMapper.writeValueAsString(funcionario);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/funcionario/salario/{id}", "")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void atualizarCargoCaminhoPositivo() throws Exception {
+        String json = objectMapper.writeValueAsString(funcionario);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/funcionario/cargo/{id}", 1)
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void atualizarCargoCaminhoNegativo() throws Exception {
+        String json = objectMapper.writeValueAsString(funcionario);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/funcionario/cargo/{id}", "")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void atualizarStatusCaminhoPositivo() throws Exception {
+        String json = objectMapper.writeValueAsString(funcionario);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/funcionario/status/{id}", 1)
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void atualizarStatusCaminhoNegativo() throws Exception {
+        String json = objectMapper.writeValueAsString(funcionario);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/funcionario/status/{id}", "")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }

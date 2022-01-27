@@ -1,26 +1,34 @@
 package br.com.zup.PointMarker.bancohoras;
 
-import br.com.zup.PointMarker.bancohoras.dtos.BancoDeHorasResumoDTO;
+import br.com.zup.PointMarker.bancohoras.dtos.ResumoDTO.BancoDeHorasResumoDTO;
 import br.com.zup.PointMarker.funcionario.Funcionario;
-import br.com.zup.PointMarker.funcionario.dtos.ResumoFuncionarioDTO;
+import br.com.zup.PointMarker.funcionario.FuncionarioService;
+import br.com.zup.PointMarker.funcionario.dtos.ResumoDTO.ResumoFuncionarioDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/bancohoras")
 public class BancoDeHorasController {
 
-    @Autowired
     private BancoDeHorasService horasService;
 
-    @Autowired
     private ModelMapper modelMapper;
 
+    private FuncionarioService funcionarioService;
+
+
+    @Autowired
+    public BancoDeHorasController(FuncionarioService funcionarioService, ModelMapper modelMapper, BancoDeHorasService horasService) {
+        this.funcionarioService = funcionarioService;
+        this.modelMapper = modelMapper;
+        this.horasService = horasService;
+    }
+
     @PostMapping
+    @ResponseStatus(HttpStatus.OK)
     public BancoDeHorasResumoDTO cadastrarHorasTrabalhadas(@RequestBody BancoDeHoras bancoDeHoras) {
         BancoDeHoras bancoDeHorasSalvo = horasService.salvarHorasTrabalhadas(bancoDeHoras);
         Funcionario funcionario = bancoDeHorasSalvo.getId_funcionario();
@@ -31,4 +39,6 @@ public class BancoDeHorasController {
 
         return resumoDTO;
     }
+
+
 }
