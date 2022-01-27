@@ -1,31 +1,21 @@
 package br.com.zup.PointMarker.funcionario;
 
 import br.com.zup.PointMarker.cargo.Cargo;
-import br.com.zup.PointMarker.component.Conversor;
-import br.com.zup.PointMarker.dtos.AtualizarSalarioEntradaDTO;
-import br.com.zup.PointMarker.dtos.AtualizarSalarioSaidaDTO;
 import br.com.zup.PointMarker.enums.Status;
-import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Optional;
 
 @WebMvcTest(FuncionarioController.class)
 public class FuncionarioControllerTeste {
