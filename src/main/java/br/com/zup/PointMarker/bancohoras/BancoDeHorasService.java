@@ -24,12 +24,14 @@ public class BancoDeHorasService {
     public BancoDeHoras salvarHorasTrabalhadas(BancoDeHoras bancoDeHoras) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(bancoDeHoras.getId_funcionario().getId());
 
-        if (verificarHorasTrabalhadadas(bancoDeHoras.getId_funcionario().getId(), bancoDeHoras)) {
-            bancoDeHoras.setId_funcionario(funcionario);
-            return bancoDeHorasRepository.save(bancoDeHoras);
+        try {
+            if (verificarHorasTrabalhadadas(bancoDeHoras.getId_funcionario().getId(), bancoDeHoras)) {
+                bancoDeHoras.setId_funcionario(funcionario);
+            }
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Você já excedeu as horas trabalhadas.");
         }
-
-        throw new RuntimeException("Você já excedeu as horas trabalhadas.");
+        return bancoDeHorasRepository.save(bancoDeHoras);
     }
 
     public boolean verificarHorasTrabalhadadas(int id, BancoDeHoras bancoDeHoras) {
@@ -66,6 +68,6 @@ public class BancoDeHorasService {
             return totalHorasTrabalhadas;
         }
 
-        throw new RuntimeException("Excedeu");
+        throw new RuntimeException("Você já excedeu as horas trabalhadas.");
     }
 }
