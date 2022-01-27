@@ -1,5 +1,6 @@
 package br.com.zup.PointMarker.config.configmensagem;
 
+import br.com.zup.PointMarker.exceptions.AumentoDeSalarioInvalidoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -66,4 +67,9 @@ public class ControllerAdvisor {
         return new MensagemDeErro(naoEncontrado.getMessage());
     }
 
+    @ExceptionHandler(AumentoDeSalarioInvalidoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro manipularMensagemDeErroParaFuncionarioComStatusInativ(AumentoDeSalarioInvalidoException valorInvalido) {
+        return new MensagemDeErro(valorInvalido.getMessage());
+    }
 }
