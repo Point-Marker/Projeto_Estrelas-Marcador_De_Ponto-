@@ -3,6 +3,7 @@ package br.com.zup.PointMarker.funcionario;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.cargo.CargoRepository;
 import br.com.zup.PointMarker.enums.Status;
+import br.com.zup.PointMarker.exceptions.AumentoDeSalarioInvalidoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,27 +55,40 @@ public class FuncionarioService {
     public Funcionario atualizarSalario(int id, double salario) {
 
         Funcionario funcionario = buscarFuncionario(id);
-        funcionario.setSalario(salario);
+        if (funcionario.getStatus().equals(Status.ATIVO)) {
+            if (salario < funcionario.getCargo().getSalario() &
+                    funcionario.getSalario() == funcionario.getCargo().getSalario()) {
 
-        funcionarioRepository.save(funcionario);
+                funcionario.setSalario(salario + funcionario.getCargo().getSalario());
 
-        return funcionario;
+            } else if (salario < funcionario.getCargo().getSalario() &
+                    funcionario.getSalario() != funcionario.getCargo().getSalario()) {
+
+                funcionario.setSalario(funcionario.getSalario() + salario);
+
+            } else if (funcionario.getSalario() <= funcionario.getCargo().getSalario()) {
+                throw new AumentoDeSalarioInvalidoException("O aumento de salario não pode ser menor do que o salário " +
+                        "oferecido pelo cargo do Funcionario");
+            }
+            funcionarioRepository.save(funcionario);
+            return funcionario;
+        }
+        throw new FuncionarioComStatusInativoException("Este Funcionario está INATIVO.");
     }
 
     public Funcionario atualizarCargo(int idFuncionario, Cargo idCargo) {
         Funcionario funcionario = buscarFuncionario(idFuncionario);
 
-        if (funcionario != null) {
-            if (funcionario.getStatus() != Status.INATIVO) {
+        if (funcionario.getStatus().equals(Status.ATIVO)) {
 
-                Optional<Cargo> cargoOptional = cargoRepository.findById(idCargo.getId());
-                funcionario.setCargo(cargoOptional.get());
-                funcionario.setSalario(cargoOptional.get().getSalario());
-                funcionarioRepository.save(funcionario);
-            }
-            throw new FuncionarioComStatusInativoException("Este Funcionario Não Pode Ter O Seu Cargo Alterado, pois ele está INATIVO.");
+            Optional<Cargo> cargoOptional = cargoRepository.findById(idCargo.getId());
+            funcionario.setCargo(cargoOptional.get());
+            funcionario.setSalario(cargoOptional.get().getSalario());
+            funcionarioRepository.save(funcionario);
+            return funcionario;
         }
-        return funcionario;
+        throw new FuncionarioComStatusInativoException("Este Funcionario está INATIVO.");
+
     }
 
     public Funcionario atualizarStatus(int id, Status status) {
