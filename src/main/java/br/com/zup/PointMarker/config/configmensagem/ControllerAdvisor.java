@@ -1,5 +1,8 @@
 package br.com.zup.PointMarker.config.configmensagem;
 
+import br.com.zup.PointMarker.exceptions.AumentoDeSalarioInvalidoException;
+import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
+import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -52,4 +55,21 @@ public class ControllerAdvisor {
         return new MensagemDeErro("Este CPF Já Está Cadastrado.");
     }
 
+    @ExceptionHandler(FuncionarioComStatusInativoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro manipularMensagemDeErroParaFuncionarioComStatusInativ(FuncionarioComStatusInativoException statusInativo) {
+        return new MensagemDeErro(statusInativo.getMessage());
+    }
+
+    @ExceptionHandler(FuncionarioNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public MensagemDeErro manipularMensagemDeErroParaFuncionarioComStatusInativ(FuncionarioNaoEncontradoException naoEncontrado) {
+        return new MensagemDeErro(naoEncontrado.getMessage());
+    }
+
+    @ExceptionHandler(AumentoDeSalarioInvalidoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro manipularMensagemDeErroParaFuncionarioComStatusInativ(AumentoDeSalarioInvalidoException valorInvalido) {
+        return new MensagemDeErro(valorInvalido.getMessage());
+    }
 }
