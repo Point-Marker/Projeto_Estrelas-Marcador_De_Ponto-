@@ -1,9 +1,7 @@
 package br.com.zup.PointMarker.funcionario;
 
-import br.com.zup.PointMarker.bancohoras.BancoDeHoras;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +27,7 @@ public class Funcionario {
     private String cpf;
     private double salario;
     private LocalDate dataDeNascimento;
-    @OneToOne(targetEntity = Cargo.class)
+    @ManyToOne
     private Cargo cargo;
     private Status status;
 }
