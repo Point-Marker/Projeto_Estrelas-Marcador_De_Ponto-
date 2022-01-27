@@ -32,9 +32,9 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public MensagemDeErro manipularMensagegParaCargoNaoEncontrado() {
+    public ErroValidacao manipularMensagegParaCargoNaoEncontrado(NoSuchElementException exception) {
 
-        return new MensagemDeErro("Este Cargo Não Está Cadastrado.");
+        return new ErroValidacao(exception.getLocalizedMessage(), exception.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
