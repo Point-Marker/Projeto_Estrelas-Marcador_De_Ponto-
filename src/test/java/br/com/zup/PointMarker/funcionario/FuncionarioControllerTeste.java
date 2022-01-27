@@ -1,13 +1,8 @@
 package br.com.zup.PointMarker.funcionario;
 
 import br.com.zup.PointMarker.cargo.Cargo;
-import br.com.zup.PointMarker.component.Conversor;
-import br.com.zup.PointMarker.dtos.AtualizarSalarioEntradaDTO;
-import br.com.zup.PointMarker.dtos.AtualizarSalarioSaidaDTO;
 import br.com.zup.PointMarker.enums.Status;
-import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -20,12 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Optional;
 
 @WebMvcTest(FuncionarioController.class)
 public class FuncionarioControllerTeste {
@@ -55,12 +47,73 @@ public class FuncionarioControllerTeste {
 
         funcionario = new Funcionario();
         funcionario.setId(1);
-        funcionario.setNome("Afonso");
+        funcionario.setNome("Afonso Benedito de Souza   ");
         funcionario.setCpf("159.307.330-58");
         funcionario.setDataDeNascimento(LocalDate.of(1999, Month.JULY, 12));
         funcionario.setSalario(cargo.getSalario());
         funcionario.setCargo(cargo);
         funcionario.setStatus(Status.ATIVO);
+    }
+
+    @Test
+    public void testarCadastroDeFuncionario_QuandoTodosOsDadosForemEnviadosComSucesso() throws Exception {
+        Mockito.when(funcionarioService.salvarFuncionario(funcionario)).thenReturn(funcionario);
+
+        String json = objectMapper.writeValueAsString(funcionario);
+
+        ResultActions resultadoDaRequisicao =
+                mockMvc.perform(MockMvcRequestBuilders.post("/funcionario")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+    @Test
+    public void testarCadastroDeFuncionario_QuandoOCampoNomeEstiverVazioNaoDeveCadastrarOFuncionario() throws Exception {
+
+        Mockito.when(funcionarioService.salvarFuncionario(funcionario)).thenReturn(funcionario);
+        funcionario.setNome("");
+
+        String json = objectMapper.writeValueAsString(funcionario);
+
+
+        ResultActions resultActions =
+                mockMvc.perform(MockMvcRequestBuilders.post("/funcionario")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void testarCadastroDeFuncionario_QuandoONomeNaoEstiverComDezCaracters() throws Exception {
+
+        Mockito.when(funcionarioService.salvarFuncionario(funcionario)).thenReturn(funcionario);
+        funcionario.setNome("Alonso");
+
+        String json = objectMapper.writeValueAsString(funcionario);
+
+
+        ResultActions resultActions =
+                mockMvc.perform(MockMvcRequestBuilders.post("/funcionario")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void testarCadastroDeFuncionario_QuandoONomeNaoEstiverComMenosDoQueTrintaCaracters() throws Exception {
+
+        Mockito.when(funcionarioService.salvarFuncionario(funcionario)).thenReturn(funcionario);
+        funcionario.setNome("Alonso Conrado Francisco De Juapinba Nevez Meireles");
+
+        String json = objectMapper.writeValueAsString(funcionario);
+
+
+        ResultActions resultActions =
+                mockMvc.perform(MockMvcRequestBuilders.post("/funcionario")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
     }
 
     @Test
