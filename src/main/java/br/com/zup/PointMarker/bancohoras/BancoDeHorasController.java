@@ -41,12 +41,27 @@ public class BancoDeHorasController {
 
     @PutMapping("/marcador/entrada/{idFuncionario}")
     @ResponseStatus(HttpStatus.OK)
-    public AtualizarHorasTrabalhadasSaidaDTO atualizarHorasTrabalhadas(@PathVariable int idFuncionario,
-                                                                       @RequestParam @JsonFormat(pattern = "dd/mm/yyyy")
-                                                                               LocalDateTime data,
-                                                                       @RequestBody AtualizarHorasTrabalhadasEntradaDTO
-                                                                                   atualizarHorasTrabalhadasEntradaDTO) {
+    public AtualizarHorasTrabalhadasSaidaDTO atualizarHorasEntrada(@PathVariable int idFuncionario,
+                                                                   @RequestParam @JsonFormat(pattern = "dd/mm/yyyy")
+                                                                           LocalDateTime data,
+                                                                   @RequestBody AtualizarHorasTrabalhadasEntradaDTO
+                                                                           atualizarHorasTrabalhadasEntradaDTO) {
 
+        BancoDeHoras banco = modelMapper.map(atualizarHorasTrabalhadasEntradaDTO, BancoDeHoras.class);
+        bancoDeHorasService.atualizarHorasTrabalhadasEntrada(idFuncionario, data, banco);
+        return modelMapper.map(banco, AtualizarHorasTrabalhadasSaidaDTO.class);
+    }
 
+    @PutMapping("/marcador/saida/{idFuncionario}")
+    @ResponseStatus(HttpStatus.OK)
+    public AtualizarHorasTrabalhadasSaidaDTO atualizarHorasSaida(@PathVariable int idFuncionario,
+                                                                 @RequestParam @JsonFormat(pattern = "dd/mm/yyyy")
+                                                                         LocalDateTime data,
+                                                                 @RequestBody AtualizarHorasTrabalhadasEntradaDTO
+                                                                         atualizarHorasTrabalhadasEntradaDTO) {
+
+        BancoDeHoras banco = modelMapper.map(atualizarHorasTrabalhadasEntradaDTO, BancoDeHoras.class);
+        bancoDeHorasService.atualizarHorasTrabalhadasSaida(idFuncionario, data, banco);
+        return modelMapper.map(banco, AtualizarHorasTrabalhadasSaidaDTO.class);
     }
 }
