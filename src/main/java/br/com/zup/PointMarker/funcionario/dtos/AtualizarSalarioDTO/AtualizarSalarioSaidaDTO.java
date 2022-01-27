@@ -1,4 +1,5 @@
-package br.com.zup.PointMarker.funcionario.dtos;
+
+package br.com.zup.PointMarker.funcionario.dtos.AtualizarSalarioDTO;
 
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
@@ -9,9 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AtualizarStatusSaidaDTO {
-    private int id;
-    private String nome;
+public class AtualizarSalarioSaidaDTO {
     private Cargo cargo;
     private Status status;
+    private String salario;
 }

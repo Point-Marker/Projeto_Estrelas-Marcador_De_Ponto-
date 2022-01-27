@@ -1,4 +1,4 @@
-package br.com.zup.PointMarker.funcionario.dtos;
+package br.com.zup.PointMarker.funcionario.dtos.CadastroFuncionárioDTO;
 
 import br.com.zup.PointMarker.cargo.Cargo;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class EntradaFuncionarioDTO {
+public class CadastroFuncionarioEntradaDTO {
 
     @NotBlank(message = "{nome.null}")
     @Size(min = 10, max = 30, message = "{nome.size}")

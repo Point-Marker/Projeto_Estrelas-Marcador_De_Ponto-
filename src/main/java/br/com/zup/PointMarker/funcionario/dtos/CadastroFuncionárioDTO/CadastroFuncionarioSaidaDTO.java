@@ -1,4 +1,4 @@
-package br.com.zup.PointMarker.funcionario.dtos;
+package br.com.zup.PointMarker.funcionario.dtos.CadastroFuncionárioDTO;
 
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class FuncionarioSaidaDTO {
+public class CadastroFuncionarioSaidaDTO {
     private String nome;
     private String cpf;
     private double salario;
