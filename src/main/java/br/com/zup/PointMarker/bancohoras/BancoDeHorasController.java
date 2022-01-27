@@ -28,7 +28,7 @@ public class BancoDeHorasController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public BancoDeHorasResumoDTO cadastrarHorasTrabalhadas(@RequestBody BancoDeHoras bancoDeHoras) {
         BancoDeHoras bancoDeHorasSalvo = horasService.salvarHorasTrabalhadas(bancoDeHoras);
         Funcionario funcionario = bancoDeHorasSalvo.getId_funcionario();
