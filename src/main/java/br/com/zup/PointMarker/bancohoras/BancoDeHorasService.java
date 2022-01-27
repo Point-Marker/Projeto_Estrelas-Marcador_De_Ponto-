@@ -22,5 +22,4 @@ public class BancoDeHorasService {
         bancoDeHoras.setFuncionario(funcionario);
         return bancoDeHorasRepository.findAllByFuncionario(bancoDeHoras.getFuncionario());
     }
-
 }
