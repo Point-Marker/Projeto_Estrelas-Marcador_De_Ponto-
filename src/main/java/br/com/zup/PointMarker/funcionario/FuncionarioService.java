@@ -1,21 +1,21 @@
 package br.com.zup.PointMarker.funcionario;
 
 import br.com.zup.PointMarker.cargo.Cargo;
-import br.com.zup.PointMarker.dtos.AtualizarSalarioSaidaDTO;
+import br.com.zup.PointMarker.cargo.CargoRepository;
 import br.com.zup.PointMarker.enums.Status;
+import br.com.zup.PointMarker.exceptions.AumentoDeSalarioInvalidoException;
+import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.zup.PointMarker.cargo.CargoRepository;
-
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.List;
 
 @Service
 public class FuncionarioService {
-  
+
     private FuncionarioRepository funcionarioRepository;
     private CargoRepository cargoRepository;
 
@@ -34,16 +34,16 @@ public class FuncionarioService {
         entradafuncionario.setStatus(Status.ATIVO);
         return funcionarioRepository.save(entradafuncionario);
     }
-  
+
     public List<Funcionario> exibirFuncionarios(Status status) {
-        if (status != null){
+        if (status != null) {
             return funcionarioRepository.findAllByStatus(status);
         }
 
         return (List<Funcionario>) funcionarioRepository.findAll();
     }
-  
-     public Funcionario buscarFuncionario(int id) {
+
+    public Funcionario buscarFuncionario(int id) {
         Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
 
         if (optionalFuncionario.isEmpty()) {
@@ -54,31 +54,49 @@ public class FuncionarioService {
 
     public Funcionario atualizarSalario(int id, double salario) {
 
-       Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
-       optionalFuncionario.orElseThrow( () -> new FuncionarioNaoEncontradoException("Funcionário não encontrado."));
+        Funcionario funcionario = buscarFuncionario(id);
+        if (funcionario.getStatus().equals(Status.ATIVO)) {
+            if (salario < funcionario.getCargo().getSalario() &
+                    funcionario.getSalario() == funcionario.getCargo().getSalario()) {
 
-       Funcionario funcionario = optionalFuncionario.get();
-       funcionario.setSalario(salario);
+                funcionario.setSalario(salario + funcionario.getCargo().getSalario());
 
-        return funcionario;
+            } else if (salario < funcionario.getCargo().getSalario() &
+                    funcionario.getSalario() != funcionario.getCargo().getSalario()) {
+
+                funcionario.setSalario(funcionario.getSalario() + salario);
+
+            } else if (funcionario.getSalario() <= funcionario.getCargo().getSalario()) {
+                throw new AumentoDeSalarioInvalidoException("O aumento de salario não pode ser menor do que o salário " +
+                        "oferecido pelo cargo do Funcionario");
+            }
+            funcionarioRepository.save(funcionario);
+            return funcionario;
+        }
+        throw new FuncionarioComStatusInativoException("Este Funcionario está INATIVO.");
     }
 
     public Funcionario atualizarCargo(int idFuncionario, Cargo idCargo) {
         Funcionario funcionario = buscarFuncionario(idFuncionario);
 
-        if (funcionario != null) {
-            funcionario.setSalario(idCargo.getSalario());
+        if (funcionario.getStatus().equals(Status.ATIVO)) {
+
+            Optional<Cargo> cargoOptional = cargoRepository.findById(idCargo.getId());
+            funcionario.setCargo(cargoOptional.get());
+            funcionario.setSalario(cargoOptional.get().getSalario());
+            funcionarioRepository.save(funcionario);
+            return funcionario;
         }
-        return funcionario;
+        throw new FuncionarioComStatusInativoException("Este Funcionario está INATIVO.");
+
     }
-  
+
     public Funcionario atualizarStatus(int id, Status status) {
 
-        Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
-        optionalFuncionario.orElseThrow( () -> new FuncionarioNaoEncontradoException("Funcionário não encontrado."));
-
-        Funcionario funcionario = optionalFuncionario.get();
+        Funcionario funcionario = buscarFuncionario(id);
         funcionario.setStatus(status);
+
+        funcionarioRepository.save(funcionario);
 
         return funcionario;
     }
