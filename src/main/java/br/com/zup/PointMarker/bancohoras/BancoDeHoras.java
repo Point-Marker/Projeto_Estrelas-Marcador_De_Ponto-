@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @NoArgsConstructor
 @Getter
@@ -20,6 +22,8 @@ public class BancoDeHoras {
     private  int id;
     @OneToOne
     private Funcionario funcionario;
-    private LocalDateTime entrada;
-    private LocalDateTime saida;
+    private LocalDate diaDoTrabalho;
+    private LocalTime entrada;
+    private LocalTime saida;
+
 }
