@@ -43,4 +43,14 @@ public class BancoDeHorasService {
 
         return bancoDeHoras;
     }
+
+    public void removerHorasFuncionario (int id){
+        Funcionario funcionario = funcionarioService.buscarFuncionario(id);
+        funcionarioService.deletarHorasTrabalhadas(id);
+
+        BancoDeHoras banco = new BancoDeHoras();
+        banco.setId_funcionario(funcionario);
+        bancoDeHorasRepository.delete(banco);
+
+    }
 }
