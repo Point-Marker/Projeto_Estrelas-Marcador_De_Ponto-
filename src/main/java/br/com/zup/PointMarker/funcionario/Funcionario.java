@@ -34,5 +34,6 @@ public class Funcionario {
     @Enumerated(EnumType.STRING)
     private Status status;
     private int totalHorasTrabalhadas;
+    private int horasExtras;
 
 }
