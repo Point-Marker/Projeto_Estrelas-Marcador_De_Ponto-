@@ -9,7 +9,6 @@ import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -94,8 +93,13 @@ public class FuncionarioService {
     public Funcionario atualizarStatus(int id, Status status) {
 
         Funcionario funcionario = buscarFuncionario(id);
-        funcionario.setStatus(status);
+        if (status.equals(Status.INATIVO)) {
+            if (funcionario.getTotalDeHorasTrabalhadas() > 50) {
+                throw new RuntimeException("Este Funcionario Tem Mais de 50 Horas Trabalhadas Neste Mês");
+            }
+        }
 
+        funcionario.setStatus(status);
         funcionarioRepository.save(funcionario);
 
         return funcionario;
