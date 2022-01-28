@@ -1,6 +1,7 @@
 package br.com.zup.PointMarker.bancohoras;
 
-import br.com.zup.PointMarker.bancohoras.dtos.ResumoDTO.BancoDeHorasResumoDTO;
+import br.com.zup.PointMarker.bancohoras.dtos.ResumoSaidaDTO.BancoDeHorasResumoDTO;
+import br.com.zup.PointMarker.bancohoras.dtos.cadastrodebancodehorasdto.CadastroEntradaBancoDeHorasDTO;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import br.com.zup.PointMarker.funcionario.dtos.ResumoDTO.ResumoFuncionarioDTO;
@@ -29,16 +30,17 @@ public class BancoDeHorasController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BancoDeHorasResumoDTO cadastrarHorasTrabalhadas(@RequestBody BancoDeHoras bancoDeHoras) {
-        BancoDeHoras bancoDeHorasSalvo = horasService.salvarHorasTrabalhadas(bancoDeHoras);
-        Funcionario funcionario = bancoDeHorasSalvo.getId_funcionario();
+    public BancoDeHorasResumoDTO cadastrarHorasTrabalhadas(@RequestBody CadastroEntradaBancoDeHorasDTO
+                                                                   cadastroEntrada) {
+        BancoDeHoras bancoDeHorasSalvo = modelMapper.map(cadastroEntrada, BancoDeHoras.class);
+        horasService.salvarHorasTrabalhadas(bancoDeHorasSalvo);
+
+        Funcionario funcionario = bancoDeHorasSalvo.getFuncionario();
         ResumoFuncionarioDTO resumoFuncionarioDTO = modelMapper.map(funcionario, ResumoFuncionarioDTO.class);
 
-        BancoDeHorasResumoDTO resumoDTO = modelMapper.map(bancoDeHorasSalvo, BancoDeHorasResumoDTO.class);
-        resumoDTO.setFuncionario(resumoFuncionarioDTO);
+        BancoDeHorasResumoDTO resumoBancoDTO = modelMapper.map(bancoDeHorasSalvo, BancoDeHorasResumoDTO.class);
+        resumoBancoDTO.setFuncionario(resumoFuncionarioDTO);
 
-        return resumoDTO;
+        return resumoBancoDTO;
     }
-
-
 }
