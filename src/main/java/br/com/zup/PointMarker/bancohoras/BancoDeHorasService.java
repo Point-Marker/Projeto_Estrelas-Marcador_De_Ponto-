@@ -19,7 +19,8 @@ public class BancoDeHorasService {
     public List<BancoDeHoras> exibirHorasTrabalhadas(int id) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
         BancoDeHoras bancoDeHoras = new BancoDeHoras();
-        bancoDeHoras.setId_funcionario(funcionario);
-        return bancoDeHorasRepository.findAllById_Funcionario(bancoDeHoras.getId_funcionario());
+        bancoDeHoras.setFuncionario(funcionario);
+        return bancoDeHorasRepository.findAllByFuncionario(bancoDeHoras.getFuncionario());
     }
+
 }
