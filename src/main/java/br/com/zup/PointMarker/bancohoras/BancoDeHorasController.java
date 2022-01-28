@@ -2,35 +2,41 @@ package br.com.zup.PointMarker.bancohoras;
 
 import br.com.zup.PointMarker.bancohoras.dtos.ResumoDTO.BancoDeHorasResumoDTO;
 import br.com.zup.PointMarker.funcionario.Funcionario;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import br.com.zup.PointMarker.funcionario.dtos.ResumoDTO.ResumoFuncionarioDTO;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/bancohoras")
 public class BancoDeHorasController {
 
-    private BancoDeHorasService horasService;
+    private BancoDeHorasService bancoDeHorasService;
 
     private ModelMapper modelMapper;
 
-    private FuncionarioService funcionarioService;
-
 
     @Autowired
-    public BancoDeHorasController(FuncionarioService funcionarioService, ModelMapper modelMapper, BancoDeHorasService horasService) {
-        this.funcionarioService = funcionarioService;
+    public BancoDeHorasController(BancoDeHorasService bancoDeHorasService, ModelMapper modelMapper) {
+        this.bancoDeHorasService = bancoDeHorasService;
         this.modelMapper = modelMapper;
-        this.horasService = horasService;
-    }
+      }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BancoDeHorasResumoDTO cadastrarHorasTrabalhadas(@RequestBody BancoDeHoras bancoDeHoras) {
-        BancoDeHoras bancoDeHorasSalvo = horasService.salvarHorasTrabalhadas(bancoDeHoras);
+        BancoDeHoras bancoDeHorasSalvo = bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras);
         Funcionario funcionario = bancoDeHorasSalvo.getId_funcionario();
         ResumoFuncionarioDTO resumoFuncionarioDTO = modelMapper.map(funcionario, ResumoFuncionarioDTO.class);
 
@@ -40,5 +46,9 @@ public class BancoDeHorasController {
         return resumoDTO;
     }
 
+    @GetMapping("/{id}")
+    public List<BancoDeHoras> exibirBancoDeHorasFuncionario(@PathVariable int id){
+        return bancoDeHorasService.exibirHorasTrabalhadas(id);
+    }
 
 }
