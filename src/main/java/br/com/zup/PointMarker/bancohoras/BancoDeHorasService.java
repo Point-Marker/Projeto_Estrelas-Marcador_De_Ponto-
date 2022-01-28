@@ -49,7 +49,7 @@ public class BancoDeHorasService {
         funcionarioService.deletarHorasTrabalhadas(id);
 
         BancoDeHoras banco = new BancoDeHoras();
-        banco.setId_funcionario(funcionario);
+        banco.setFuncionario(funcionario);
         bancoDeHorasRepository.delete(banco);
 
     }
