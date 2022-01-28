@@ -19,7 +19,7 @@ public class BancoDeHoras {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  int id;
     @OneToOne
-    private Funcionario id_funcionario;
+    private Funcionario funcionario;
     private LocalDateTime entrada;
     private LocalDateTime saida;
 }
