@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface BancoDeHorasRepository extends CrudRepository<BancoDeHoras, Integer> {
 
-    List<BancoDeHoras> findAllById_Funcionario(Funcionario funcionario);
+    List<BancoDeHoras> findAllByFuncionario(Funcionario funcionario);
 
 }
