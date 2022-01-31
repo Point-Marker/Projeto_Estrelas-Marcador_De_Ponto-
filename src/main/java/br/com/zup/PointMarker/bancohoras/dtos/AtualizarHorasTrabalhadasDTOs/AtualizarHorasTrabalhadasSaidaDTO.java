@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @NoArgsConstructor
 @Getter
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 public class AtualizarHorasTrabalhadasSaidaDTO {
 
     private Funcionario id_funcionario;
-    private LocalDateTime entrada;
-    private LocalDateTime saida;
+    private LocalDate diaDoTrabalho;
+    private LocalTime entrada;
+    private LocalTime saida;
 }

@@ -5,7 +5,7 @@ import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -24,20 +24,20 @@ public class BancoDeHorasService {
         return bancoDeHorasRepository.findAllByFuncionario(bancoDeHoras.getFuncionario());
     }
 
-    public BancoDeHoras atualizarHorasTrabalhadasEntrada(int id, LocalDateTime data, BancoDeHoras bancoDeHoras) {
+    public BancoDeHoras atualizarHorasTrabalhadasEntrada(int id, LocalDate data, BancoDeHoras bancoDeHoras) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
 
-        BancoDeHoras banco = bancoDeHorasRepository.findByEntrada(data);
+        BancoDeHoras banco = bancoDeHorasRepository.findByDiaDoTrabalho(data);
         banco.setEntrada(bancoDeHoras.getEntrada());
         bancoDeHorasRepository.save(banco);
 
         return bancoDeHoras;
     }
 
-    public BancoDeHoras atualizarHorasTrabalhadasSaida(int id, LocalDateTime data, BancoDeHoras bancoDeHoras) {
+    public BancoDeHoras atualizarHorasTrabalhadasSaida(int id, LocalDate data, BancoDeHoras bancoDeHoras) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
 
-        BancoDeHoras banco = bancoDeHorasRepository.findByEntrada(data);
+        BancoDeHoras banco = bancoDeHorasRepository.findByDiaDoTrabalho(data);
         banco.setSaida(bancoDeHoras.getSaida());
         bancoDeHorasRepository.save(banco);
 
