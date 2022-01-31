@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.time.LocalDateTime;
 
@@ -35,6 +36,11 @@ public class BancoDeHorasController {
     @GetMapping("/{id}")
     public List<BancoDeHoras> exibirBancoDeHorasFuncionario(@PathVariable int id) {
         return bancoDeHorasService.exibirHorasTrabalhadas(id);
+    }
+
+    @GetMapping("/filtro")
+    public List<BancoDeHoras> exibirHorasExtrasTrabalhadas(@RequestParam LocalDate mesDeFiltro) {
+        return bancoDeHorasService.horasExtrasTrabalhadas(mesDeFiltro);
     }
 
     @PutMapping("/marcador/entrada/{idFuncionario}")
@@ -65,7 +71,8 @@ public class BancoDeHorasController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletarHorasFuncionario (@PathVariable int id){
+    public void deletarHorasFuncionario(@PathVariable int id) {
         bancoDeHorasService.removerHorasFuncionario(id);
     }
+
 }
