@@ -36,9 +36,42 @@
     },
     "status": "ATIVO"
 }
-``` 
-
-
+```
 <hr/>
+
+# Cadastro de Banco de Horas
+
+- /bancohoras
+- POST
+- JSON
+
+```json
+{
+    "id_funcionario":{
+      "id":1
+    },
+    "horaExtra": 1,
+    "entrada": "12/01/2001 08:00",
+    "saida": "12/01/2001 15:00"
+}
+```
+
+- Resposta 201
+- Saida
+```json
+{
+"funcionario": {
+"nome": "Afonso  Gonçalves Tevez",
+"cpf": "527.550.148-06",
+"cargo": {
+"id": 2,
+"nome": "Jovem Aprendiz",
+"salario": 800.0
+    }
+  },
+"entrada": "12/01/2001 08:00",
+"saida": "12/01/2001 15:00"
+}
+```
 
 
