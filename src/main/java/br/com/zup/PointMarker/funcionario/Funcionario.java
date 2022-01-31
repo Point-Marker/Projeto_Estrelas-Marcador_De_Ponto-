@@ -31,6 +31,6 @@ public class Funcionario {
     private Cargo cargo;
     @Enumerated(EnumType.STRING)
     private Status status;
-    private int totalDeHorasTrabalhadas;
-
+    private int totalHorasTrabalhadas;
+    private int horasExtras;
 }
