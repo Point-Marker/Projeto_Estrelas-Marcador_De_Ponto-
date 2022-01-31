@@ -34,7 +34,7 @@ public class FuncionarioService {
         return funcionarioRepository.save(entradafuncionario);
     }
 
-    public List<Funcionario> exibirFuncionarios(Status status) {
+    public List<Funcionario> exibirTodosFuncionarios(Status status) {
         if (status != null) {
             return funcionarioRepository.findAllByStatus(status);
         }
@@ -97,7 +97,7 @@ public class FuncionarioService {
 
         Funcionario funcionario = buscarFuncionario(id);
         if (status.equals(Status.INATIVO)) {
-            if (funcionario.getTotalDeHorasTrabalhadas() > 50) {
+            if (funcionario.getTotalHorasTrabalhadas() > 50) {
                 throw new RuntimeException("Este Funcionario Tem Mais de 50 Horas Trabalhadas Neste Mês");
             }
         }

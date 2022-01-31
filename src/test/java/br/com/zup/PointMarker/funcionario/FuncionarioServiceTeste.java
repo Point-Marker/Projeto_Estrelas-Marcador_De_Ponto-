@@ -7,7 +7,6 @@ import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -159,7 +158,7 @@ public class FuncionarioServiceTeste {
         status = null;
         Mockito.when(funcionarioRepository.findAll()).thenReturn(List.of(funcionario));
 
-        List<Funcionario> funcionariosExibidos = funcionarioService.exibirFuncionarios(status);
+        List<Funcionario> funcionariosExibidos = funcionarioService.exibirTodosFuncionarios(status);
         for (Funcionario funcionarioReferencia : funcionariosExibidos) {
             Assertions.assertEquals(funcionarioReferencia, funcionario);
         }
@@ -171,7 +170,7 @@ public class FuncionarioServiceTeste {
         status = Status.ATIVO;
         Mockito.when(funcionarioRepository.findAllByStatus(status)).thenReturn(List.of(funcionario));
 
-        List<Funcionario> funcionariosAtivos = funcionarioService.exibirFuncionarios(status);
+        List<Funcionario> funcionariosAtivos = funcionarioService.exibirTodosFuncionarios(status);
         for (Funcionario funcionarioReferencia: funcionariosAtivos) {
             Assertions.assertEquals(funcionarioReferencia.getStatus(), Status.ATIVO);
         }

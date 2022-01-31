@@ -44,7 +44,7 @@ public class FuncionarioController {
 
     @GetMapping
     public List<Funcionario> exibirFuncionariosAtivos(@RequestParam(required = false) Status status) {
-        return funcionarioService.exibirFuncionarios(status);
+        return funcionarioService.exibirTodosFuncionarios(status);
     }
 
     @PutMapping("/salario/{id}")
