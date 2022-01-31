@@ -97,7 +97,7 @@ public class FuncionarioService {
 
         Funcionario funcionario = buscarFuncionario(id);
         if (status.equals(Status.INATIVO)) {
-            if (funcionario.getTotalDeHorasTrabalhadas() > 50) {
+            if (funcionario.getTotalHorasTrabalhadas() > 50) {
                 throw new RuntimeException("Este Funcionario Tem Mais de 50 Horas Trabalhadas Neste Mês");
             }
         }
