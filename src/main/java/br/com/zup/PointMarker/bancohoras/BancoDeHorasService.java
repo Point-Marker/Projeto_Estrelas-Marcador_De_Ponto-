@@ -40,6 +40,7 @@ public class BancoDeHorasService {
         } else {
             return false;
         }
+    }
 
     public List<BancoDeHoras> exibirHorasTrabalhadas(int id) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
@@ -51,7 +52,7 @@ public class BancoDeHorasService {
     }
 
 
-    public BancoDeHoras atualizarHorasTrabalhadasEntrada(int id, LocalDateTime data, BancoDeHoras bancoDeHoras) {
+    public BancoDeHoras atualizarHorasTrabalhadasEntrada(int id, LocalDate data, BancoDeHoras bancoDeHoras) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
 
         BancoDeHoras banco = bancoDeHorasRepository.findByEntrada(data);
@@ -61,7 +62,7 @@ public class BancoDeHorasService {
         return bancoDeHoras;
     }
 
-    public BancoDeHoras atualizarHorasTrabalhadasSaida(int id, LocalDateTime data, BancoDeHoras bancoDeHoras) {
+    public BancoDeHoras atualizarHorasTrabalhadasSaida(int id, LocalDate data, BancoDeHoras bancoDeHoras) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
 
         BancoDeHoras banco = bancoDeHorasRepository.findByEntrada(data);
@@ -82,21 +83,21 @@ public class BancoDeHorasService {
     }
 
     public List<BancoDeHoras> horasExtrasTrabalhadas(LocalDate mes) {
-            List<BancoDeHoras> listaDeHorasExtras = bancoDeHorasRepository.findAllByDiaDoTrabalho(mes);
+        List<BancoDeHoras> listaDeHorasExtras = bancoDeHorasRepository.findAllByDiaDoTrabalho(mes);
 
-            for (BancoDeHoras referencia: listaDeHorasExtras){
-                Funcionario funcionario= funcionarioService.buscarFuncionario(referencia.getFuncionario().getId());
+        for (BancoDeHoras referencia : listaDeHorasExtras) {
+            Funcionario funcionario = funcionarioService.buscarFuncionario(referencia.getFuncionario().getId());
 
-                if (funcionario.getStatus().equals(Status.ATIVO)) {
-                    if (funcionario.getTotalHorasTrabalhadas() > 50) {
-                        int horasExtras = referencia.getFuncionario().getTotalHorasTrabalhadas() - 50;
-                        funcionario.setTotalHorasTrabalhadas(horasExtras);
-                        referencia.setFuncionario(funcionario);
-                        bancoDeHorasRepository.save(referencia);
-                    }
+            if (funcionario.getStatus().equals(Status.ATIVO)) {
+                if (funcionario.getTotalHorasTrabalhadas() > 50) {
+                    int horasExtras = referencia.getFuncionario().getTotalHorasTrabalhadas() - 50;
+                    funcionario.setTotalHorasTrabalhadas(horasExtras);
+                    referencia.setFuncionario(funcionario);
+                    bancoDeHorasRepository.save(referencia);
                 }
-                return listaDeHorasExtras;
             }
+            return listaDeHorasExtras;
+        }
 
         throw new RuntimeException("Mês não encontrado.");
     }

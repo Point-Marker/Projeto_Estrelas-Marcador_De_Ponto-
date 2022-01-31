@@ -11,7 +11,7 @@ public interface BancoDeHorasRepository extends CrudRepository<BancoDeHoras, Int
 
     List<BancoDeHoras> findAllByFuncionario(Funcionario funcionario);
 
-    BancoDeHoras findByEntrada(LocalDateTime dataEntrada);
+    BancoDeHoras findByEntrada(LocalDate dataEntrada);
 
     List<BancoDeHoras> findAllByDiaDoTrabalho(LocalDate mesDeFiltro);
 }
