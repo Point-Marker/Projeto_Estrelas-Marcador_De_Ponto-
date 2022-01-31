@@ -37,7 +37,7 @@ class ValidaHoras {
 
     public static boolean validarHorasLancadas(BancoDeHoras bancoDeHoras, BancoDeHorasRepository bancoDeHorasRepository) {
 
-        if (bancoDeHoras.getEntrada().isAfter(bancoDeHoras.getEntrada()) & bancoDeHoras.getEntrada().isBefore(bancoDeHoras.getEntrada())) {
+        if (bancoDeHoras.getEntrada().isAfter(bancoDeHoras.getSaida()) & bancoDeHoras.getSaida().isBefore(bancoDeHoras.getEntrada())) {
             throw new HorarioInvalidoException("A Hora De Entrada Não Pode ser Depois da Hora de Saida Do Trabalho.");
         }
 
