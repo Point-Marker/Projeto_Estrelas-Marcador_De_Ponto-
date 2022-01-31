@@ -92,6 +92,9 @@ public class FuncionarioService {
 
     public Funcionario atualizarStatus(int id, Status status) {
 
+        Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
+        optionalFuncionario.orElseThrow(() -> new FuncionarioNaoEncontradoException("Funcionário não encontrado."));
+
         Funcionario funcionario = buscarFuncionario(id);
         if (status.equals(Status.INATIVO)) {
             if (funcionario.getTotalDeHorasTrabalhadas() > 50) {
@@ -103,6 +106,12 @@ public class FuncionarioService {
         funcionarioRepository.save(funcionario);
 
         return funcionario;
+    }
+
+    public void deletarHorasTrabalhadas(int id) {
+        Funcionario funcionario = buscarFuncionario(id);
+        funcionario.setTotalHorasTrabalhadas(0);
+        funcionarioRepository.save(funcionario);
     }
 
 }

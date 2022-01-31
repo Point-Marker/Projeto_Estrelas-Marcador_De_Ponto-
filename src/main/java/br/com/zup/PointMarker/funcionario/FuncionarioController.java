@@ -36,6 +36,7 @@ public class FuncionarioController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CadastroFuncionarioSaidaDTO cadastrarFuncionario(@RequestBody @Valid CadastroFuncionarioEntradaDTO cadastroFuncionarioEntradaDTO) {
+
         Funcionario funcionario = modelMapper.map(cadastroFuncionarioEntradaDTO, Funcionario.class);
         funcionarioService.salvarFuncionario(funcionario);
         return modelMapper.map(funcionario, CadastroFuncionarioSaidaDTO.class);
@@ -46,13 +47,12 @@ public class FuncionarioController {
         return funcionarioService.exibirFuncionarios(status);
     }
 
-
     @PutMapping("/salario/{id}")
     @ResponseStatus(HttpStatus.OK)
     public AtualizarSalarioSaidaDTO atualizarSalario(@PathVariable int id, @RequestBody AtualizarSalarioEntradaDTO atualizarSalario) {
 
-        Funcionario funcionario = funcionarioService.atualizarSalario(id, atualizarSalario.getSalario());
-
+        Funcionario funcionario = funcionarioService.buscarFuncionario(id);
+        funcionarioService.atualizarSalario(id, atualizarSalario.getSalario());
         return modelMapper.map(funcionario, AtualizarSalarioSaidaDTO.class);
     }
 
@@ -61,7 +61,6 @@ public class FuncionarioController {
     public AtualizarCargoSaidaDTO atualizarCargo(@PathVariable int id, @RequestBody AtualizarCargoEntradaDTO atualizarCargoEntradaDTO) {
 
         Funcionario funcionario = funcionarioService.atualizarCargo(id, atualizarCargoEntradaDTO.getCargo());
-
         return modelMapper.map(funcionario, AtualizarCargoSaidaDTO.class);
     }
 
@@ -69,8 +68,8 @@ public class FuncionarioController {
     @ResponseStatus(HttpStatus.OK)
     public AtualizarStatusSaidaDTO atualizarStatus(@PathVariable int id, @RequestBody AtualizarStatusEntradaDTO atualizarStatusEntradaDTO) {
 
-        Funcionario funcionario = funcionarioService.atualizarStatus(id, atualizarStatusEntradaDTO.getStatus());
-
-        return modelMapper.map(funcionario, AtualizarStatusSaidaDTO.class);
+        Status status = modelMapper.map(atualizarStatusEntradaDTO, Status.class);
+        funcionarioService.atualizarStatus(id, status);
+        return modelMapper.map(status, AtualizarStatusSaidaDTO.class);
     }
 }
