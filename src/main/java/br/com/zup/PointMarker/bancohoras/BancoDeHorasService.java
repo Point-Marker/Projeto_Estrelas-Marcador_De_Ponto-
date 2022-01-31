@@ -63,8 +63,10 @@ public class BancoDeHorasService {
 
     public List<BancoDeHoras> horasExtrasTrabalhadas(LocalDate mes) {
             List<BancoDeHoras> listaDeHorasExtras = bancoDeHorasRepository.findAllByDiaDoTrabalho(mes);
+
             for (BancoDeHoras referencia: listaDeHorasExtras){
                 Funcionario funcionario= funcionarioService.buscarFuncionario(referencia.getFuncionario().getId());
+
                 if (funcionario.getStatus().equals(Status.ATIVO)) {
                     if (funcionario.getTotalHorasTrabalhadas() > 50) {
                         int horasExtras = referencia.getFuncionario().getTotalHorasTrabalhadas() - 50;
