@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -28,7 +27,7 @@ public class FuncionarioService {
     public Funcionario salvarFuncionario(Funcionario entradafuncionario) {
         Optional<Cargo> cargoOptional = cargoRepository.findById(entradafuncionario.getCargo().getId());
         entradafuncionario.setCargo(cargoOptional.get());
-        cargoOptional.orElseThrow(NoSuchElementException::new);
+        cargoOptional.orElseThrow();
 
         entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
         entradafuncionario.setStatus(Status.ATIVO);
@@ -97,8 +96,13 @@ public class FuncionarioService {
         optionalFuncionario.orElseThrow(() -> new FuncionarioNaoEncontradoException("Funcionário não encontrado."));
 
         Funcionario funcionario = buscarFuncionario(id);
-        funcionario.setStatus(status);
+        if (status.equals(Status.INATIVO)) {
+            if (funcionario.getTotalDeHorasTrabalhadas() > 50) {
+                throw new RuntimeException("Este Funcionario Tem Mais de 50 Horas Trabalhadas Neste Mês");
+            }
+        }
 
+        funcionario.setStatus(status);
         funcionarioRepository.save(funcionario);
 
         return funcionario;

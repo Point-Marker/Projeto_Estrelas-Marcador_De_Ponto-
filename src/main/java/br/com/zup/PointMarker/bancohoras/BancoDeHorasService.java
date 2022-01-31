@@ -1,5 +1,6 @@
 package br.com.zup.PointMarker.bancohoras;
 
+import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +12,42 @@ import java.util.List;
 @Service
 public class BancoDeHorasService {
 
-    @Autowired
+    private BancoDeHorasRepository bancoDeHorasRepository;
     private FuncionarioService funcionarioService;
 
     @Autowired
-    private BancoDeHorasRepository bancoDeHorasRepository;
+    public BancoDeHorasService(BancoDeHorasRepository bancoDeHorasRepository, FuncionarioService funcionarioService) {
+        this.bancoDeHorasRepository = bancoDeHorasRepository;
+        this.funcionarioService = funcionarioService;
+    }
+
+
+    public BancoDeHoras salvarHorasTrabalhadas(BancoDeHoras bancoDeHoras) {
+
+        Funcionario funcionario = funcionarioService.buscarFuncionario(bancoDeHoras.getFuncionario().getId());
+        if (verificarHorasTrabalhadadas(bancoDeHoras)) {
+            bancoDeHoras.setFuncionario(funcionario);
+        }
+
+        bancoDeHoras.setDiaDoTrabalho(LocalDate.now());
+        return bancoDeHorasRepository.save(bancoDeHoras);
+    }
+
+    public boolean verificarHorasTrabalhadadas(BancoDeHoras bancoDeHoras) {
+
+        if (ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository) <= 50) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public List<BancoDeHoras> exibirHorasTrabalhadas(int id) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
+
         BancoDeHoras bancoDeHoras = new BancoDeHoras();
         bancoDeHoras.setFuncionario(funcionario);
+
         return bancoDeHorasRepository.findAllByFuncionario(bancoDeHoras.getFuncionario());
     }
 
@@ -44,7 +71,7 @@ public class BancoDeHorasService {
         return bancoDeHoras;
     }
 
-    public void removerHorasFuncionario (int id){
+    public void removerHorasFuncionario(int id) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
         funcionarioService.deletarHorasTrabalhadas(id);
 
@@ -52,5 +79,25 @@ public class BancoDeHorasService {
         banco.setFuncionario(funcionario);
         bancoDeHorasRepository.delete(banco);
 
+    }
+
+    public List<BancoDeHoras> horasExtrasTrabalhadas(LocalDate mes) {
+            List<BancoDeHoras> listaDeHorasExtras = bancoDeHorasRepository.findAllByDiaDoTrabalho(mes);
+
+            for (BancoDeHoras referencia: listaDeHorasExtras){
+                Funcionario funcionario= funcionarioService.buscarFuncionario(referencia.getFuncionario().getId());
+
+                if (funcionario.getStatus().equals(Status.ATIVO)) {
+                    if (funcionario.getTotalHorasTrabalhadas() > 50) {
+                        int horasExtras = referencia.getFuncionario().getTotalHorasTrabalhadas() - 50;
+                        funcionario.setTotalHorasTrabalhadas(horasExtras);
+                        referencia.setFuncionario(funcionario);
+                        bancoDeHorasRepository.save(referencia);
+                    }
+                }
+                return listaDeHorasExtras;
+            }
+
+        throw new RuntimeException("Mês não encontrado.");
     }
 }
