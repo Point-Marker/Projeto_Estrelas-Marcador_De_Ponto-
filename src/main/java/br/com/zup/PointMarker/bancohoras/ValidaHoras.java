@@ -4,7 +4,6 @@ import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 
-
 import java.util.List;
 
 class ValidaHoras {
