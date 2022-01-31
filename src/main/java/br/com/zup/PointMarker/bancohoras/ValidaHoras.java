@@ -49,8 +49,7 @@ class ValidaHoras {
         List<BancoDeHoras> bancoDeHorasList = bancoDeHorasRepository.findAllByFuncionario(bancoDeHoras.getFuncionario());
 
         for (BancoDeHoras referencia : bancoDeHorasList) {
-            if (referencia.getEntrada().equals(bancoDeHoras.getEntrada()) &
-                    referencia.getEntrada().equals(bancoDeHoras.getEntrada())) {
+            if (referencia.getDiaDoTrabalho().equals(bancoDeHoras.getDiaDoTrabalho())) {
                 throw new RuntimeException("Este dia já foi cadastrado.");
             }
         }

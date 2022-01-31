@@ -82,21 +82,21 @@ public class BancoDeHorasService {
     }
 
     public List<BancoDeHoras> horasExtrasTrabalhadas(LocalDate mes) {
-            List<BancoDeHoras> listaDeHorasExtras = bancoDeHorasRepository.findAllByDiaDoTrabalho(mes);
+        List<BancoDeHoras> listaDeHorasExtras = bancoDeHorasRepository.findAllByDiaDoTrabalho(mes);
 
-            for (BancoDeHoras referencia: listaDeHorasExtras){
-                Funcionario funcionario= funcionarioService.buscarFuncionario(referencia.getFuncionario().getId());
+        for (BancoDeHoras referencia : listaDeHorasExtras) {
+            Funcionario funcionario = funcionarioService.buscarFuncionario(referencia.getFuncionario().getId());
 
-                if (funcionario.getStatus().equals(Status.ATIVO)) {
-                    if (funcionario.getTotalHorasTrabalhadas() > 50) {
-                        int horasExtras = referencia.getFuncionario().getTotalHorasTrabalhadas() - 50;
-                        funcionario.setTotalHorasTrabalhadas(horasExtras);
-                        referencia.setFuncionario(funcionario);
-                        bancoDeHorasRepository.save(referencia);
-                    }
+            if (funcionario.getStatus().equals(Status.ATIVO)) {
+                if (funcionario.getTotalHorasTrabalhadas() > 50) {
+                    int horasExtras = referencia.getFuncionario().getTotalHorasTrabalhadas() - 50;
+                    funcionario.setTotalHorasTrabalhadas(horasExtras);
+                    referencia.setFuncionario(funcionario);
+                    bancoDeHorasRepository.save(referencia);
                 }
-                return listaDeHorasExtras;
             }
+            return listaDeHorasExtras;
+        }
 
         throw new RuntimeException("Mês não encontrado.");
     }
