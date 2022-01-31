@@ -19,7 +19,7 @@ class ValidaHoras {
                 final int LIMITE_DE_HORAS_TRABALHADAS = 50;
 
                 if (funcionario.getTotalHorasTrabalhadas() <= LIMITE_DE_HORAS_TRABALHADAS) {
-                    funcionario.setTotalHorasTrabalhadas(funcionario.getTotalHorasTrabalhadas() + contadorDeHoras(bancoDeHoras));
+                    funcionario.setTotalHorasTrabalhadas(funcionario.getTotalHorasTrabalhadas() + contadorDeHoras(bancoDeHoras, funcionario));
                     bancoDeHoras.setFuncionario(funcionario);
                     bancoDeHorasRepository.save(bancoDeHoras);
                 } else {
@@ -56,15 +56,17 @@ class ValidaHoras {
         return true;
     }
 
-    private static int contadorDeHoras(BancoDeHoras bancoDeHoras) {
+    private static int contadorDeHoras(BancoDeHoras bancoDeHoras, Funcionario funcionario) {
         int entrada = bancoDeHoras.getEntrada().getHour();
         int saida = bancoDeHoras.getEntrada().getHour();
 
         int horasTrabalhadas = saida - entrada;
 
-        if (horasTrabalhadas > 8) {
-            throw new RuntimeException("Não É Permitido Cadastrar Mais Do Que 8 Horas Trabalhadas.");
+        if (horasTrabalhadas != funcionario.getCargo().getCargoHoraria()) {
+            throw new RuntimeException("A sua Cargo Horaria é de: "
+                    + funcionario.getCargo().getCargoHoraria());
         }
+
         return horasTrabalhadas;
     }
 
