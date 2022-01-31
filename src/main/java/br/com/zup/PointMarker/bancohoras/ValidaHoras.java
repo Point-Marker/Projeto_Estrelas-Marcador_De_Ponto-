@@ -19,15 +19,15 @@ class ValidaHoras {
             if (validarHorasLancadas(bancoDeHoras, bancoDeHorasRepository)) {
                 final int LIMITE_DE_HORAS_TRABALHADAS = 50;
 
-                if (funcionario.getTotalDeHorasTrabalhadas() <= LIMITE_DE_HORAS_TRABALHADAS) {
-                    funcionario.setTotalDeHorasTrabalhadas(funcionario.getTotalDeHorasTrabalhadas() + contadorDeHoras(bancoDeHoras));
+                if (funcionario.getTotalHorasTrabalhadas() <= LIMITE_DE_HORAS_TRABALHADAS) {
+                    funcionario.setTotalHorasTrabalhadas(funcionario.getTotalHorasTrabalhadas() + contadorDeHoras(bancoDeHoras));
                     bancoDeHoras.setFuncionario(funcionario);
                     bancoDeHorasRepository.save(bancoDeHoras);
                 } else {
                     throw new RuntimeException("Você já excedeu as horas trabalhadas.");
                 }
             }
-            return funcionario.getTotalDeHorasTrabalhadas();
+            return funcionario.getTotalHorasTrabalhadas();
         } catch (HorarioInvalidoException horarioInvalido) {
             throw new HorarioInvalidoException(horarioInvalido.getMessage());
         } catch (RuntimeException exception) {

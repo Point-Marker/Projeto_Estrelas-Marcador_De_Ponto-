@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/bancohoras")
@@ -67,7 +66,7 @@ public class BancoDeHorasController {
     @ResponseStatus(HttpStatus.OK)
     public AtualizarHorasTrabalhadasSaidaDTO atualizarHorasEntrada(@PathVariable int idFuncionario,
                                                                    @RequestParam @JsonFormat(pattern = "dd/mm/yyyy")
-                                                                           LocalDateTime data,
+                                                                           LocalDate data,
                                                                    @RequestBody AtualizarHorasTrabalhadasEntradaDTO
                                                                            atualizarHorasTrabalhadasEntradaDTO) {
 
@@ -80,7 +79,7 @@ public class BancoDeHorasController {
     @ResponseStatus(HttpStatus.OK)
     public AtualizarHorasTrabalhadasSaidaDTO atualizarHorasSaida(@PathVariable int idFuncionario,
                                                                  @RequestParam @JsonFormat(pattern = "dd/mm/yyyy")
-                                                                         LocalDateTime data,
+                                                                         LocalDate data,
                                                                  @RequestBody AtualizarHorasTrabalhadasEntradaDTO
                                                                          atualizarHorasTrabalhadasEntradaDTO) {
 

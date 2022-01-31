@@ -40,6 +40,7 @@ public class BancoDeHorasService {
         } else {
             return false;
         }
+    }
 
     public List<BancoDeHoras> exibirHorasTrabalhadas(int id) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
@@ -50,21 +51,20 @@ public class BancoDeHorasService {
         return bancoDeHorasRepository.findAllByFuncionario(bancoDeHoras.getFuncionario());
     }
 
-
-    public BancoDeHoras atualizarHorasTrabalhadasEntrada(int id, LocalDateTime data, BancoDeHoras bancoDeHoras) {
+    public BancoDeHoras atualizarHorasTrabalhadasEntrada(int id, LocalDate data, BancoDeHoras bancoDeHoras) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
 
-        BancoDeHoras banco = bancoDeHorasRepository.findByEntrada(data);
+        BancoDeHoras banco = bancoDeHorasRepository.findByDiaDoTrabalho(data);
         banco.setEntrada(bancoDeHoras.getEntrada());
         bancoDeHorasRepository.save(banco);
 
         return bancoDeHoras;
     }
 
-    public BancoDeHoras atualizarHorasTrabalhadasSaida(int id, LocalDateTime data, BancoDeHoras bancoDeHoras) {
+    public BancoDeHoras atualizarHorasTrabalhadasSaida(int id, LocalDate data, BancoDeHoras bancoDeHoras) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
 
-        BancoDeHoras banco = bancoDeHorasRepository.findByEntrada(data);
+        BancoDeHoras banco = bancoDeHorasRepository.findByDiaDoTrabalho(data);
         banco.setSaida(bancoDeHoras.getSaida());
         bancoDeHorasRepository.save(banco);
 

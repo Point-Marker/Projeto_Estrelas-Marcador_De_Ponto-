@@ -28,5 +28,4 @@ public class BancoDeHoras {
     private LocalTime entrada;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime saida;
-
 }

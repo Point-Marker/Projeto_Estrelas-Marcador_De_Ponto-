@@ -6,15 +6,19 @@ import br.com.zup.PointMarker.bancohoras.BancoDeHorasService;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
+import br.com.zup.PointMarker.funcionario.FuncionarioService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
+import java.util.List;
 
 @SpringBootTest
 public class BancoDeHorasServiceTest {
@@ -24,6 +28,8 @@ public class BancoDeHorasServiceTest {
 
     @MockBean
     private BancoDeHorasRepository bancoDeHorasRepository;
+    @MockBean
+    private FuncionarioService funcionarioService;
 
     private Funcionario funcionario;
     private BancoDeHoras bancoDeHoras;
@@ -34,9 +40,10 @@ public class BancoDeHorasServiceTest {
     public void setUp() {
 
         bancoDeHoras = new BancoDeHoras();
-        bancoDeHoras.setEntrada("5/5/2000");
         bancoDeHoras.setId(1);
-        bancoDeHoras.setSaida("2000-01-01");
+        bancoDeHoras.setEntrada(LocalTime.of(8, 00));
+        bancoDeHoras.setSaida(LocalTime.of(15, 00));
+        bancoDeHoras.setDiaDoTrabalho(LocalDate.now());
 
         cargo = new Cargo();
         cargo.setNome("Estagiario");
@@ -44,11 +51,43 @@ public class BancoDeHorasServiceTest {
         cargo.setId(1);
 
         funcionario = new Funcionario();
+        funcionario.setId(1);
         funcionario.setNome("Afonso");
         funcionario.setCpf("159.307.330-58");
         funcionario.setDataDeNascimento(LocalDate.of(1999, Month.JULY, 12));
         funcionario.setSalario(cargo.getSalario());
         funcionario.setCargo(cargo);
         funcionario.setStatus(Status.ATIVO);
+    }
+
+    @Test
+    public void exibirHorasTrabalhadasCaminhoVerdadeiro() {
+        Mockito.when(funcionarioService.buscarFuncionario(Mockito.anyInt())).thenReturn(funcionario);
+        bancoDeHoras = new BancoDeHoras();
+        bancoDeHoras.setFuncionario(funcionario);
+        List<BancoDeHoras> bancoList = bancoDeHorasRepository.findAllByFuncionario(funcionario);
+        for (BancoDeHoras bancoDeHoras : bancoList) {
+            Assertions.assertEquals(funcionario, bancoDeHoras.getFuncionario());
+        }
+    }
+
+    @Test
+    public void exibirHorasTrabalhadasCaminhoEntradaCaminhoFalso() {
+        Mockito.when(funcionarioService.buscarFuncionario(2)).thenReturn(null);
+        List<BancoDeHoras> bancoList = bancoDeHorasService.exibirHorasTrabalhadas(2);
+
+        Mockito.verify(bancoDeHorasRepository, Mockito.times(0)).findAllByFuncionario(funcionario);
+    }
+
+    @Test
+    public void atualizarHorasTrabalhadasEntradaCaminhoVerdadeiro() {
+        Mockito.when(funcionarioService.buscarFuncionario(Mockito.anyInt())).thenReturn(funcionario);
+        Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(bancoDeHoras.getDiaDoTrabalho())).thenReturn(bancoDeHoras);
+
+        BancoDeHoras bancoTesteHorario = new BancoDeHoras();
+        bancoTesteHorario.setEntrada(LocalTime.of(12, 30));
+        BancoDeHoras bancoList = bancoDeHorasService.atualizarHorasTrabalhadasEntrada(Mockito.anyInt(), LocalDate.now(), bancoDeHoras);
+
+        Assertions.assertNotEquals(bancoList.getEntrada(), bancoDeHoras.getEntrada());
     }
 }
