@@ -1,12 +1,14 @@
 package br.com.zup.PointMarker.bancohoras;
 
 import br.com.zup.PointMarker.funcionario.Funcionario;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @NoArgsConstructor
 @Getter
@@ -20,6 +22,10 @@ public class BancoDeHoras {
     private  int id;
     @OneToOne
     private Funcionario funcionario;
-    private LocalDateTime entrada;
-    private LocalDateTime saida;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate diaDoTrabalho;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime entrada;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime saida;
 }
