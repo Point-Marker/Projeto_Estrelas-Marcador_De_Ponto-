@@ -93,4 +93,5 @@ public class BancoDeHorasController {
     public void deletarHorasFuncionario(@PathVariable int id) {
         bancoDeHorasService.removerHorasFuncionario(id);
     }
+
 }

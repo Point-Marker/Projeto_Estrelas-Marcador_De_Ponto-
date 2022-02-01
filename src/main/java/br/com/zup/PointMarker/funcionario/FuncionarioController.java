@@ -19,7 +19,7 @@ public class FuncionarioController {
     }
 
     @GetMapping
-    public Funcionario exibirFuncionario(@RequestParam(required = false) int id) {
+    public Funcionario exibirFuncionarioId(@RequestParam(required = false) int id) {
         Funcionario idFuncionario = funcionarioService.buscarFuncionario(id);
 
         return idFuncionario;
