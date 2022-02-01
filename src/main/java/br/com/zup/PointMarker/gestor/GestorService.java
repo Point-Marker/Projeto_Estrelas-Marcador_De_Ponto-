@@ -29,6 +29,12 @@ public class GestorService {
         return funcionario;
     }
 
+    public Funcionario exibirUmFuncionario(int id) {
+        Funcionario funcionario = funcionarioService.buscarFuncionario(id);
+
+        return funcionario;
+    }
+
     public Funcionario cadastrarFuncionario(Funcionario entradaFuncionario) {
         Funcionario funcionario = funcionarioService.salvarFuncionario(entradaFuncionario);
 
