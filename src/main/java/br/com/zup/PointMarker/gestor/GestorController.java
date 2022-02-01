@@ -55,6 +55,13 @@ public class GestorController {
         return gestorService.exibirTodosFuncionarios(status);
     }
 
+    @GetMapping
+    public Funcionario exibirFuncionarioUnico(@RequestParam(required = false) int id) {
+        Funcionario idFuncionario = gestorService.exibirUmFuncionario(id);
+
+        return idFuncionario;
+    }
+
     @PutMapping("/salario/{id}")
     @ResponseStatus(HttpStatus.OK)
     public AtualizarSalarioSaidaDTO atualizarSalario(@PathVariable int id, @RequestBody AtualizarSalarioEntradaDTO atualizarSalario) {
@@ -80,4 +87,5 @@ public class GestorController {
         gestorService.atualizarStatus(id, status);
         return modelMapper.map(status, AtualizarStatusSaidaDTO.class);
     }
+
 }
