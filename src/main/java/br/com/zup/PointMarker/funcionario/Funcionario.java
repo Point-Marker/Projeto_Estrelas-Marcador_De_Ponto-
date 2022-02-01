@@ -35,6 +35,6 @@ public class Funcionario {
     private Status status;
     private int totalHorasTrabalhadas;
     private int horasExtras;
-    @OneToMany
+    @OneToMany(mappedBy = "funcionario")
     private List<BancoDeHoras> bancoDeHoras;
 }
