@@ -28,7 +28,7 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
         http.cors().configurationSource(configurarCors());
 
         http.authorizeRequests().antMatchers(HttpMethod.POST, END_POINTS).permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().hasRole("gestor");
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     }
