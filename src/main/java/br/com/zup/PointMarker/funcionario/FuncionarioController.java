@@ -1,6 +1,5 @@
 package br.com.zup.PointMarker.funcionario;
 
-
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.dtos.AtualizarCargoDTO.AtualizarCargoEntradaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.AtualizarCargoDTO.AtualizarCargoSaidaDTO;
@@ -31,20 +30,6 @@ public class FuncionarioController {
     public FuncionarioController(FuncionarioService funcionarioService, ModelMapper modelMapper) {
         this.funcionarioService = funcionarioService;
         this.modelMapper = modelMapper;
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CadastroFuncionarioSaidaDTO cadastrarFuncionario(@RequestBody @Valid CadastroFuncionarioEntradaDTO cadastroFuncionarioEntradaDTO) {
-
-        Funcionario funcionario = modelMapper.map(cadastroFuncionarioEntradaDTO, Funcionario.class);
-        funcionarioService.salvarFuncionario(funcionario);
-        return modelMapper.map(funcionario, CadastroFuncionarioSaidaDTO.class);
-    }
-
-    @GetMapping
-    public List<Funcionario> exibirFuncionariosAtivos(@RequestParam(required = false) Status status) {
-        return funcionarioService.exibirTodosFuncionarios(status);
     }
 
     @PutMapping("/salario/{id}")
