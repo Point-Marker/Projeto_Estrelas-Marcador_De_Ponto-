@@ -2,13 +2,17 @@ package br.com.zup.PointMarker.gestor;
 
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
+import br.com.zup.PointMarker.funcionario.dtos.AtualizarSalarioDTO.AtualizarSalarioEntradaDTO;
+import br.com.zup.PointMarker.funcionario.dtos.AtualizarSalarioDTO.AtualizarSalarioSaidaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.CadastroFuncionárioDTO.CadastroFuncionarioEntradaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.CadastroFuncionárioDTO.CadastroFuncionarioSaidaDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,5 +49,14 @@ public class GestorController {
     @GetMapping
     public List<Funcionario> exibirFuncionariosAtivos(@RequestParam(required = false) Status status) {
         return gestorService.exibirTodosFuncionarios(status);
+    }
+
+    @PutMapping("/salario/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AtualizarSalarioSaidaDTO atualizarSalario(@PathVariable int id, @RequestBody AtualizarSalarioEntradaDTO atualizarSalario) {
+
+        Funcionario funcionario = gestorService.exibirUmFuncionario(id);
+        gestorService.atualizarSalario(id, atualizarSalario.getSalario());
+        return modelMapper.map(funcionario, AtualizarSalarioSaidaDTO.class);
     }
 }
