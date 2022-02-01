@@ -70,6 +70,7 @@ public class GestorController {
 
     @GetMapping("/{id}")
     public Funcionario exibirFuncionarioUnico(@PathVariable int id) {
+      
         Funcionario idFuncionario = gestorService.exibirUmFuncionario(id);
 
         return idFuncionario;
