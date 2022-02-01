@@ -88,10 +88,10 @@ public class BancoDeHorasServiceTeste {
         bancoDeHorasComErro.setEntrada(LocalTime.now());
         bancoDeHorasComErro.setSaida(LocalTime.now());
 
-        Mockito.when(ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository, funcionarioRepository)).thenReturn(null);
+        Mockito.when(ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository)).thenReturn(null);
 
         Assertions.assertThrows(RuntimeException.class, () -> {
-            ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository, funcionarioRepository);
+            ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository);
         });
 
     }
