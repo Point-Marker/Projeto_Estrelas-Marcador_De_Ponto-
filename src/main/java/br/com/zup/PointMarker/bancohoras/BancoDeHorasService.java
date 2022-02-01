@@ -28,13 +28,12 @@ public class BancoDeHorasService {
 
     public BancoDeHoras salvarHorasTrabalhadas(BancoDeHoras bancoDeHoras) {
 
-        Funcionario funcionario = funcionarioService.buscarFuncionario(bancoDeHoras.getFuncionario().getId());
         if (verificarHorasTrabalhadadas(bancoDeHoras)) {
-            bancoDeHoras.setFuncionario(funcionario);
+            bancoDeHoras.setDiaDoTrabalho(LocalDate.now());
+            return bancoDeHorasRepository.save(bancoDeHoras);
         }
 
-        bancoDeHoras.setDiaDoTrabalho(LocalDate.now());
-        return bancoDeHorasRepository.save(bancoDeHoras);
+        throw new RuntimeException();
     }
 
     public boolean verificarHorasTrabalhadadas(BancoDeHoras bancoDeHoras) {
