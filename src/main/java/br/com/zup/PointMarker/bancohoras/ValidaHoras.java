@@ -2,12 +2,13 @@ package br.com.zup.PointMarker.bancohoras;
 
 import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
+import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 
-
+import java.time.LocalDate;
 import java.util.List;
 
-class ValidaHoras {
+public class ValidaHoras {
 
 
     public static int calcularHorasDeTrabalho(BancoDeHoras bancoDeHoras, FuncionarioService funcionarioService,
@@ -19,8 +20,18 @@ class ValidaHoras {
             if (validarHorasLancadas(bancoDeHoras, bancoDeHorasRepository)) {
                 final int LIMITE_DE_HORAS_TRABALHADAS = 50;
 
+                int entrada = bancoDeHoras.getEntrada().getHour();
+                int saida = bancoDeHoras.getSaida().getHour();
+
+                int horasTrabalhadas = saida - entrada;
+
+                if (horasTrabalhadas != funcionario.getCargo().getCargoHoraria()) {
+                    throw new RuntimeException("A sua Cargo Horaria é de: "
+                            + funcionario.getCargo().getCargoHoraria());
+                }
+
                 if (funcionario.getTotalHorasTrabalhadas() <= LIMITE_DE_HORAS_TRABALHADAS) {
-                    funcionario.setTotalHorasTrabalhadas(funcionario.getTotalHorasTrabalhadas() + contadorDeHoras(bancoDeHoras));
+                    funcionario.setTotalHorasTrabalhadas(funcionario.getTotalHorasTrabalhadas() + horasTrabalhadas);
                     bancoDeHoras.setFuncionario(funcionario);
                     bancoDeHorasRepository.save(bancoDeHoras);
                 } else {
@@ -37,7 +48,7 @@ class ValidaHoras {
 
     public static boolean validarHorasLancadas(BancoDeHoras bancoDeHoras, BancoDeHorasRepository bancoDeHorasRepository) {
 
-        if (bancoDeHoras.getEntrada().isAfter(bancoDeHoras.getEntrada()) & bancoDeHoras.getEntrada().isBefore(bancoDeHoras.getEntrada())) {
+        if (bancoDeHoras.getEntrada().isAfter(bancoDeHoras.getSaida()) & bancoDeHoras.getSaida().isBefore(bancoDeHoras.getEntrada())) {
             throw new HorarioInvalidoException("A Hora De Entrada Não Pode ser Depois da Hora de Saida Do Trabalho.");
         }
 
@@ -50,9 +61,8 @@ class ValidaHoras {
         List<BancoDeHoras> bancoDeHorasList = bancoDeHorasRepository.findAllByFuncionario(bancoDeHoras.getFuncionario());
 
         for (BancoDeHoras referencia : bancoDeHorasList) {
-            if (referencia.getEntrada().equals(bancoDeHoras.getEntrada()) &
-                    referencia.getEntrada().equals(bancoDeHoras.getEntrada())) {
-                throw new RuntimeException("Este dia já foi cadastrado.");
+            if (referencia.getDiaDoTrabalho().equals(LocalDate.now())) {
+                throw new RuntimeException("Este dia ja foi cadastrado.");
             }
         }
         return true;
@@ -60,14 +70,16 @@ class ValidaHoras {
 
     private static int contadorDeHoras(BancoDeHoras bancoDeHoras) {
         int entrada = bancoDeHoras.getEntrada().getHour();
-        int saida = bancoDeHoras.getEntrada().getHour();
+        int saida = bancoDeHoras.getSaida().getHour();
 
         int horasTrabalhadas = saida - entrada;
 
-        if (horasTrabalhadas > 8) {
-            throw new RuntimeException("Não É Permitido Cadastrar Mais Do Que 8 Horas Trabalhadas.");
+        if (horasTrabalhadas == bancoDeHoras.getFuncionario().getCargo().getCargoHoraria()) {
+            return horasTrabalhadas;
         }
-        return horasTrabalhadas;
+
+        throw new RuntimeException("A sua Cargo Horaria é de: "
+                + bancoDeHoras.getFuncionario().getCargo().getCargoHoraria());
     }
 
 }

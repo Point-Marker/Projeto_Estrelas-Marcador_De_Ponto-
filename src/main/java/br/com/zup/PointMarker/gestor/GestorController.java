@@ -13,12 +13,14 @@ import br.com.zup.PointMarker.funcionario.dtos.AtualizarStatusDTO.AtualizarStatu
 import br.com.zup.PointMarker.funcionario.dtos.AtualizarStatusDTO.AtualizarStatusSaidaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.CadastroFuncionárioDTO.CadastroFuncionarioEntradaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.CadastroFuncionárioDTO.CadastroFuncionarioSaidaDTO;
+import br.com.zup.PointMarker.funcionario.dtos.FuncionarioDetailsDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,17 +28,15 @@ import java.util.List;
 public class GestorController {
 
     private GestorService gestorService;
-    private GestorRepository gestorRepository;
     private ModelMapper modelMapper;
 
     @Autowired
-    public GestorController(GestorService gestorService, GestorRepository gestorRepository, ModelMapper modelMapper) {
+    public GestorController(GestorService gestorService, ModelMapper modelMapper) {
         this.gestorService = gestorService;
-        this.gestorRepository = gestorRepository;
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping
+    @PostMapping("/cadastro/funcionarios")
     @ResponseStatus(HttpStatus.CREATED)
     public CadastroFuncionarioSaidaDTO cadastrarFuncionario(@RequestBody @Valid CadastroFuncionarioEntradaDTO cadastroFuncionarioEntradaDTO) {
 
@@ -45,7 +45,7 @@ public class GestorController {
         return modelMapper.map(funcionario, CadastroFuncionarioSaidaDTO.class);
     }
 
-    @PostMapping
+    @PostMapping("/cadastro/cargos")
     @ResponseStatus(HttpStatus.CREATED)
     public CargoCadastroSaidaDTO cadastrarCargo(@RequestBody CargoCadastroEntradaDTO cadastroEntradaDTO) {
 
@@ -55,12 +55,22 @@ public class GestorController {
     }
 
     @GetMapping
-    public List<Funcionario> exibirFuncionariosAtivos(@RequestParam(required = false) Status status) {
-        return gestorService.exibirTodosFuncionarios(status);
+    public List<FuncionarioDetailsDTO> exibirFuncionariosAtivos(@RequestParam(required = false) Status status) {
+        List<Funcionario> funcionariosAtivos = gestorService.exibirTodosFuncionarios(status);
+
+        List<FuncionarioDetailsDTO> funcionarioDetailsAtivos = new ArrayList<>();
+
+        for (Funcionario referencia : funcionariosAtivos) {
+            FuncionarioDetailsDTO funcionarioDetailsDTO = modelMapper.map(referencia, FuncionarioDetailsDTO.class);
+            funcionarioDetailsAtivos.add(funcionarioDetailsDTO);
+        }
+
+        return funcionarioDetailsAtivos;
     }
 
-    @GetMapping
-    public Funcionario exibirFuncionarioUnico(@RequestParam(required = false) int id) {
+    @GetMapping("/{id}")
+    public Funcionario exibirFuncionarioUnico(@PathVariable int id) {
+      
         Funcionario idFuncionario = gestorService.exibirUmFuncionario(id);
 
         return idFuncionario;

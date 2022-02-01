@@ -1,11 +1,6 @@
 package br.com.zup.PointMarker.config.configmensagem;
 
-import br.com.zup.PointMarker.cargo.Cargo;
-import br.com.zup.PointMarker.exceptions.AumentoDeSalarioInvalidoException;
-import br.com.zup.PointMarker.exceptions.CargoJaCadastradoException;
-import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
-import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
-import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
+import br.com.zup.PointMarker.exceptions.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;

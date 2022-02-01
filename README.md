@@ -47,12 +47,11 @@
 
 ```json
 {
-    "id_funcionario":{
-      "id":1
-    },
-    "horaExtra": 1,
-    "entrada": "12/01/2001 08:00",
-    "saida": "12/01/2001 15:00"
+  "funcionario":{
+    "id":1
+  },
+  "entrada": "09:00",
+  "saida": "17:00"
 }
 ```
 
@@ -60,18 +59,22 @@
 - Saida
 ```json
 {
-"funcionario": {
-"nome": "Afonso  Gonçalves Tevez",
-"cpf": "527.550.148-06",
-"cargo": {
-"id": 2,
-"nome": "Jovem Aprendiz",
-"salario": 800.0
+  "funcionario": {
+    "nome": "Clovis Gonçalves Tevez",
+    "cpf": "308.384.638-00",
+    "cargo": {
+      "id": 1,
+      "nome": "Estagio",
+      "salario": 900.0,
+      "cargoHoraria": 8
     }
   },
-"entrada": "12/01/2001 08:00",
-"saida": "12/01/2001 15:00"
+  "diaDoTrabalho": "01/02/2022",
+  "entrada": "09:00",
+  "saida": "17:00"
 }
 ```
+
+
 
 

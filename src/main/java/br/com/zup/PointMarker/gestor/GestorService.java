@@ -5,7 +5,6 @@ import br.com.zup.PointMarker.cargo.CargoRepository;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.CargoJaCadastradoException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
-import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,9 +31,7 @@ public class GestorService {
     }
 
     public List<Funcionario> exibirTodosFuncionarios(Status status) {
-        List<Funcionario> todosFuncionario = funcionarioService.exibirTodosFuncionarios(status);
-
-        return todosFuncionario;
+        return funcionarioService.exibirTodosFuncionarios(status);
     }
 
     public Funcionario exibirUmFuncionario(int id) {
@@ -68,7 +65,7 @@ public class GestorService {
     public Cargo cadastrarCargo(Cargo cargo) {
         Optional<Cargo> cargoOptional = cargoRepository.findByNome(cargo.getNome());
 
-        if (cargoOptional.isEmpty()){
+        if (cargoOptional.isEmpty()) {
             return cargoRepository.save(cargo);
         }
         throw new CargoJaCadastradoException("Cargo já cadastrado.");
