@@ -1,5 +1,7 @@
 package br.com.zup.PointMarker.gestor;
 
+import br.com.zup.PointMarker.bancohoras.BancoDeHoras;
+import br.com.zup.PointMarker.bancohoras.BancoDeHorasService;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.cargo.CargoRepository;
 import br.com.zup.PointMarker.enums.Status;
@@ -16,13 +18,18 @@ import java.util.Optional;
 @Service
 public class GestorService {
 
+    private BancoDeHorasService bancoDeHorasService;
     private FuncionarioService funcionarioService;
     private FuncionarioRepository funcionarioRepository;
     private GestorRepository gestorRepository;
     private CargoRepository cargoRepository;
 
     @Autowired
-    public GestorService(FuncionarioService funcionarioService, FuncionarioRepository funcionarioRepository, GestorRepository gestorRepository, CargoRepository cargoRepository) {
+    public GestorService(BancoDeHorasService bancoDeHorasService, FuncionarioService funcionarioService, 
+                         FuncionarioRepository funcionarioRepository, GestorRepository gestorRepository, 
+                         CargoRepository cargoRepository) {
+
+        this.bancoDeHorasService = bancoDeHorasService;
         this.funcionarioService = funcionarioService;
         this.funcionarioRepository = funcionarioRepository;
         this.gestorRepository = gestorRepository;
@@ -77,4 +84,5 @@ public class GestorService {
         }
         throw new CargoJaCadastradoException("Cargo já cadastrado.");
     }
+
 }

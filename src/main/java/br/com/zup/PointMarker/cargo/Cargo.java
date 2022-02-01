@@ -21,4 +21,5 @@ public class Cargo {
     private String nome;
     @Column(nullable = true)
     private double salario;
+
 }

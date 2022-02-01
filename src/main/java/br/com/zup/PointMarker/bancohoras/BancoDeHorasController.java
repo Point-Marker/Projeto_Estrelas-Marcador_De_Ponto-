@@ -52,6 +52,12 @@ public class BancoDeHorasController {
         return resumoBancoDTO;
     }
 
+    @GetMapping
+    public List<BancoDeHoras> exibirTodosBancosDeHoras() {
+        List<BancoDeHoras> todosBancosDeHoras = bancoDeHorasService.exibirTodosBancosDeHoras();
+        return todosBancosDeHoras;
+    }
+
     @GetMapping("/{id}")
     public List<BancoDeHoras> exibirBancoDeHorasFuncionario(@PathVariable int id) {
         return bancoDeHorasService.exibirHorasTrabalhadas(id);
