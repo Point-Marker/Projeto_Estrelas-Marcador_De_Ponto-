@@ -1,9 +1,9 @@
 package br.com.zup.PointMarker.cargo;
 
-import br.com.zup.PointMarker.funcionario.Funcionario;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "cargos")
-public class Cargo {
+public class Cargo implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +22,14 @@ public class Cargo {
     @Column(nullable = true)
     private double salario;
     private int cargoHoraria;
+
+    @Override
+    public String getAuthority() {
+        return nome;
+    }
+
+    @Override
+    public String toString() {
+        return "Cargo [id= " + id + ", nome= " + nome + "]";
+    }
 }
