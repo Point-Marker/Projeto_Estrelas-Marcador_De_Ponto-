@@ -38,7 +38,7 @@ public class BancoDeHorasService {
 
     public boolean verificarHorasTrabalhadadas(BancoDeHoras bancoDeHoras) {
 
-        if (ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository, funcionarioRepository) <= 50) {
+        if (ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository) <= 50) {
             return true;
         } else {
             return false;
