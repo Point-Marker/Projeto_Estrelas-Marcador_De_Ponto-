@@ -6,6 +6,8 @@ import br.com.zup.PointMarker.funcionario.dtos.AtualizarCargoDTO.AtualizarCargoE
 import br.com.zup.PointMarker.funcionario.dtos.AtualizarCargoDTO.AtualizarCargoSaidaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.AtualizarSalarioDTO.AtualizarSalarioEntradaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.AtualizarSalarioDTO.AtualizarSalarioSaidaDTO;
+import br.com.zup.PointMarker.funcionario.dtos.AtualizarStatusDTO.AtualizarStatusEntradaDTO;
+import br.com.zup.PointMarker.funcionario.dtos.AtualizarStatusDTO.AtualizarStatusSaidaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.CadastroFuncionárioDTO.CadastroFuncionarioEntradaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.CadastroFuncionárioDTO.CadastroFuncionarioSaidaDTO;
 import org.modelmapper.ModelMapper;
@@ -68,5 +70,14 @@ public class GestorController {
 
         Funcionario funcionario = gestorService.atualizarCargo(id, atualizarCargoEntradaDTO.getCargo());
         return modelMapper.map(funcionario, AtualizarCargoSaidaDTO.class);
+    }
+
+    @PutMapping("/status/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AtualizarStatusSaidaDTO atualizarStatus(@PathVariable int id, @RequestBody AtualizarStatusEntradaDTO atualizarStatusEntradaDTO) {
+
+        Status status = modelMapper.map(atualizarStatusEntradaDTO, Status.class);
+        gestorService.atualizarStatus(id, status);
+        return modelMapper.map(status, AtualizarStatusSaidaDTO.class);
     }
 }
