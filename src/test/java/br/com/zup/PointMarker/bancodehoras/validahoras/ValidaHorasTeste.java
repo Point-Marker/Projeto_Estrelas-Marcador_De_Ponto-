@@ -1,4 +1,4 @@
-package br.com.zup.PointMarker.bancodehoras;
+package br.com.zup.PointMarker.bancodehoras.validahoras;
 
 import br.com.zup.PointMarker.bancohoras.BancoDeHoras;
 import br.com.zup.PointMarker.bancohoras.BancoDeHorasRepository;
@@ -7,7 +7,6 @@ import br.com.zup.PointMarker.bancohoras.ValidaHoras;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
-import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,9 +18,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @SpringBootTest
-public class BancoDeHorasServiceTeste {
+public class ValidaHorasTeste {
 
     @Autowired
     private BancoDeHorasService bancoDeHorasService;
@@ -31,9 +31,6 @@ public class BancoDeHorasServiceTeste {
 
     @MockBean
     private FuncionarioService funcionarioService;
-
-    @MockBean
-    private FuncionarioRepository funcionarioRepository;
 
     Funcionario funcionario;
     BancoDeHoras bancoDeHoras;
@@ -64,33 +61,23 @@ public class BancoDeHorasServiceTeste {
         bancoDeHoras.setEntrada(LocalTime.now());
         bancoDeHoras.setSaida(LocalTime.now());
 
+        bancoDeHorasRepository.save(bancoDeHoras);
     }
 
     @Test
-    public void testarCadastroDeHoras() {
-        Mockito.when(bancoDeHorasRepository.save(bancoDeHoras)).thenReturn(bancoDeHoras);
+    public void diaJaInseridoNoSistema_QuandoTemExcecao() {
+        Mockito.when(bancoDeHorasRepository.findAllByFuncionario(funcionario)).thenReturn(List.of(bancoDeHoras));
 
-        var bancoDeHorasCadastrado = bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras);
-
-        Assertions.assertNotEquals(bancoDeHorasCadastrado.getFuncionario(), null);
-    }
-
-    @Test
-    public void testarCadastroDeHoras_QuandoODiaForRepetido() {
-        Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
-
-        BancoDeHoras bancoDeHorasComDataJaCadastrada = new BancoDeHoras();
-        bancoDeHorasComDataJaCadastrada.setDiaDoTrabalho(bancoDeHoras.getDiaDoTrabalho());
-        BancoDeHoras bancoDeHorasComErro = bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHorasComDataJaCadastrada);
-        bancoDeHorasComErro.setFuncionario(funcionario);
-        bancoDeHorasComErro.setDiaDoTrabalho(LocalDate.now());
-        bancoDeHorasComErro.setEntrada(LocalTime.now());
-        bancoDeHorasComErro.setSaida(LocalTime.now());
-
-        Mockito.when(ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository, funcionarioRepository)).thenReturn(null);
+        BancoDeHoras bancoDeHorasComDataRepetida = new BancoDeHoras();
+        bancoDeHorasComDataRepetida.setDiaDoTrabalho(LocalDate.now());
+        bancoDeHorasComDataRepetida.setId(1);
+        bancoDeHorasComDataRepetida.setFuncionario(funcionario);
+        bancoDeHorasComDataRepetida.setDiaDoTrabalho(LocalDate.now());
+        bancoDeHorasComDataRepetida.setEntrada(LocalTime.now());
+        bancoDeHorasComDataRepetida.setSaida(LocalTime.now());
 
         Assertions.assertThrows(RuntimeException.class, () -> {
-            ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository, funcionarioRepository);
+            ValidaHoras.horaJaInseridaNoSistema(bancoDeHorasRepository, bancoDeHoras);
         });
 
     }
