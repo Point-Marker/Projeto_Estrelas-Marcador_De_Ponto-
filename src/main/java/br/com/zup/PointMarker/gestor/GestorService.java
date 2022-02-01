@@ -24,6 +24,12 @@ public class GestorService {
         this.gestorRepository = gestorRepository;
     }
 
+    public Funcionario cadastrarFuncionario(Funcionario entradaFuncionario) {
+        Funcionario funcionario = funcionarioService.salvarFuncionario(entradaFuncionario);
+
+        return funcionario;
+    }
+
     public List<Funcionario> exibirTodosFuncionarios(Status status) {
         List<Funcionario> todosFuncionario = funcionarioService.exibirTodosFuncionarios(status);
 
@@ -34,12 +40,6 @@ public class GestorService {
         Funcionario umFuncionario = funcionarioService.buscarFuncionario(id);
 
         return umFuncionario;
-    }
-
-    public Funcionario cadastrarFuncionario(Funcionario entradaFuncionario) {
-        Funcionario funcionario = funcionarioService.salvarFuncionario(entradaFuncionario);
-
-        return funcionario;
     }
 
     public void removerFuncionario(int id) {
