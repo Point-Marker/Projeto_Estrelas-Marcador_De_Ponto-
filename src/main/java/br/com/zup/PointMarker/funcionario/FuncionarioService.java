@@ -32,11 +32,18 @@ public class FuncionarioService {
         entradafuncionario.setCargo(cargoOptional.get());
         cargoOptional.orElseThrow();
 
-        String senhaEscondida = bCryptPasswordEncoder.encode(entradafuncionario.getSenha());
-        entradafuncionario.setSenha(senhaEscondida);
-        entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
-        entradafuncionario.setStatus(Status.ATIVO);
-        return funcionarioRepository.save(entradafuncionario);
+        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNomeUsuario(entradafuncionario
+                .getNomeUsuario());
+
+        if (funcionarioOptional.isEmpty()) {
+            String senhaEscondida = bCryptPasswordEncoder.encode(entradafuncionario.getSenha());
+            entradafuncionario.setSenha(senhaEscondida);
+            entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
+            entradafuncionario.setStatus(Status.ATIVO);
+            return funcionarioRepository.save(entradafuncionario);
+        }
+
+        throw new RuntimeException();
     }
 
     public List<Funcionario> exibirFuncionarios(Status status) {
