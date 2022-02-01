@@ -22,4 +22,5 @@ public class Cargo {
     @Column(nullable = true)
     private double salario;
     private int cargoHoraria;
+
 }

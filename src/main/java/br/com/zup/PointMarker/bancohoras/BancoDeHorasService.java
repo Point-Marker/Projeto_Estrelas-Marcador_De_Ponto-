@@ -45,6 +45,11 @@ public class BancoDeHorasService {
         }
     }
 
+    public List<BancoDeHoras> exibirTodosBancosDeHoras() {
+
+        return (List<BancoDeHoras>) bancoDeHorasRepository.findAll();
+    }
+
     public List<BancoDeHoras> exibirHorasTrabalhadas(int id) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
 

@@ -17,15 +17,11 @@ import java.util.Optional;
 public class GestorService {
 
     private FuncionarioService funcionarioService;
-    private FuncionarioRepository funcionarioRepository;
-    private GestorRepository gestorRepository;
     private CargoRepository cargoRepository;
 
     @Autowired
-    public GestorService(FuncionarioService funcionarioService, FuncionarioRepository funcionarioRepository, GestorRepository gestorRepository, CargoRepository cargoRepository) {
+    public GestorService(FuncionarioService funcionarioService, CargoRepository cargoRepository) {
         this.funcionarioService = funcionarioService;
-        this.funcionarioRepository = funcionarioRepository;
-        this.gestorRepository = gestorRepository;
         this.cargoRepository = cargoRepository;
     }
 
@@ -77,4 +73,5 @@ public class GestorService {
         }
         throw new CargoJaCadastradoException("Cargo já cadastrado.");
     }
+
 }
