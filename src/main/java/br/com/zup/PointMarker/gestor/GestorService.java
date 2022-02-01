@@ -69,4 +69,8 @@ public class GestorService {
         return statusFuncionario;
     }
 
+    public List<BancoDeHoras> exibirTodosBancosDeHoras() {
+        List<BancoDeHoras> todosBancosDeHoras = bancoDeHorasService.exibirTodosBancosDeHoras();
+        return todosBancosDeHoras;
+    }
 }
