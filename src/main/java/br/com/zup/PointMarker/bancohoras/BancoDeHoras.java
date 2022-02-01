@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.engine.internal.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -20,9 +21,8 @@ public class BancoDeHoras {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @OneToOne
+    @ManyToOne
     private Funcionario funcionario;
-    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate diaDoTrabalho;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime entrada;
