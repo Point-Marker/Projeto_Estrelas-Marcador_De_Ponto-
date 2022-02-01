@@ -2,6 +2,8 @@ package br.com.zup.PointMarker.gestor;
 
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
+import br.com.zup.PointMarker.funcionario.dtos.AtualizarCargoDTO.AtualizarCargoEntradaDTO;
+import br.com.zup.PointMarker.funcionario.dtos.AtualizarCargoDTO.AtualizarCargoSaidaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.AtualizarSalarioDTO.AtualizarSalarioEntradaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.AtualizarSalarioDTO.AtualizarSalarioSaidaDTO;
 import br.com.zup.PointMarker.funcionario.dtos.CadastroFuncionárioDTO.CadastroFuncionarioEntradaDTO;
@@ -58,5 +60,13 @@ public class GestorController {
         Funcionario funcionario = gestorService.exibirUmFuncionario(id);
         gestorService.atualizarSalario(id, atualizarSalario.getSalario());
         return modelMapper.map(funcionario, AtualizarSalarioSaidaDTO.class);
+    }
+
+    @PutMapping("/cargo/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AtualizarCargoSaidaDTO atualizarCargo(@PathVariable int id, @RequestBody AtualizarCargoEntradaDTO atualizarCargoEntradaDTO) {
+
+        Funcionario funcionario = gestorService.atualizarCargo(id, atualizarCargoEntradaDTO.getCargo());
+        return modelMapper.map(funcionario, AtualizarCargoSaidaDTO.class);
     }
 }
