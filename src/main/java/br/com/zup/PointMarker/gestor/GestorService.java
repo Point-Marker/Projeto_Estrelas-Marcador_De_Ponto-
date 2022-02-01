@@ -28,4 +28,10 @@ public class GestorService {
 
         return funcionario;
     }
+
+    public Funcionario cadastrarFuncionario(Funcionario entradaFuncionario) {
+        Funcionario funcionario = funcionarioService.salvarFuncionario(entradaFuncionario);
+
+        return funcionario;
+    }
 }
