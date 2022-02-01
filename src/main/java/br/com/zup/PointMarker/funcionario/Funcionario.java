@@ -1,5 +1,6 @@
 package br.com.zup.PointMarker.funcionario;
 
+import br.com.zup.PointMarker.bancohoras.BancoDeHoras;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -33,4 +35,6 @@ public class Funcionario {
     private Status status;
     private int totalHorasTrabalhadas;
     private int horasExtras;
+    @OneToMany
+    private List<BancoDeHoras> bancoDeHoras;
 }
