@@ -1,5 +1,7 @@
 package br.com.zup.PointMarker.gestor;
 
+import br.com.zup.PointMarker.bancohoras.BancoDeHoras;
+import br.com.zup.PointMarker.bancohoras.BancoDeHorasService;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
@@ -13,12 +15,15 @@ import java.util.List;
 @Service
 public class GestorService {
 
+    private BancoDeHorasService bancoDeHorasService;
     private FuncionarioService funcionarioService;
     private FuncionarioRepository funcionarioRepository;
     private GestorRepository gestorRepository;
 
     @Autowired
-    public GestorService(FuncionarioService funcionarioService, GestorRepository gestorRepository, FuncionarioRepository funcionarioRepository) {
+    public GestorService(BancoDeHorasService bancoDeHorasService, FuncionarioService funcionarioService,
+                         FuncionarioRepository funcionarioRepository, GestorRepository gestorRepository) {
+        this.bancoDeHorasService = bancoDeHorasService;
         this.funcionarioService = funcionarioService;
         this.funcionarioRepository = funcionarioRepository;
         this.gestorRepository = gestorRepository;
@@ -63,4 +68,5 @@ public class GestorService {
 
         return statusFuncionario;
     }
+
 }
