@@ -55,13 +55,11 @@ public class GestorController {
     }
 
     @GetMapping
-    @ResponseStatus
     public List<Funcionario> exibirFuncionariosAtivos(@RequestParam(required = false) Status status) {
         return gestorService.exibirTodosFuncionarios(status);
     }
 
     @GetMapping
-    @ResponseStatus
     public Funcionario exibirFuncionarioUnico(@RequestParam(required = false) int id) {
         Funcionario idFuncionario = gestorService.exibirUmFuncionario(id);
 
