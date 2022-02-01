@@ -16,8 +16,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
 
     private static final String[] END_POINTS = {
-            "/funcionarios",
-            "/bancohoras"
+            "/funcionario",
+
     };
 
 
@@ -26,7 +26,8 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.cors().configurationSource(configurarCors());
 
-        http.authorizeRequests().antMatchers(HttpMethod.POST, END_POINTS).permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, END_POINTS).permitAll()
+                .anyRequest().authenticated();
 
     }
 
