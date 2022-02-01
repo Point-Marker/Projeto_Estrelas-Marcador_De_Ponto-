@@ -52,4 +52,9 @@ public class GestorService {
         return salarioFuncionario;
     }
 
+    public Funcionario atualizarCargo(int idFuncionario, Cargo idCargo){
+        Funcionario cargoFuncionario = funcionarioService.atualizarCargo(idFuncionario, idCargo);
+
+        return cargoFuncionario;
+    }
 }
