@@ -69,7 +69,7 @@ public class GestorService {
         return statusFuncionario;
     }
 
-    public Cargo cadastrarCargo(Cargo cargo, double salario) {
+    public Cargo cadastrarCargo(Cargo cargo) {
         Optional<Cargo> cargoOptional = cargoRepository.findByNome(cargo.getNome());
 
         if (cargoOptional.isEmpty()){
