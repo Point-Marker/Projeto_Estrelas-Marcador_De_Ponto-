@@ -2,5 +2,9 @@ package br.com.zup.PointMarker.cargo;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface CargoRepository extends CrudRepository<Cargo,Integer> {
+import java.util.Optional;
+
+public interface CargoRepository extends CrudRepository<Cargo, Integer> {
+
+    Optional<Cargo> findByNome(String nome);
 }

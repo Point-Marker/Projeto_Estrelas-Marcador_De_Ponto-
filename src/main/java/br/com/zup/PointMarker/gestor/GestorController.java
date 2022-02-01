@@ -1,5 +1,8 @@
 package br.com.zup.PointMarker.gestor;
 
+import br.com.zup.PointMarker.cargo.Cargo;
+import br.com.zup.PointMarker.cargo.dtos.CargoCadastroEntradaDTO;
+import br.com.zup.PointMarker.cargo.dtos.CargoCadastroSaidaDTO;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.dtos.AtualizarCargoDTO.AtualizarCargoEntradaDTO;
@@ -40,6 +43,15 @@ public class GestorController {
         Funcionario funcionario = modelMapper.map(cadastroFuncionarioEntradaDTO, Funcionario.class);
         gestorService.cadastrarFuncionario(funcionario);
         return modelMapper.map(funcionario, CadastroFuncionarioSaidaDTO.class);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CargoCadastroSaidaDTO cadastrarCargo(@RequestBody CargoCadastroEntradaDTO cadastroEntradaDTO) {
+
+        Cargo cargo = modelMapper.map(cadastroEntradaDTO, Cargo.class);
+        gestorService.cadastrarCargo(cargo);
+        return modelMapper.map(cargo, CargoCadastroSaidaDTO.class);
     }
 
     @GetMapping

@@ -1,6 +1,8 @@
 package br.com.zup.PointMarker.config.configmensagem;
 
+import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.exceptions.AumentoDeSalarioInvalidoException;
+import br.com.zup.PointMarker.exceptions.CargoJaCadastradoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
@@ -30,29 +32,24 @@ public class ControllerAdvisor {
                     fieldError.getDefaultMessage());
             erros.add(erroValidacao);
         }
-
         return erros;
     }
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErroValidacao manipularMensagegParaCargoNaoEncontrado(NoSuchElementException exception) {
-
         return new ErroValidacao(exception.getLocalizedMessage(), exception.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public MensagemDeErro manipularMensagegParaDataDeNascimentoForaDoPadraoBrasileiro() {
-
-        return new MensagemDeErro("Digite a sua data de nascimento, " +
-                "de acordo com o seguinte formato: 23/06/2001 -> dd/MM/AAAA.");
+        return new MensagemDeErro("de acordo com o seguinte formato: 23/06/2001 -> dd/MM/AAAA.");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public MensagemDeErro manipularMensagegParaCPFRepetido() {
-
         return new MensagemDeErro("Este CPF Já Está Cadastrado.");
     }
 
@@ -78,5 +75,11 @@ public class ControllerAdvisor {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public MensagemDeErro manipularMensagemDeErroParaHorarioInvalido(HorarioInvalidoException horarioInvalido) {
         return new MensagemDeErro(horarioInvalido.getMessage());
+    }
+
+    @ExceptionHandler(CargoJaCadastradoException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public MensagemDeErro cargoJaCadastrado(CargoJaCadastradoException cargoJaCadastradoException) {
+        return new MensagemDeErro(cargoJaCadastradoException.getMessage());
     }
 }
