@@ -26,12 +26,12 @@ public class BancoDeHorasControllerTeste {
         funcionario = new Funcionario();
         funcionario.setId(1);
 
-        bancoDeHoras = new BancoDeHoras();
-        bancoDeHoras.setId(1);
-        bancoDeHoras.setId_funcionario(funcionario);
-        bancoDeHoras.setHoraExtra(1);
-        bancoDeHoras.setEntrada(LocalDateTime.now());
-        bancoDeHoras.setSaida(LocalDateTime.now());
+//        bancoDeHoras = new BancoDeHoras();
+//        bancoDeHoras.setId(1);
+//        bancoDeHoras.setId_funcionario(funcionario);
+//        bancoDeHoras.setHoraExtra(1);
+//        bancoDeHoras.setEntrada(LocalDateTime.now());
+//        bancoDeHoras.setSaida(LocalDateTime.now());
 
     }
 //
