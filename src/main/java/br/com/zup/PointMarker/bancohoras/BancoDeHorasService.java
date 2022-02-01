@@ -2,7 +2,6 @@ package br.com.zup.PointMarker.bancohoras;
 
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
-import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,14 +14,11 @@ public class BancoDeHorasService {
 
     private BancoDeHorasRepository bancoDeHorasRepository;
     private FuncionarioService funcionarioService;
-    private FuncionarioRepository funcionarioRepository;
 
     @Autowired
-    public BancoDeHorasService(BancoDeHorasRepository bancoDeHorasRepository, FuncionarioService funcionarioService,
-                               FuncionarioRepository funcionarioRepository) {
+    public BancoDeHorasService(BancoDeHorasRepository bancoDeHorasRepository, FuncionarioService funcionarioService) {
         this.bancoDeHorasRepository = bancoDeHorasRepository;
         this.funcionarioService = funcionarioService;
-        this.funcionarioRepository = funcionarioRepository;
     }
 
 

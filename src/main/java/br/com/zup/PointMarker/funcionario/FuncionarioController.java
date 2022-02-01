@@ -18,9 +18,8 @@ public class FuncionarioController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping
-    @ResponseStatus
-    public Funcionario exibirFuncionarioId(@RequestParam(required = false) int id) {
+    @GetMapping("/{id}'")
+    public Funcionario exibirFuncionarioId(int id) {
         Funcionario idFuncionario = funcionarioService.buscarFuncionario(id);
 
         return idFuncionario;
