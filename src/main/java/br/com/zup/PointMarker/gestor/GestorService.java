@@ -1,5 +1,6 @@
 package br.com.zup.PointMarker.gestor;
 
+import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
@@ -24,15 +25,15 @@ public class GestorService {
     }
 
     public List<Funcionario> exibirTodosFuncionarios(Status status) {
-        List<Funcionario> funcionario = funcionarioService.exibirTodosFuncionarios(status);
+        List<Funcionario> todosFuncionario = funcionarioService.exibirTodosFuncionarios(status);
 
-        return funcionario;
+        return todosFuncionario;
     }
 
     public Funcionario exibirUmFuncionario(int id) {
-        Funcionario funcionario = funcionarioService.buscarFuncionario(id);
+        Funcionario umFuncionario = funcionarioService.buscarFuncionario(id);
 
-        return funcionario;
+        return umFuncionario;
     }
 
     public Funcionario cadastrarFuncionario(Funcionario entradaFuncionario) {
@@ -44,4 +45,11 @@ public class GestorService {
     public void removerFuncionario(int id) {
         funcionarioService.deletarHorasTrabalhadas(id);
     }
+
+    public Funcionario atualizarSalario(int id, double salario) {
+        Funcionario salarioFuncionario = funcionarioService.atualizarSalario(id, salario);
+
+        return salarioFuncionario;
+    }
+
 }
