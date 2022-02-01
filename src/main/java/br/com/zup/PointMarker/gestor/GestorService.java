@@ -52,9 +52,15 @@ public class GestorService {
         return salarioFuncionario;
     }
 
-    public Funcionario atualizarCargo(int idFuncionario, Cargo idCargo){
+    public Funcionario atualizarCargo(int idFuncionario, Cargo idCargo) {
         Funcionario cargoFuncionario = funcionarioService.atualizarCargo(idFuncionario, idCargo);
 
         return cargoFuncionario;
+    }
+
+    public Funcionario atualizarStatus(int id, Status status) {
+        Funcionario statusFuncionario = funcionarioService.atualizarStatus(id, status);
+
+        return statusFuncionario;
     }
 }
