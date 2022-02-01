@@ -110,8 +110,7 @@ public class FuncionarioService {
 
     public void deletarHorasTrabalhadas(int id) {
         Funcionario funcionario = buscarFuncionario(id);
-        funcionario.setTotalHorasTrabalhadas(0);
-        funcionarioRepository.save(funcionario);
+        funcionarioRepository.delete(funcionario);
     }
 
 }

@@ -34,4 +34,8 @@ public class GestorService {
 
         return funcionario;
     }
+
+    public void removerFuncionario(int id) {
+        funcionarioService.deletarHorasTrabalhadas(id);
+    }
 }
