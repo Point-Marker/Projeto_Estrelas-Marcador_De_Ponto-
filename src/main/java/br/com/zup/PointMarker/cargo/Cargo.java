@@ -1,6 +1,5 @@
 package br.com.zup.PointMarker.cargo;
 
-import br.com.zup.PointMarker.funcionario.Funcionario;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

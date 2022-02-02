@@ -118,9 +118,8 @@ public class GestorController {
     @ResponseStatus(HttpStatus.OK)
     public AtualizarStatusSaidaDTO atualizarStatus(@PathVariable int id, @RequestBody AtualizarStatusEntradaDTO atualizarStatusEntradaDTO) {
 
-        Status status = modelMapper.map(atualizarStatusEntradaDTO, Status.class);
-        gestorService.atualizarStatus(id, status);
-        return modelMapper.map(status, AtualizarStatusSaidaDTO.class);
+        Funcionario funcionario = gestorService.atualizarStatus(id, atualizarStatusEntradaDTO.getStatus());
+        return modelMapper.map(funcionario, AtualizarStatusSaidaDTO.class);
     }
 
     @DeleteMapping("/{id}")
