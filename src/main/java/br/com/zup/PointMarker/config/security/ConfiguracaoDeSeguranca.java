@@ -1,6 +1,7 @@
 package br.com.zup.PointMarker.config.security;
 
 import br.com.zup.PointMarker.config.security.JWT.FiltroDeAutenticacaoJWT;
+import br.com.zup.PointMarker.config.security.JWT.FiltroDeAutorizacao;
 import br.com.zup.PointMarker.config.security.JWT.JWTComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,8 +28,6 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
 
     private static final String[] END_POINTS = {
             "/dashboard/cadastro/funcionarios",
-            "/login"
-
     };
 
 
@@ -41,6 +40,7 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilter(new FiltroDeAutenticacaoJWT(jwtComponent, authenticationManager()));
+        http.addFilter(new FiltroDeAutorizacao(authenticationManager(), jwtComponent, userDetailsService));
     }
 
     @Override

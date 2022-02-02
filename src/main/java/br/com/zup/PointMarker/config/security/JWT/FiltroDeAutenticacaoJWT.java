@@ -5,7 +5,6 @@ import br.com.zup.PointMarker.config.security.UsuarioLogadoService;
 import br.com.zup.PointMarker.exceptions.AcessoNegadoException;
 import br.com.zup.PointMarker.funcionario.dtos.LoginDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@AllArgsConstructor
 public class FiltroDeAutenticacaoJWT extends UsernamePasswordAuthenticationFilter {
     private JWTComponent jwtComponent;
     private AuthenticationManager authenticationManager;

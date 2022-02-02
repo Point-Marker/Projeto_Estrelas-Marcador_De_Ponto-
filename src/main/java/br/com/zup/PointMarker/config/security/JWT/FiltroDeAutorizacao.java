@@ -2,6 +2,7 @@ package br.com.zup.PointMarker.config.security.JWT;
 
 import br.com.zup.PointMarker.exceptions.TokenInvalidoException;
 import io.jsonwebtoken.Claims;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,7 +48,7 @@ public class FiltroDeAutorizacao extends BasicAuthenticationFilter {
                 UsernamePasswordAuthenticationToken auth = pegarAutenticacao(token.substring(6));
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (TokenInvalidoException exception) {
-
+            response.sendError(HttpStatus.FORBIDDEN.value());
             }
         }
         chain.doFilter(request, response);
