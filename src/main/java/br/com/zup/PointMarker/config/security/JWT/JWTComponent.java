@@ -1,4 +1,4 @@
-package br.com.zup.PointMarker.config.security.jwt;
+package br.com.zup.PointMarker.config.security.JWT;
 
 import br.com.zup.PointMarker.exceptions.TokenInvalidoException;
 import io.jsonwebtoken.Claims;
