@@ -17,7 +17,7 @@ public class Cargo implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(nullable = true)
+    @Column(nullable = true, unique = true)
     private String nome;
     @Column(nullable = true)
     private double salario;

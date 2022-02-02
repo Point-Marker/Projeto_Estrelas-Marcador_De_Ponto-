@@ -19,6 +19,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+
 
 @SpringBootTest
 public class BancoDeHorasServiceTeste {
@@ -87,11 +89,42 @@ public class BancoDeHorasServiceTeste {
         bancoDeHorasComErro.setEntrada(LocalTime.now());
         bancoDeHorasComErro.setSaida(LocalTime.now());
 
-        Mockito.when(ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository, funcionarioRepository)).thenReturn(null);
+        Mockito.when(ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository)).thenReturn(null);
 
         Assertions.assertThrows(RuntimeException.class, () -> {
-            ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository, funcionarioRepository);
+            ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository);
         });
 
+    }
+
+    @Test
+    public void exibirHorasTrabalhadasCaminhoVerdadeiro() {
+        Mockito.when(funcionarioService.buscarFuncionario(Mockito.anyInt())).thenReturn(funcionario);
+        bancoDeHoras = new BancoDeHoras();
+        bancoDeHoras.setFuncionario(funcionario);
+        List<BancoDeHoras> bancoList = bancoDeHorasRepository.findAllByFuncionario(funcionario);
+        for (BancoDeHoras bancoDeHoras : bancoList) {
+            Assertions.assertEquals(funcionario, bancoDeHoras.getFuncionario());
+        }
+    }
+
+    @Test
+    public void exibirHorasTrabalhadasCaminhoEntradaCaminhoFalso() {
+        Mockito.when(funcionarioService.buscarFuncionario(2)).thenReturn(null);
+        List<BancoDeHoras> bancoList = bancoDeHorasService.exibirHorasTrabalhadas(2);
+
+        Mockito.verify(bancoDeHorasRepository, Mockito.times(0)).findAllByFuncionario(funcionario);
+    }
+
+    @Test
+    public void atualizarHorasTrabalhadasEntradaCaminhoVerdadeiro() {
+        Mockito.when(funcionarioService.buscarFuncionario(Mockito.anyInt())).thenReturn(funcionario);
+        Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(bancoDeHoras.getDiaDoTrabalho())).thenReturn(bancoDeHoras);
+
+        BancoDeHoras bancoTesteHorario = new BancoDeHoras();
+        bancoTesteHorario.setEntrada(LocalTime.of(12, 30));
+        BancoDeHoras bancoList = bancoDeHorasService.atualizarHorasTrabalhadasEntrada(Mockito.anyInt(), LocalDate.now(), bancoDeHoras);
+
+        Assertions.assertNotEquals(bancoList.getEntrada(), bancoDeHoras.getEntrada());
     }
 }

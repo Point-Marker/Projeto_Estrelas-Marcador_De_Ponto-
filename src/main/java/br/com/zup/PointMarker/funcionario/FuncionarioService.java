@@ -46,7 +46,7 @@ public class FuncionarioService {
         throw new RuntimeException();
     }
 
-    public List<Funcionario> exibirFuncionarios(Status status) {
+    public List<Funcionario> exibirTodosFuncionarios(Status status) {
         if (status != null) {
             return funcionarioRepository.findAllByStatus(status);
         }
@@ -122,8 +122,7 @@ public class FuncionarioService {
 
     public void deletarHorasTrabalhadas(int id) {
         Funcionario funcionario = buscarFuncionario(id);
-        funcionario.setTotalHorasTrabalhadas(0);
-        funcionarioRepository.save(funcionario);
+        funcionarioRepository.delete(funcionario);
     }
 
 }

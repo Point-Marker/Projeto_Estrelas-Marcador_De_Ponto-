@@ -12,7 +12,7 @@ public class ValidaHoras {
 
 
     public static int calcularHorasDeTrabalho(BancoDeHoras bancoDeHoras, FuncionarioService funcionarioService,
-                                              BancoDeHorasRepository bancoDeHorasRepository, FuncionarioRepository funcionarioRepository) {
+                                              BancoDeHorasRepository bancoDeHorasRepository) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(bancoDeHoras.getFuncionario().getId());
 
         try {
@@ -32,7 +32,6 @@ public class ValidaHoras {
 
                 if (funcionario.getTotalHorasTrabalhadas() <= LIMITE_DE_HORAS_TRABALHADAS) {
                     funcionario.setTotalHorasTrabalhadas(funcionario.getTotalHorasTrabalhadas() + horasTrabalhadas);
-                    funcionarioRepository.save(funcionario);
                     bancoDeHoras.setFuncionario(funcionario);
                     bancoDeHorasRepository.save(bancoDeHoras);
                 } else {
