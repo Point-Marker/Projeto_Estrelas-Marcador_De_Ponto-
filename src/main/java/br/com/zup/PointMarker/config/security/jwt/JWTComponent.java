@@ -5,17 +5,19 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
 public class JWTComponent {
     @Value("${jwt.segredo}")
     private String segredo;
-    @Value("${jwt.tempo}")
-    private Long milissegundo;
+    @Value("${jwt.milissegundos}")
+    private Long milissegundos;
 
     public String gerarToken(String username, int id) {
-        Date vencimento = new Date(System.currentTimeMillis() * milissegundo);
+        Date vencimento = new Date(System.currentTimeMillis() + milissegundos);
 
         String token = Jwts.builder().setSubject(username)
                 .claim("idUsuario", id).setExpiration(vencimento)
