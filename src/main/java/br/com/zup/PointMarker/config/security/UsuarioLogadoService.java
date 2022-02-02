@@ -4,14 +4,13 @@ import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UsuarioLogadoService implements UserDetailsService {
@@ -29,10 +28,13 @@ public class UsuarioLogadoService implements UserDetailsService {
         List<Cargo> cargosDoFuncionario = new ArrayList<>();
         cargosDoFuncionario.add(funcionarioOptional.get().getCargo());
 
-        Funcionario funcionario = funcionarioOptional.get();
-
-        return new UsuarioLogado(funcionario.getId(), funcionario.getNomeUsuario(), funcionario.getSenha()
-                , cargosDoFuncionario);
+        return new UsuarioLogado(funcionarioOptional.get().getId(), funcionarioOptional.get().getNomeUsuario(),
+                funcionarioOptional.get().getSenha(), pegarAutorizacao(funcionarioOptional.get()));
     }
 
+    private Set<SimpleGrantedAuthority> pegarAutorizacao(Funcionario funcionario) {
+        Set<SimpleGrantedAuthority> autorizacoes = new HashSet<>();
+        autorizacoes.add(new SimpleGrantedAuthority("ROLE_" + funcionario.getCargo().getNome()));
+        return autorizacoes;
+    }
 }

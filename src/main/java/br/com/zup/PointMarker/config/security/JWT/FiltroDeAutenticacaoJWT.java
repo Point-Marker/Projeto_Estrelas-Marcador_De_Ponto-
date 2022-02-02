@@ -10,7 +10,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -18,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @AllArgsConstructor
 public class FiltroDeAutenticacaoJWT extends UsernamePasswordAuthenticationFilter {
@@ -25,16 +25,20 @@ public class FiltroDeAutenticacaoJWT extends UsernamePasswordAuthenticationFilte
     private AuthenticationManager authenticationManager;
     private UsuarioLogadoService usuarioLogadoService;
 
+    public FiltroDeAutenticacaoJWT(JWTComponent jwtComponent, AuthenticationManager authenticationManager) {
+        this.jwtComponent = jwtComponent;
+        this.authenticationManager = authenticationManager;
+    }
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
             LoginDTO login = objectMapper.readValue(request.getInputStream(), LoginDTO.class);
-            UserDetails userDetails = usuarioLogadoService.loadUserByUsername(login.getNomeUsuario());
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    login.getNomeUsuario(), login.getSenha(), userDetails.getAuthorities());
+                    login.getNomeUsuario(), login.getSenha(), new ArrayList<>());
             Authentication autenticacao = authenticationManager.authenticate(authToken);
             return autenticacao;
         } catch (IOException e) {

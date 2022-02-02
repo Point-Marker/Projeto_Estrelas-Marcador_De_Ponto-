@@ -1,12 +1,12 @@
 package br.com.zup.PointMarker.config.security;
 
-import br.com.zup.PointMarker.cargo.Cargo;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,11 +17,11 @@ public class UsuarioLogado implements UserDetails {
     private int id;
     private String nomeUsuario;
     private String senha;
-    private List<Cargo> cargoList;
+    private Set<SimpleGrantedAuthority> autorizacoes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return cargoList;
+        return autorizacoes;
     }
 
     @Override
