@@ -1,5 +1,7 @@
 package br.com.zup.PointMarker.gestor;
 
+import br.com.zup.PointMarker.bancohoras.BancoDeHoras;
+import br.com.zup.PointMarker.bancohoras.dtos.DetailsDTO.BancoDeHorasDetailsDTO;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.cargo.dtos.CargoCadastroEntradaDTO;
 import br.com.zup.PointMarker.cargo.dtos.CargoCadastroSaidaDTO;
@@ -62,6 +64,15 @@ public class GestorController {
 
         for (Funcionario referencia : funcionariosAtivos) {
             FuncionarioDetailsDTO funcionarioDetailsDTO = modelMapper.map(referencia, FuncionarioDetailsDTO.class);
+            List<BancoDeHorasDetailsDTO> detailsbancoList = new ArrayList<>();
+
+            List<BancoDeHoras> bancoDeHoras = referencia.getBancoDeHoras();
+
+            for (BancoDeHoras referenciaBancoDeHoras : bancoDeHoras) {
+                BancoDeHorasDetailsDTO bancoDeHorasDetailsDTO = modelMapper.map(referenciaBancoDeHoras, BancoDeHorasDetailsDTO.class);
+                detailsbancoList.add(bancoDeHorasDetailsDTO);
+            }
+            funcionarioDetailsDTO.setBancoDeHorasDetailsDTO(detailsbancoList);
             funcionarioDetailsAtivos.add(funcionarioDetailsDTO);
         }
 
@@ -69,11 +80,21 @@ public class GestorController {
     }
 
     @GetMapping("/{id}")
-    public Funcionario exibirFuncionarioUnico(@PathVariable int id) {
-      
-        Funcionario idFuncionario = gestorService.exibirUmFuncionario(id);
+    public FuncionarioDetailsDTO exibirFuncionarioUnico(@PathVariable int id) {
 
-        return idFuncionario;
+        Funcionario funcionario = gestorService.exibirUmFuncionario(id);
+        List<BancoDeHoras> bancoDeHoras = funcionario.getBancoDeHoras();
+        List<BancoDeHorasDetailsDTO> detailsbancoList = new ArrayList<>();
+
+        for (BancoDeHoras referenciaBancoDeHoras : bancoDeHoras) {
+            BancoDeHorasDetailsDTO bancoDeHorasDetailsDTO = modelMapper.map(referenciaBancoDeHoras, BancoDeHorasDetailsDTO.class);
+            detailsbancoList.add(bancoDeHorasDetailsDTO);
+        }
+
+        FuncionarioDetailsDTO funcionarioDetailsDTO = modelMapper.map(funcionario, FuncionarioDetailsDTO.class);
+        funcionarioDetailsDTO.setBancoDeHorasDetailsDTO(detailsbancoList);
+
+        return funcionarioDetailsDTO;
     }
 
     @PutMapping("/salario/{id}")
