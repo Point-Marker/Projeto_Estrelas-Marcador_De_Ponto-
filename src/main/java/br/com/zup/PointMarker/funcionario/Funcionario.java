@@ -3,6 +3,7 @@ package br.com.zup.PointMarker.funcionario;
 import br.com.zup.PointMarker.bancohoras.BancoDeHoras;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
+import br.com.zup.PointMarker.usuario.Usuario;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,8 +24,6 @@ public class Funcionario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
-    private String nomeUsuario;
-    private String senha;
     @Column(unique = true)
     private String cpf;
     private double salario;
@@ -37,4 +36,6 @@ public class Funcionario {
     private int horasExtras;
     @OneToMany(mappedBy = "funcionario")
     private List<BancoDeHoras> bancoDeHoras;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Usuario usuario;
 }
