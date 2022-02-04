@@ -1,6 +1,7 @@
 package br.com.zup.PointMarker.bancohoras;
 
 import br.com.zup.PointMarker.enums.Status;
+import br.com.zup.PointMarker.exceptions.BancoDeHorasNãoEncontradoException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +103,7 @@ public class BancoDeHorasService {
             return listaDeHorasExtras;
         }
 
-        throw new RuntimeException("Mês não encontrado.");
+        throw new BancoDeHorasNãoEncontradoException("O banco de horas solicitado não pôde ser encontrado!");
     }
 
 }
