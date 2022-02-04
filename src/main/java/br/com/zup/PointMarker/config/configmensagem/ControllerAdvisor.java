@@ -98,4 +98,11 @@ public class ControllerAdvisor {
         return new MensagemDeErro("O dia informado já foi cadastrado!");
     }
 
+    @ExceptionHandler(BancoDeHorasNãoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public MensagemDeErro bancoDeHorasNaoEncontrado(BancoDeHorasNãoEncontradoException
+                                                                bancoDeHorasNãoEncontradoException) {
+        return new MensagemDeErro("O banco de horas solicitado não pôde ser encontrado!");
+    }
+
 }
