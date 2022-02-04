@@ -35,6 +35,7 @@ public class FiltroDeAutenticacaoJWT extends UsernamePasswordAuthenticationFilte
         try {
             LoginDTO login = objectMapper.readValue(request.getInputStream(), LoginDTO.class);
 
+
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     login.getNomeUsuario(), login.getSenha(), new ArrayList<>());
             Authentication autenticacao = authenticationManager.authenticate(authToken);
@@ -50,7 +51,7 @@ public class FiltroDeAutenticacaoJWT extends UsernamePasswordAuthenticationFilte
         String username = usuarioLogado.getUsername();
         int id = usuarioLogado.getId();
 
-        String token = jwtComponent.gerarToken(username, id);
+        String token = jwtComponent.gerarToken(username, id, usuarioLogado.getAuthorities());
 
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
         response.addHeader("Authorization", "Token " + token);
