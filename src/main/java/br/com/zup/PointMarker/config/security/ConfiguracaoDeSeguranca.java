@@ -26,8 +26,16 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    private static final String[] END_POINTS = {
+    private static final String[] END_POINTS_PUBLICO = {
             "/dashboard/cadastro/funcionarios",
+    };
+
+    private static final String[] END_POINTS_POST = {
+            "/bancohoras"
+    };
+
+    private static final String[] END_POINTS_GET = {
+            "/dashboard/",
     };
 
 
@@ -36,8 +44,10 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.cors().configurationSource(configurarCors());
 
-        http.authorizeRequests().antMatchers(HttpMethod.POST, END_POINTS).permitAll()
-                .anyRequest().authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, END_POINTS_PUBLICO).permitAll()
+                .antMatchers(HttpMethod.POST, END_POINTS_POST).hasAnyAuthority("USER", "ADMIN")
+                .antMatchers(HttpMethod.GET, END_POINTS_GET).hasAnyAuthority("USER", "ADMIN")
+                .and().authorizeRequests().anyRequest().hasAuthority("ADMIN");
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilter(new FiltroDeAutenticacaoJWT(jwtComponent, authenticationManager()));
         http.addFilter(new FiltroDeAutorizacao(authenticationManager(), jwtComponent, userDetailsService));
