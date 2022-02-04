@@ -7,6 +7,7 @@ import br.com.zup.PointMarker.exceptions.AumentoDeSalarioInvalidoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import br.com.zup.PointMarker.exceptions.LimiteAumentoSalarioException;
+import br.com.zup.PointMarker.exceptions.MaisDeCinquentaHorasTrabalhadasException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -80,7 +81,7 @@ public class FuncionarioService {
                     funcionario.getSalario() != funcionario.getCargo().getSalario()) {
 
                 if (salario > tetoFuncionario){
-                    throw new RuntimeException("O aumento de salário não pode ser maior do que 50% o salário atual do " +
+                    throw new LimiteAumentoSalarioException("O aumento de salário não pode ser maior do que 50% o salário atual do " +
                             "funcionário ou do cargo do funcionário.");
                 }
 
@@ -119,7 +120,7 @@ public class FuncionarioService {
         Funcionario funcionario = buscarFuncionario(id);
         if (status.equals(Status.INATIVO)) {
             if (funcionario.getTotalHorasTrabalhadas() > 50) {
-                throw new RuntimeException("Este Funcionario Tem Mais de 50 Horas Trabalhadas Neste Mês");
+                throw new MaisDeCinquentaHorasTrabalhadasException("Este Funcionario Tem Mais de 50 Horas Trabalhadas Neste Mês");
             }
         }
 

@@ -110,4 +110,10 @@ public class ControllerAdvisor {
     public MensagemDeErro limiteAumentoSalario(LimiteAumentoSalarioException limiteAumentoSalarioException){
         return new MensagemDeErro(limiteAumentoSalarioException.getMessage());
     }
+
+    @ExceptionHandler(MaisDeCinquentaHorasTrabalhadasException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro maisDeCinquentaHoras(MaisDeCinquentaHorasTrabalhadasException maisDeCinquentaHorasTrabalhadasException){
+        return new MensagemDeErro(maisDeCinquentaHorasTrabalhadasException.getMessage());
+    }
 }
