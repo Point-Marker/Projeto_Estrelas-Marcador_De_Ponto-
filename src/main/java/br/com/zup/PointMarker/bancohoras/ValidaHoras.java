@@ -80,7 +80,7 @@ public class ValidaHoras {
             return horasTrabalhadas;
         }
 
-        throw new RuntimeException("A sua Cargo Horaria é de: "
+        throw new ASuaCargaHorariaException("A sua Carga Horaria é de: "
                 + bancoDeHoras.getFuncionario().getCargo().getCargoHoraria());
     }
 

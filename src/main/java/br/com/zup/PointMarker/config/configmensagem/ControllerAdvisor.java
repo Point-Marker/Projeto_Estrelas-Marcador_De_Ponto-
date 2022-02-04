@@ -85,4 +85,17 @@ public class ControllerAdvisor {
         return new MensagemDeErro("Você excedeu sua carga horária de trabalho!");
     }
 
+    @ExceptionHandler(ASuaCargaHorariaException.class)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public MensagemDeErro aSuaCargaHoraria(ASuaCargaHorariaException aSuaCargaHorariaException) {
+        return new MensagemDeErro("A sua carga horária é de: ");
+    }
+
+    @ExceptionHandler(HoraJaInseridaNoSistemaException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public MensagemDeErro horaJaInseridaNoSistema(HoraJaInseridaNoSistemaException
+                                                              horaJaInseridaNoSistemaException){
+        return new MensagemDeErro("O dia informado já foi cadastrado!");
+    }
+
 }
