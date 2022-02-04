@@ -2,6 +2,7 @@ package br.com.zup.PointMarker.funcionario.dtos.CadastroFuncionárioDTO;
 
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
+import br.com.zup.PointMarker.usuario.Usuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,5 @@ public class CadastroFuncionarioSaidaDTO {
     private LocalDate dataDeNascimento;
     private Cargo cargo;
     private Status status;
-
+    private Usuario usuario;
 }

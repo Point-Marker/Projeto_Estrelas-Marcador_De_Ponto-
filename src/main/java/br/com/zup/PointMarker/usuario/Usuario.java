@@ -1,6 +1,5 @@
-package br.com.zup.PointMarker.gestor;
+package br.com.zup.PointMarker.usuario;
 
-import br.com.zup.PointMarker.cargo.Cargo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,9 +10,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "gestor")
-public class Gestor {
-
+@Table(name = "usuarios")
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

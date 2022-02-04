@@ -1,6 +1,7 @@
 package br.com.zup.PointMarker.funcionario.dtos.CadastroFuncionárioDTO;
 
 import br.com.zup.PointMarker.cargo.Cargo;
+import br.com.zup.PointMarker.usuario.Usuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,4 +25,5 @@ public class CadastroFuncionarioEntradaDTO {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataDeNascimento;
     private Cargo cargo;
+    private Usuario usuario;
 }

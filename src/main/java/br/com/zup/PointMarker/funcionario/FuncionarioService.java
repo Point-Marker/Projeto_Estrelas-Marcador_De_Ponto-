@@ -7,6 +7,7 @@ import br.com.zup.PointMarker.exceptions.AumentoDeSalarioInvalidoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +18,13 @@ public class FuncionarioService {
 
     private FuncionarioRepository funcionarioRepository;
     private CargoRepository cargoRepository;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public FuncionarioService(FuncionarioRepository funcionarioRepository, CargoRepository cargoRepository) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, CargoRepository cargoRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.funcionarioRepository = funcionarioRepository;
         this.cargoRepository = cargoRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public Funcionario salvarFuncionario(Funcionario entradafuncionario) {
@@ -29,9 +32,12 @@ public class FuncionarioService {
         entradafuncionario.setCargo(cargoOptional.get());
         cargoOptional.orElseThrow();
 
-        entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
-        entradafuncionario.setStatus(Status.ATIVO);
-        return funcionarioRepository.save(entradafuncionario);
+            String senhaEscondida = bCryptPasswordEncoder.encode(entradafuncionario.getUsuario().getSenha());
+            entradafuncionario.getUsuario().setSenha(senhaEscondida);
+            entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
+            entradafuncionario.setStatus(Status.ATIVO);
+            return funcionarioRepository.save(entradafuncionario);
+
     }
 
     public List<Funcionario> exibirTodosFuncionarios(Status status) {
