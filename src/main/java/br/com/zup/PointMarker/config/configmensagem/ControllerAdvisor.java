@@ -82,27 +82,27 @@ public class ControllerAdvisor {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public MensagemDeErro voceExcedeuAsHorasTrabalhadas(VoceExcedeuAsHorasTrabalhadasException
                                                                     voceExcedeuAsHorasTrabalhadasException) {
-        return new MensagemDeErro("Você excedeu sua carga horária de trabalho!");
+        return new MensagemDeErro(voceExcedeuAsHorasTrabalhadasException.getMessage());
     }
 
     @ExceptionHandler(ASuaCargaHorariaException.class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public MensagemDeErro aSuaCargaHoraria(ASuaCargaHorariaException aSuaCargaHorariaException) {
-        return new MensagemDeErro("A sua carga horária é de: ");
+        return new MensagemDeErro(aSuaCargaHorariaException.getMessage());
     }
 
     @ExceptionHandler(HoraJaInseridaNoSistemaException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public MensagemDeErro horaJaInseridaNoSistema(HoraJaInseridaNoSistemaException
                                                               horaJaInseridaNoSistemaException){
-        return new MensagemDeErro("O dia informado já foi cadastrado!");
+        return new MensagemDeErro(horaJaInseridaNoSistemaException.getMessage());
     }
 
     @ExceptionHandler(BancoDeHorasNãoEncontradoException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public MensagemDeErro bancoDeHorasNaoEncontrado(BancoDeHorasNãoEncontradoException
                                                                 bancoDeHorasNãoEncontradoException) {
-        return new MensagemDeErro("O banco de horas solicitado não pôde ser encontrado!");
+        return new MensagemDeErro(bancoDeHorasNãoEncontradoException.getMessage());
     }
 
     @ExceptionHandler(LimiteAumentoSalarioException.class)
@@ -113,7 +113,9 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(MaisDeCinquentaHorasTrabalhadasException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public MensagemDeErro maisDeCinquentaHoras(MaisDeCinquentaHorasTrabalhadasException maisDeCinquentaHorasTrabalhadasException){
+    public MensagemDeErro maisDeCinquentaHoras(MaisDeCinquentaHorasTrabalhadasException
+                                                           maisDeCinquentaHorasTrabalhadasException){
         return new MensagemDeErro(maisDeCinquentaHorasTrabalhadasException.getMessage());
     }
+
 }
