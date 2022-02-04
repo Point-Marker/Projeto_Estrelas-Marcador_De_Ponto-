@@ -1,5 +1,6 @@
 package br.com.zup.PointMarker.bancohoras;
 
+import br.com.zup.PointMarker.exceptions.ASuaCargaHorariaException;
 import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
@@ -26,7 +27,7 @@ public class ValidaHoras {
                 int horasTrabalhadas = saida - entrada;
 
                 if (horasTrabalhadas != funcionario.getCargo().getCargoHoraria()) {
-                    throw new RuntimeException("A sua Cargo Horaria é de: "
+                    throw new ASuaCargaHorariaException("A sua Carga Horaria é de: "
                             + funcionario.getCargo().getCargoHoraria());
                 }
 
