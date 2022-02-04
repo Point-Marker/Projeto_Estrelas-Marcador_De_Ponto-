@@ -6,6 +6,7 @@ import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.AumentoDeSalarioInvalidoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
 import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
+import br.com.zup.PointMarker.exceptions.LimiteAumentoSalarioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,7 @@ public class FuncionarioService {
                     funcionario.getSalario() == funcionario.getCargo().getSalario()) {
 
                 if (salario > tetoFuncionario || salario > tetoCargo){
-                    throw new RuntimeException("O aumento de salário não pode ser maior do que 50% o salário atual do " +
+                    throw new LimiteAumentoSalarioException("O aumento de salário não pode ser maior do que 50% o salário atual do " +
                             "funcionário ou do cargo do funcionário.");
                 }
 

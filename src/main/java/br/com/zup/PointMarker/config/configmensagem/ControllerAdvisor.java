@@ -105,4 +105,9 @@ public class ControllerAdvisor {
         return new MensagemDeErro("O banco de horas solicitado não pôde ser encontrado!");
     }
 
+    @ExceptionHandler(LimiteAumentoSalarioException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro limiteAumentoSalario(LimiteAumentoSalarioException limiteAumentoSalarioException){
+        return new MensagemDeErro(limiteAumentoSalarioException.getMessage());
+    }
 }
