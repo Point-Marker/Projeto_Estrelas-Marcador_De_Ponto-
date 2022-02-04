@@ -5,8 +5,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Date;
 
 @Component
@@ -16,10 +18,12 @@ public class JWTComponent {
     @Value("${jwt.milissegundos}")
     private Long milissegundos;
 
-    public String gerarToken(String username, int id) {
+    public String gerarToken(String username, int id,
+                             Collection<? extends GrantedAuthority> authentication) {
         Date vencimento = new Date(System.currentTimeMillis() + milissegundos);
 
         String token = Jwts.builder().setSubject(username)
+                .claim("Autorizacoes", authentication)
                 .claim("idUsuario", id).setExpiration(vencimento)
                 .signWith(SignatureAlgorithm.HS512, segredo.getBytes()).compact();
         return token;
