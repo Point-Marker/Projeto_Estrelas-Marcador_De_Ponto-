@@ -30,7 +30,7 @@ public class BancoDeHorasService {
             return bancoDeHorasRepository.save(bancoDeHoras);
         }
 
-        throw new RuntimeException();
+        throw new BancoDeHorasNãoEncontradoException("O banco de horas solicitado não pôde ser encontrado!");
     }
 
     public boolean verificarHorasTrabalhadadas(BancoDeHoras bancoDeHoras) {
