@@ -2,6 +2,7 @@ package br.com.zup.PointMarker.bancohoras;
 
 import br.com.zup.PointMarker.exceptions.ASuaCargaHorariaException;
 import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
+import br.com.zup.PointMarker.exceptions.VoceExcedeuAsHorasTrabalhadasException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
@@ -36,7 +37,7 @@ public class ValidaHoras {
                     bancoDeHoras.setFuncionario(funcionario);
                     bancoDeHorasRepository.save(bancoDeHoras);
                 } else {
-                    throw new RuntimeException("Você já excedeu as horas trabalhadas.");
+                    throw new VoceExcedeuAsHorasTrabalhadasException("Você excedeu sua carga horária de trabalho!");
                 }
             }
             return funcionario.getTotalHorasTrabalhadas();
