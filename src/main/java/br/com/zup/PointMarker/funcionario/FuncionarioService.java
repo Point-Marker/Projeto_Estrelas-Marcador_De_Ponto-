@@ -60,14 +60,28 @@ public class FuncionarioService {
     public Funcionario atualizarSalario(int id, double salario) {
 
         Funcionario funcionario = buscarFuncionario(id);
+
+        double tetoFuncionario = funcionario.getSalario() / 2;
+        double tetoCargo = funcionario.getCargo().getSalario() / 2;
+
         if (funcionario.getStatus().equals(Status.ATIVO)) {
             if (salario < funcionario.getCargo().getSalario() &
                     funcionario.getSalario() == funcionario.getCargo().getSalario()) {
+
+                if (salario > tetoFuncionario || salario > tetoCargo){
+                    throw new RuntimeException("O aumento de salário não pode ser maior do que 50% o salário atual do " +
+                            "funcionário ou do cargo do funcionário.");
+                }
 
                 funcionario.setSalario(salario + funcionario.getCargo().getSalario());
 
             } else if (salario < funcionario.getCargo().getSalario() &
                     funcionario.getSalario() != funcionario.getCargo().getSalario()) {
+
+                if (salario > tetoFuncionario){
+                    throw new RuntimeException("O aumento de salário não pode ser maior do que 50% o salário atual do " +
+                            "funcionário ou do cargo do funcionário.");
+                }
 
                 funcionario.setSalario(funcionario.getSalario() + salario);
 
