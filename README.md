@@ -10,33 +10,21 @@
 
  ```json
 {
-  "nome":"Adeildo",
-  "cpf":"563.038.670-06",
-  "dataDeNascimento":"01/01/1999",
-  "cargo": {
-    "id":1
-  }
+    "nome":"Load cobs Voks",
+    "cpf":"616.653.070-64",
+    "dataDeNascimento":"01/07/1979",
+    "cargo": {
+        "id":1
+    },
+    "usuario":{
+    "nomeUsuario":"Load702",
+    "senha":"1234"
+    }
 }
 ```
 
 - Resposta 201
 
-- Saida:
-
-```json 
-{
-    "nome": "Adeildo",
-    "cpf": "563.038.670-06",
-    "salario": 900.0,
-    "dataDeNascimento": "01/01/1999",
-    "cargo": {
-        "id": 1,
-        "nome": "Estagiario",
-        "salario": 900.0
-    },
-    "status": "ATIVO"
-}
-```
 <hr/>
 
 # Cadastro de Banco de Horas
@@ -59,19 +47,20 @@
 - Saida
 ```json
 {
-  "funcionario": {
-    "nome": "Clovis Gonçalves Tevez",
-    "cpf": "308.384.638-00",
-    "cargo": {
-      "id": 1,
-      "nome": "Estagio",
-      "salario": 900.0,
-      "cargoHoraria": 8
-    }
-  },
-  "diaDoTrabalho": "01/02/2022",
-  "entrada": "09:00",
-  "saida": "17:00"
+    "funcionario": {
+        "nome": "Leoncio Das Neves",
+        "cpf": "684.671.650-57",
+        "cargo": {
+            "id": 1,
+            "nome": "Estagio",
+            "salario": 900.0,
+            "cargoHoraria": 8,
+            "authority": "Estagio"
+        }
+    },
+    "diaDoTrabalho": "04/02/2022",
+    "entrada": "09:00",
+    "saida": "17:00"
 }
 ```
 
