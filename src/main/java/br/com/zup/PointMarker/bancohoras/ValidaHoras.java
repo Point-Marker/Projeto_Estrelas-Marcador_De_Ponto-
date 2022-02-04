@@ -64,7 +64,7 @@ public class ValidaHoras {
 
         for (BancoDeHoras referencia : bancoDeHorasList) {
             if (referencia.getDiaDoTrabalho().equals(LocalDate.now())) {
-                throw new RuntimeException("Este dia ja foi cadastrado.");
+                throw new HorarioInvalidoException("O dia informado já foi cadastrado!");
             }
         }
         return true;
