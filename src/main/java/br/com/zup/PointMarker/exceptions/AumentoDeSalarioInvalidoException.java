@@ -4,4 +4,5 @@ public class AumentoDeSalarioInvalidoException extends RuntimeException {
     public AumentoDeSalarioInvalidoException(String message) {
         super(message);
     }
+
 }

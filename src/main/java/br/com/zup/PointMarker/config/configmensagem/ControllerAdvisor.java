@@ -77,4 +77,12 @@ public class ControllerAdvisor {
     public MensagemDeErro cargoJaCadastrado(CargoJaCadastradoException cargoJaCadastradoException) {
         return new MensagemDeErro(cargoJaCadastradoException.getMessage());
     }
+
+    @ExceptionHandler(VoceExcedeuAsHorasTrabalhadasException.class)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public MensagemDeErro voceExcedeuAsHorasTrabalhadas(VoceExcedeuAsHorasTrabalhadasException
+                                                                    voceExcedeuAsHorasTrabalhadasException) {
+        return new MensagemDeErro("Você excedeu sua carga horária de trabalho!");
+    }
+
 }
