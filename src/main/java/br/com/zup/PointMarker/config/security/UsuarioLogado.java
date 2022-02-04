@@ -5,8 +5,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,11 +18,15 @@ public class UsuarioLogado implements UserDetails {
     private int id;
     private String nomeUsuario;
     private String senha;
-    private Set<SimpleGrantedAuthority> autorizacoes;
+    private List<String> autorizacoes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return autorizacoes;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (String referencia : autorizacoes) {
+            authorities.add(new SimpleGrantedAuthority(referencia));
+        }
+        return authorities;
     }
 
     @Override
