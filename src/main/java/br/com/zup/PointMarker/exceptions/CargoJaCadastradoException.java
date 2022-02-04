@@ -4,4 +4,5 @@ public class CargoJaCadastradoException extends RuntimeException{
     public CargoJaCadastradoException(String message) {
         super(message);
     }
+
 }

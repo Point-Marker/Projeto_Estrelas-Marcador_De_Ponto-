@@ -77,4 +77,32 @@ public class ControllerAdvisor {
     public MensagemDeErro cargoJaCadastrado(CargoJaCadastradoException cargoJaCadastradoException) {
         return new MensagemDeErro(cargoJaCadastradoException.getMessage());
     }
+
+    @ExceptionHandler(VoceExcedeuAsHorasTrabalhadasException.class)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public MensagemDeErro voceExcedeuAsHorasTrabalhadas(VoceExcedeuAsHorasTrabalhadasException
+                                                                    voceExcedeuAsHorasTrabalhadasException) {
+        return new MensagemDeErro("Você excedeu sua carga horária de trabalho!");
+    }
+
+    @ExceptionHandler(ASuaCargaHorariaException.class)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public MensagemDeErro aSuaCargaHoraria(ASuaCargaHorariaException aSuaCargaHorariaException) {
+        return new MensagemDeErro("A sua carga horária é de: ");
+    }
+
+    @ExceptionHandler(HoraJaInseridaNoSistemaException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public MensagemDeErro horaJaInseridaNoSistema(HoraJaInseridaNoSistemaException
+                                                              horaJaInseridaNoSistemaException){
+        return new MensagemDeErro("O dia informado já foi cadastrado!");
+    }
+
+    @ExceptionHandler(BancoDeHorasNãoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public MensagemDeErro bancoDeHorasNaoEncontrado(BancoDeHorasNãoEncontradoException
+                                                                bancoDeHorasNãoEncontradoException) {
+        return new MensagemDeErro("O banco de horas solicitado não pôde ser encontrado!");
+    }
+
 }

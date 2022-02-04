@@ -1,6 +1,8 @@
 package br.com.zup.PointMarker.bancohoras;
 
+import br.com.zup.PointMarker.exceptions.ASuaCargaHorariaException;
 import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
+import br.com.zup.PointMarker.exceptions.VoceExcedeuAsHorasTrabalhadasException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
@@ -26,7 +28,7 @@ public class ValidaHoras {
                 int horasTrabalhadas = saida - entrada;
 
                 if (horasTrabalhadas != funcionario.getCargo().getCargoHoraria()) {
-                    throw new RuntimeException("A sua Cargo Horaria é de: "
+                    throw new ASuaCargaHorariaException("A sua Carga Horaria é de: "
                             + funcionario.getCargo().getCargoHoraria());
                 }
 
@@ -35,7 +37,7 @@ public class ValidaHoras {
                     bancoDeHoras.setFuncionario(funcionario);
                     bancoDeHorasRepository.save(bancoDeHoras);
                 } else {
-                    throw new RuntimeException("Você já excedeu as horas trabalhadas.");
+                    throw new VoceExcedeuAsHorasTrabalhadasException("Você excedeu sua carga horária de trabalho!");
                 }
             }
             return funcionario.getTotalHorasTrabalhadas();
@@ -62,7 +64,7 @@ public class ValidaHoras {
 
         for (BancoDeHoras referencia : bancoDeHorasList) {
             if (referencia.getDiaDoTrabalho().equals(LocalDate.now())) {
-                throw new RuntimeException("Este dia ja foi cadastrado.");
+                throw new HorarioInvalidoException("O dia informado já foi cadastrado!");
             }
         }
         return true;
@@ -78,7 +80,7 @@ public class ValidaHoras {
             return horasTrabalhadas;
         }
 
-        throw new RuntimeException("A sua Cargo Horaria é de: "
+        throw new ASuaCargaHorariaException("A sua Carga Horaria é de: "
                 + bancoDeHoras.getFuncionario().getCargo().getCargoHoraria());
     }
 
