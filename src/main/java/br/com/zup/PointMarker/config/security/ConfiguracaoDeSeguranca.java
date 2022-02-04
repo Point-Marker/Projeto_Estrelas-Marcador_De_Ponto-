@@ -35,7 +35,7 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
     };
 
     private static final String[] END_POINTS_GET = {
-            "/dashboard/",
+            "/dashboard/{id}",
     };
 
 
@@ -45,7 +45,7 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
         http.cors().configurationSource(configurarCors());
 
         http.authorizeRequests().antMatchers(HttpMethod.POST, END_POINTS_PUBLICO).permitAll()
-                .antMatchers(HttpMethod.POST, END_POINTS_POST).hasAnyAuthority("USER", "ADMIN")
+                .and().authorizeRequests().antMatchers(HttpMethod.POST, END_POINTS_POST).hasAnyAuthority("USER", "ADMIN")
                 .antMatchers(HttpMethod.GET, END_POINTS_GET).hasAnyAuthority("USER", "ADMIN")
                 .and().authorizeRequests().anyRequest().hasAuthority("ADMIN");
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
