@@ -1,12 +1,15 @@
 package br.com.zup.PointMarker.gestor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
+import br.com.zup.PointMarker.cargo.Cargo;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
+
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "gestor")
 public class Gestor {
@@ -14,9 +17,6 @@ public class Gestor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotBlank(message = "{nome.null}")
-    private String nome;
-    private String nomeDeUsuario;
+    private String nomeUsuario;
     private String senha;
-
 }
