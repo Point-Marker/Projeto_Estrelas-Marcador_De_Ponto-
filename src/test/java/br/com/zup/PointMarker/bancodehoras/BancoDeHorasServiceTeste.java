@@ -9,6 +9,7 @@ import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
+import br.com.zup.PointMarker.usuario.Usuario;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,9 +38,13 @@ public class BancoDeHorasServiceTeste {
     @MockBean
     private FuncionarioRepository funcionarioRepository;
 
+    @MockBean
+    private ValidaHoras validaHoras;
+
     Funcionario funcionario;
     BancoDeHoras bancoDeHoras;
     Cargo cargo;
+    Usuario usuario;
 
     @BeforeEach
     public void setUp() {
@@ -50,12 +55,17 @@ public class BancoDeHorasServiceTeste {
         cargo.setSalario(700);
         cargo.setCargoHoraria(6);
 
+        usuario = new Usuario();
+        usuario.setNomeUsuario("Afonso351");
+        usuario.setSenha("1234");
+
         funcionario = new Funcionario();
         funcionario.setId(1);
         funcionario.setNome("Afonso Guedes da Silva");
         funcionario.setStatus(Status.ATIVO);
         funcionario.setDataDeNascimento(LocalDate.of(2001, 1, 12));
         funcionario.setCpf("098.918.470-63");
+        funcionario.setUsuario(usuario);
         funcionario.setCargo(cargo);
 
 
@@ -63,18 +73,25 @@ public class BancoDeHorasServiceTeste {
         bancoDeHoras.setId(1);
         bancoDeHoras.setFuncionario(funcionario);
         bancoDeHoras.setDiaDoTrabalho(LocalDate.now());
-        bancoDeHoras.setEntrada(LocalTime.now());
-        bancoDeHoras.setSaida(LocalTime.now());
+        bancoDeHoras.setEntrada(LocalTime.of(9, 0));
+        bancoDeHoras.setSaida(LocalTime.of(15, 0));
 
     }
 
     @Test
+    public void testarVerificacaoDeHoras_QuandoRetornaTrue() {
+        Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
+
+        boolean valorTrue = bancoDeHorasService.verificarHorasTrabalhadadas(bancoDeHoras);
+
+        Assertions.assertTrue(valorTrue);
+    }
+
+    @Test
     public void testarCadastroDeHoras() {
+        Mockito.when(bancoDeHorasService.verificarHorasTrabalhadadas(bancoDeHoras)).thenReturn(true);
         Mockito.when(bancoDeHorasRepository.save(bancoDeHoras)).thenReturn(bancoDeHoras);
 
-        var bancoDeHorasCadastrado = bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras);
-
-        Assertions.assertNotEquals(bancoDeHorasCadastrado.getFuncionario(), null);
     }
 
     @Test
