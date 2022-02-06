@@ -89,8 +89,13 @@ public class BancoDeHorasServiceTeste {
 
     @Test
     public void testarCadastroDeHoras() {
+        Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
         Mockito.when(bancoDeHorasService.verificarHorasTrabalhadadas(bancoDeHoras)).thenReturn(true);
-        Mockito.when(bancoDeHorasRepository.save(bancoDeHoras)).thenReturn(bancoDeHoras);
+        Mockito.when(bancoDeHorasRepository.save(Mockito.any(BancoDeHoras.class))).thenReturn(bancoDeHoras);
+
+        BancoDeHoras bancoDeHorasSalvo = bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras);
+
+        Assertions.assertEquals(bancoDeHorasSalvo, bancoDeHoras);
 
     }
 
