@@ -1,7 +1,7 @@
 package br.com.zup.PointMarker.exceptions;
 
-public class VoceExcedeuAsHorasTrabalhadasException extends RuntimeException {
-    public VoceExcedeuAsHorasTrabalhadasException(String message) {
+public class CargoHorariaUltrapassadaException extends RuntimeException {
+    public CargoHorariaUltrapassadaException(String message) {
         super(message);
     }
 

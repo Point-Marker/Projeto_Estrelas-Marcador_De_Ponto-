@@ -78,9 +78,9 @@ public class ControllerAdvisor {
         return new MensagemDeErro(cargoJaCadastradoException.getMessage());
     }
 
-    @ExceptionHandler(VoceExcedeuAsHorasTrabalhadasException.class)
+    @ExceptionHandler(CargoHorariaUltrapassadaException.class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public MensagemDeErro voceExcedeuAsHorasTrabalhadas(VoceExcedeuAsHorasTrabalhadasException
+    public MensagemDeErro voceExcedeuAsHorasTrabalhadas(CargoHorariaUltrapassadaException
                                                                     voceExcedeuAsHorasTrabalhadasException) {
         return new MensagemDeErro(voceExcedeuAsHorasTrabalhadasException.getMessage());
     }

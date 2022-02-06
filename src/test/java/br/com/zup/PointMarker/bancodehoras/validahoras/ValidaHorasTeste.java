@@ -79,6 +79,10 @@ public class ValidaHorasTeste {
         Assertions.assertThrows(RuntimeException.class, () -> {
             ValidaHoras.horaJaInseridaNoSistema(bancoDeHorasRepository, bancoDeHoras);
         });
-
     }
+
+//    @Test
+//    public void diaJaInseridoNoSistemaCaminhoBom_QuandoODiaNaoEstaCadastradoNoSistema() {
+//
+//    }
 }
