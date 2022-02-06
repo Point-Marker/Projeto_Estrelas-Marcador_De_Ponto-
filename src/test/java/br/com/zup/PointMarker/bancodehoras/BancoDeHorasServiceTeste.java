@@ -6,6 +6,7 @@ import br.com.zup.PointMarker.bancohoras.BancoDeHorasService;
 import br.com.zup.PointMarker.bancohoras.ValidaHoras;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
+import br.com.zup.PointMarker.exceptions.CargoHorariaUltrapassadaException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
@@ -100,22 +101,14 @@ public class BancoDeHorasServiceTeste {
     }
 
     @Test
-    public void testarCadastroDeHoras_QuandoODiaForRepetido() {
+    public void testarCadastroDeHoras_QuandoOTotalDeHorasEstaMaiorQueCinquentaHorasTrabalhadas() {
+        bancoDeHoras.getFuncionario().setTotalHorasTrabalhadas(50);
+
         Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
+        Mockito.when(bancoDeHorasService.verificarHorasTrabalhadadas(bancoDeHoras)).thenReturn(false);
 
-        BancoDeHoras bancoDeHorasComDataJaCadastrada = new BancoDeHoras();
-        bancoDeHorasComDataJaCadastrada.setDiaDoTrabalho(bancoDeHoras.getDiaDoTrabalho());
-        BancoDeHoras bancoDeHorasComErro = bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHorasComDataJaCadastrada);
-        bancoDeHorasComErro.setFuncionario(funcionario);
-        bancoDeHorasComErro.setDiaDoTrabalho(LocalDate.now());
-        bancoDeHorasComErro.setEntrada(LocalTime.now());
-        bancoDeHorasComErro.setSaida(LocalTime.now());
-
-        Mockito.when(ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository)).thenReturn(null);
-
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository);
-        });
+        Assertions.assertThrows(CargoHorariaUltrapassadaException.class, () ->
+                bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras));
 
     }
 
