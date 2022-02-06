@@ -133,13 +133,17 @@ public class BancoDeHorasServiceTeste {
 
     @Test
     public void atualizarHorasTrabalhadasEntradaCaminhoVerdadeiro() {
+        bancoDeHoras.setEntrada(LocalTime.of(12,30));
+
         Mockito.when(funcionarioService.buscarFuncionario(Mockito.anyInt())).thenReturn(funcionario);
-        Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(bancoDeHoras.getDiaDoTrabalho())).thenReturn(bancoDeHoras);
+        Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(bancoDeHoras.getDiaDoTrabalho()))
+                .thenReturn(bancoDeHoras);
 
-        BancoDeHoras bancoTesteHorario = new BancoDeHoras();
-        bancoTesteHorario.setEntrada(LocalTime.of(12, 30));
-        BancoDeHoras bancoList = bancoDeHorasService.atualizarHorasTrabalhadasEntrada(Mockito.anyInt(), LocalDate.now(), bancoDeHoras);
+        BancoDeHoras bancoComHoraDeEntradaAtualizado = bancoDeHorasService.atualizarHorasTrabalhadasEntrada(1,
+                LocalDate.now(), bancoDeHoras);
 
-        Assertions.assertNotEquals(bancoList.getEntrada(), bancoDeHoras.getEntrada());
+        Assertions.assertEquals(bancoComHoraDeEntradaAtualizado.getEntrada(), bancoDeHoras.getEntrada());
     }
+
+
 }
