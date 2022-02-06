@@ -54,7 +54,7 @@ public class BancoDeHorasServiceTeste {
         cargo.setId(1);
         cargo.setNome("Jovem Aprendiz");
         cargo.setSalario(700);
-        cargo.setCargoHoraria(6);
+        cargo.setCargahoraria(6);
 
         usuario = new Usuario();
         usuario.setNomeUsuario("Afonso351");
