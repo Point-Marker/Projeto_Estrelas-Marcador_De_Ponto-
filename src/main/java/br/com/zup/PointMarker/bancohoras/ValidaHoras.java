@@ -36,15 +36,11 @@ public class ValidaHoras {
                     funcionario.setTotalHorasTrabalhadas(funcionario.getTotalHorasTrabalhadas() + horasTrabalhadas);
                     bancoDeHoras.setFuncionario(funcionario);
                     bancoDeHorasRepository.save(bancoDeHoras);
-                } else {
-                    throw new VoceExcedeuAsHorasTrabalhadasException("Você excedeu sua carga horária de trabalho!");
                 }
             }
             return funcionario.getTotalHorasTrabalhadas();
         } catch (HorarioInvalidoException horarioInvalido) {
             throw new HorarioInvalidoException(horarioInvalido.getMessage());
-        } catch (RuntimeException exception) {
-            throw new RuntimeException(exception.getMessage());
         }
     }
 
