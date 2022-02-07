@@ -43,14 +43,17 @@ public class FuncionarioService {
     }
 
     public List<Funcionario> exibirTodosFuncionarios(Status status) {
-        if (status.equals(Status.ATIVO)) {
-            return funcionarioRepository.findAllByStatus(status);
-        } else if (status.equals(Status.INATIVO)) {
-            return funcionarioRepository.findAllByStatus(status);
+        if (status != null) {
+            if (status.equals(Status.ATIVO)) {
+                return funcionarioRepository.findAllByStatus(status);
+            } else if (status.equals(Status.INATIVO)) {
+                return funcionarioRepository.findAllByStatus(status);
+            }
+            throw new RuntimeException("Informe o status do funcionário como ATIVO ou INATIVO.");
         }
+
        return (List<Funcionario>) funcionarioRepository.findAll();
     }
-
 
     public Funcionario buscarFuncionario(int id) {
         Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
