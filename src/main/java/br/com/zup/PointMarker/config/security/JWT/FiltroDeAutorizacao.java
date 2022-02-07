@@ -49,7 +49,7 @@ public class FiltroDeAutorizacao extends BasicAuthenticationFilter {
                 UsernamePasswordAuthenticationToken auth = pegarAutenticacao(token.substring(6));
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (TokenInvalidoException exception) {
-                response.sendError(HttpStatus.FORBIDDEN.value());
+                response.setStatus(HttpStatus.FORBIDDEN.value());
             }
         }
         chain.doFilter(request, response);
