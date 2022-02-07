@@ -43,7 +43,7 @@ public class ValidaHorasTeste {
         cargo.setId(1);
         cargo.setNome("Jovem Aprendiz");
         cargo.setSalario(700);
-        cargo.setCargoHoraria(6);
+        cargo.setCargahoraria(6);
 
         funcionario = new Funcionario();
         funcionario.setId(1);
