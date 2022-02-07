@@ -146,15 +146,6 @@ public class FuncionarioServiceTeste {
         Assertions.assertThrows(LimiteAumentoSalarioException.class, () -> funcionarioService.atualizarSalario(1, 700));
     }
 
-    /*@Test
-    public void atualizarSalarioCaminhoFalso_quandoSalarioDeFuncionarioForMenorQueSalarialDoCargo() {
-        Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
-        cargo.setSalario(1000);
-        funcionario.setSalario(100);
-
-        Assertions.assertThrows(AumentoDeSalarioInvalidoException.class, () -> funcionarioService.atualizarSalario(1, 100));
-    }*/
-
     @Test
     public void atualizarCargoCaminhoPositivo() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
