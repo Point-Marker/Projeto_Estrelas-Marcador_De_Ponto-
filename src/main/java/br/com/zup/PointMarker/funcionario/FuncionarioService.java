@@ -34,21 +34,23 @@ public class FuncionarioService {
         entradafuncionario.setCargo(cargoOptional.get());
         cargoOptional.orElseThrow();
 
-            String senhaEscondida = bCryptPasswordEncoder.encode(entradafuncionario.getUsuario().getSenha());
-            entradafuncionario.getUsuario().setSenha(senhaEscondida);
-            entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
-            entradafuncionario.setStatus(Status.ATIVO);
-            return funcionarioRepository.save(entradafuncionario);
+        String senhaEscondida = bCryptPasswordEncoder.encode(entradafuncionario.getUsuario().getSenha());
+        entradafuncionario.getUsuario().setSenha(senhaEscondida);
+        entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
+        entradafuncionario.setStatus(Status.ATIVO);
+        return funcionarioRepository.save(entradafuncionario);
 
     }
 
     public List<Funcionario> exibirTodosFuncionarios(Status status) {
-        if (status != null) {
+        if (status.equals(Status.ATIVO)) {
+            return funcionarioRepository.findAllByStatus(status);
+        } else if (status.equals(Status.INATIVO)) {
             return funcionarioRepository.findAllByStatus(status);
         }
-
-        return (List<Funcionario>) funcionarioRepository.findAll();
+       return (List<Funcionario>) funcionarioRepository.findAll();
     }
+
 
     public Funcionario buscarFuncionario(int id) {
         Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
@@ -70,7 +72,7 @@ public class FuncionarioService {
             if (salario < funcionario.getCargo().getSalario() &
                     funcionario.getSalario() == funcionario.getCargo().getSalario()) {
 
-                if (salario > tetoFuncionario || salario > tetoCargo){
+                if (salario > tetoFuncionario || salario > tetoCargo) {
                     throw new LimiteAumentoSalarioException("O aumento de salário não pode ser maior ou menor do que 50% o salário atual do " +
                             "funcionário ou do cargo do funcionário.");
                 }
@@ -80,7 +82,7 @@ public class FuncionarioService {
             } else if (salario < funcionario.getCargo().getSalario() &
                     funcionario.getSalario() != funcionario.getCargo().getSalario()) {
 
-                if (salario > tetoFuncionario){
+                if (salario > tetoFuncionario) {
                     throw new LimiteAumentoSalarioException("O aumento de salário não pode ser maior ou menor do que 50% o salário atual do " +
                             "funcionário ou do cargo do funcionário.");
                 }

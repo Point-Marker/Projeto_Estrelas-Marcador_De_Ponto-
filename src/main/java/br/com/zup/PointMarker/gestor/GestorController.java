@@ -57,7 +57,7 @@ public class GestorController {
     }
 
     @GetMapping
-    public List<FuncionarioDetailsDTO> exibirFuncionariosAtivos(@RequestParam(required = false) Status status) {
+    public List<FuncionarioDetailsDTO> exibirFuncionarios(@RequestParam(required = false) Status status) {
         List<Funcionario> funcionariosAtivos = gestorService.exibirTodosFuncionarios(status);
 
         List<FuncionarioDetailsDTO> funcionarioDetailsAtivos = new ArrayList<>();
