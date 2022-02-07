@@ -2,6 +2,7 @@ package br.com.zup.PointMarker.bancohoras;
 
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.BancoDeHorasNãoEncontradoException;
+import br.com.zup.PointMarker.exceptions.CargaHorariaUltrapassadaException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,7 @@ public class BancoDeHorasService {
             bancoDeHoras.setDiaDoTrabalho(LocalDate.now());
             return bancoDeHorasRepository.save(bancoDeHoras);
         }
-
-        throw new BancoDeHorasNãoEncontradoException("O banco de horas solicitado não pôde ser encontrado!");
+        throw new CargaHorariaUltrapassadaException("Você excedeu sua carga horária de trabalho!");
     }
 
     public boolean verificarHorasTrabalhadadas(BancoDeHoras bancoDeHoras) {

@@ -21,7 +21,7 @@ public class Cargo implements GrantedAuthority {
     private String nome;
     @Column(nullable = true)
     private double salario;
-    private int cargoHoraria;
+    private int cargahoraria;
 
     @Override
     public String getAuthority() {

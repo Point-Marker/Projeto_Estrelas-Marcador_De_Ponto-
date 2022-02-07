@@ -2,9 +2,7 @@ package br.com.zup.PointMarker.bancohoras;
 
 import br.com.zup.PointMarker.exceptions.ASuaCargaHorariaException;
 import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
-import br.com.zup.PointMarker.exceptions.VoceExcedeuAsHorasTrabalhadasException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
-import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 
 import java.time.LocalDate;
@@ -27,24 +25,20 @@ public class ValidaHoras {
 
                 int horasTrabalhadas = saida - entrada;
 
-                if (horasTrabalhadas != funcionario.getCargo().getCargoHoraria()) {
+                if (horasTrabalhadas != funcionario.getCargo().getCargahoraria()) {
                     throw new ASuaCargaHorariaException("A sua Carga Horaria é de: "
-                            + funcionario.getCargo().getCargoHoraria());
+                            + funcionario.getCargo().getCargahoraria());
                 }
 
                 if (funcionario.getTotalHorasTrabalhadas() <= LIMITE_DE_HORAS_TRABALHADAS) {
                     funcionario.setTotalHorasTrabalhadas(funcionario.getTotalHorasTrabalhadas() + horasTrabalhadas);
                     bancoDeHoras.setFuncionario(funcionario);
                     bancoDeHorasRepository.save(bancoDeHoras);
-                } else {
-                    throw new VoceExcedeuAsHorasTrabalhadasException("Você excedeu sua carga horária de trabalho!");
                 }
             }
             return funcionario.getTotalHorasTrabalhadas();
         } catch (HorarioInvalidoException horarioInvalido) {
             throw new HorarioInvalidoException(horarioInvalido.getMessage());
-        } catch (RuntimeException exception) {
-            throw new RuntimeException(exception.getMessage());
         }
     }
 
@@ -76,12 +70,12 @@ public class ValidaHoras {
 
         int horasTrabalhadas = saida - entrada;
 
-        if (horasTrabalhadas == bancoDeHoras.getFuncionario().getCargo().getCargoHoraria()) {
+        if (horasTrabalhadas == bancoDeHoras.getFuncionario().getCargo().getCargahoraria()) {
             return horasTrabalhadas;
         }
 
         throw new ASuaCargaHorariaException("A sua Carga Horaria é de: "
-                + bancoDeHoras.getFuncionario().getCargo().getCargoHoraria());
+                + bancoDeHoras.getFuncionario().getCargo().getCargahoraria());
     }
 
 }
