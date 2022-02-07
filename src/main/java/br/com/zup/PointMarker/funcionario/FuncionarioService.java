@@ -3,11 +3,7 @@ package br.com.zup.PointMarker.funcionario;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.cargo.CargoRepository;
 import br.com.zup.PointMarker.enums.Status;
-import br.com.zup.PointMarker.exceptions.AumentoDeSalarioInvalidoException;
-import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
-import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
-import br.com.zup.PointMarker.exceptions.LimiteAumentoSalarioException;
-import br.com.zup.PointMarker.exceptions.MaisDeCinquentaHorasTrabalhadasException;
+import br.com.zup.PointMarker.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,12 +30,15 @@ public class FuncionarioService {
         entradafuncionario.setCargo(cargoOptional.get());
         cargoOptional.orElseThrow();
 
+        if (funcionarioRepository.findByUsuario(entradafuncionario.getUsuario().getNomeUsuario()) == null) {
             String senhaEscondida = bCryptPasswordEncoder.encode(entradafuncionario.getUsuario().getSenha());
             entradafuncionario.getUsuario().setSenha(senhaEscondida);
             entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
             entradafuncionario.setStatus(Status.ATIVO);
             return funcionarioRepository.save(entradafuncionario);
+        }
 
+        throw new RuntimeException();
     }
 
     public List<Funcionario> exibirTodosFuncionarios(Status status) {
@@ -70,7 +69,7 @@ public class FuncionarioService {
             if (salario < funcionario.getCargo().getSalario() &
                     funcionario.getSalario() == funcionario.getCargo().getSalario()) {
 
-                if (salario > tetoFuncionario || salario > tetoCargo){
+                if (salario > tetoFuncionario || salario > tetoCargo) {
                     throw new LimiteAumentoSalarioException("O aumento de salário não pode ser maior ou menor do que 50% o salário atual do " +
                             "funcionário ou do cargo do funcionário.");
                 }
@@ -80,7 +79,7 @@ public class FuncionarioService {
             } else if (salario < funcionario.getCargo().getSalario() &
                     funcionario.getSalario() != funcionario.getCargo().getSalario()) {
 
-                if (salario > tetoFuncionario){
+                if (salario > tetoFuncionario) {
                     throw new LimiteAumentoSalarioException("O aumento de salário não pode ser maior ou menor do que 50% o salário atual do " +
                             "funcionário ou do cargo do funcionário.");
                 }
