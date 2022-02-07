@@ -3,11 +3,8 @@ package br.com.zup.PointMarker.funcionario;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.cargo.CargoRepository;
 import br.com.zup.PointMarker.enums.Status;
-import br.com.zup.PointMarker.exceptions.AumentoDeSalarioInvalidoException;
-import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
-import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
-import br.com.zup.PointMarker.exceptions.LimiteAumentoSalarioException;
-import br.com.zup.PointMarker.exceptions.MaisDeCinquentaHorasTrabalhadasException;
+import br.com.zup.PointMarker.exceptions.*;
+import javassist.bytecode.StackMapTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,14 +40,17 @@ public class FuncionarioService {
     }
 
     public List<Funcionario> exibirTodosFuncionarios(Status status) {
-        if (status.equals(Status.ATIVO)) {
-            return funcionarioRepository.findAllByStatus(status);
-        } else if (status.equals(Status.INATIVO)) {
-            return funcionarioRepository.findAllByStatus(status);
+        if (status != null) {
+            if (status.equals(Status.ATIVO)) {
+                return funcionarioRepository.findAllByStatus(status);
+            } else if (status.equals(Status.INATIVO)) {
+                return funcionarioRepository.findAllByStatus(status);
+            }
+            throw new StatusInvalidoException("Informe o status do funcionário como ATIVO ou INATIVO.");
         }
+
        return (List<Funcionario>) funcionarioRepository.findAll();
     }
-
 
     public Funcionario buscarFuncionario(int id) {
         Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);

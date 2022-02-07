@@ -198,13 +198,26 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void testarExibicaDeFuncionarios_quandoStatusNaoForNulo() {
+    public void testarExibicaDeFuncionarios_quandoStatusForAtivo() {
         status = Status.ATIVO;
         Mockito.when(funcionarioRepository.findAllByStatus(status)).thenReturn(List.of(funcionario));
 
         List<Funcionario> funcionariosAtivos = funcionarioService.exibirTodosFuncionarios(status);
         for (Funcionario funcionarioReferencia : funcionariosAtivos) {
             Assertions.assertEquals(funcionarioReferencia.getStatus(), Status.ATIVO);
+        }
+        Mockito.verify(funcionarioRepository, Mockito.times(0)).findAll();
+    }
+
+    @Test
+    public void testarExibicaDeFuncionarios_quandoStatusForInativo() {
+        status = Status.INATIVO;
+        funcionario.setStatus(status);
+        Mockito.when(funcionarioRepository.findAllByStatus(status)).thenReturn(List.of(funcionario));
+
+        List<Funcionario> funcionariosAtivos = funcionarioService.exibirTodosFuncionarios(status);
+        for (Funcionario funcionarioReferencia : funcionariosAtivos) {
+            Assertions.assertEquals(funcionarioReferencia.getStatus(), Status.INATIVO);
         }
         Mockito.verify(funcionarioRepository, Mockito.times(0)).findAll();
     }
