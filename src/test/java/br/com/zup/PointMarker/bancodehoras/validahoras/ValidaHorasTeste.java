@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -58,10 +59,9 @@ public class ValidaHorasTeste {
         bancoDeHoras.setId(1);
         bancoDeHoras.setFuncionario(funcionario);
         bancoDeHoras.setDiaDoTrabalho(LocalDate.now());
-        bancoDeHoras.setEntrada(LocalTime.now());
-        bancoDeHoras.setSaida(LocalTime.now());
+        bancoDeHoras.setEntrada(LocalTime.of(9,0));
+        bancoDeHoras.setSaida(LocalTime.of(15,0));
 
-        bancoDeHorasRepository.save(bancoDeHoras);
     }
 
     @Test
@@ -81,8 +81,11 @@ public class ValidaHorasTeste {
         });
     }
 
-//    @Test
-//    public void diaJaInseridoNoSistemaCaminhoBom_QuandoODiaNaoEstaCadastradoNoSistema() {
-//
-//    }
+    @Test
+    public void diaJaInseridoNoSistemaCaminhoBom_QuandoODiaNaoEstaCadastradoNoSistema() {
+        List<BancoDeHoras> listaDeBancoDeHoras = Arrays.asList(bancoDeHoras);
+
+
+
+    }
 }
