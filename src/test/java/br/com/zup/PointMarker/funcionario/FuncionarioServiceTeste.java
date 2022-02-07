@@ -3,14 +3,21 @@ package br.com.zup.PointMarker.funcionario;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.cargo.CargoRepository;
 import br.com.zup.PointMarker.enums.Status;
-import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
+import br.com.zup.PointMarker.exceptions.*;
+import br.com.zup.PointMarker.usuario.Usuario;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -18,21 +25,26 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class FuncionarioServiceTeste {
 
-    @MockBean
+    @Mock
     private FuncionarioRepository funcionarioRepository;
 
-    @MockBean
+    @Mock
     private CargoRepository cargoRepository;
 
-    @Autowired
+    @Mock
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @InjectMocks
     private FuncionarioService funcionarioService;
+
 
     private Funcionario funcionario;
     private Cargo cargo;
     private Status status;
+    private Usuario usuario;
 
 
     @BeforeEach
@@ -44,6 +56,10 @@ public class FuncionarioServiceTeste {
         cargo.setSalario(700);
         cargo.setId(1);
 
+        usuario = new Usuario();
+        usuario.setNomeUsuario("Afonso");
+        usuario.setSenha("1234");
+
         funcionario = new Funcionario();
         funcionario.setId(1);
         funcionario.setNome("Afonso");
@@ -52,11 +68,14 @@ public class FuncionarioServiceTeste {
         funcionario.setSalario(cargo.getSalario());
         funcionario.setCargo(cargo);
         funcionario.setStatus(Status.ATIVO);
+
+        funcionario.setUsuario(usuario);
     }
 
     @Test
     public void testarCadastroDeFuncionarioCaminhoBom() {
         Mockito.when(cargoRepository.findById(1)).thenReturn(Optional.of(cargo));
+        Mockito.when(bCryptPasswordEncoder.encode(funcionario.getUsuario().getSenha())).thenReturn("senhaCripto");
         Mockito.when(funcionarioRepository.save(Mockito.any(Funcionario.class))).thenReturn(funcionario);
 
         Funcionario funcionarioCadastrado = funcionarioService.salvarFuncionario(funcionario);
@@ -103,24 +122,43 @@ public class FuncionarioServiceTeste {
     @Test
     public void atualizarSalarioCaminhoVerdadeiro() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
+        funcionario.setSalario(1000);
+        Funcionario funcionario = funcionarioService.atualizarSalario(1, 350);
 
-        Funcionario funcionario = funcionarioService.atualizarSalario(1, 700);
-
-        Assertions.assertEquals(funcionario.getSalario(), 700);
+        Assertions.assertEquals(funcionario.getSalario(), 1350);
     }
 
     @Test
-    public void atualizarSalarioCaminhoFalso() {
-        Mockito.when(funcionarioRepository.findById(2)).thenReturn(Optional.empty());
+    public void atualizarSalarioCaminhoFalso_quandoSalarioForMaiorQueTetoSalarialDoCargo() {
+        Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
+        cargo.setSalario(800);
+        funcionario.setSalario(1000);
 
-        Assertions.assertThrows(FuncionarioNaoEncontradoException.class, () ->
-                funcionarioService.atualizarSalario(1, 700));
+        Assertions.assertThrows(LimiteAumentoSalarioException.class, () -> funcionarioService.atualizarSalario(1, 700));
     }
+
+    @Test
+    public void atualizarSalarioCaminhoFalso_quandoSalarioForMaiorQueTetoSalarialDoFuncionario() {
+        Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
+        cargo.setSalario(1000);
+        funcionario.setSalario(800);
+
+        Assertions.assertThrows(LimiteAumentoSalarioException.class, () -> funcionarioService.atualizarSalario(1, 700));
+    }
+
+    /*@Test
+    public void atualizarSalarioCaminhoFalso_quandoSalarioDeFuncionarioForMenorQueSalarialDoCargo() {
+        Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
+        cargo.setSalario(1000);
+        funcionario.setSalario(100);
+
+        Assertions.assertThrows(AumentoDeSalarioInvalidoException.class, () -> funcionarioService.atualizarSalario(1, 100));
+    }*/
 
     @Test
     public void atualizarCargoCaminhoPositivo() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
-
+        Mockito.when(cargoRepository.findById(1)).thenReturn(Optional.ofNullable(cargo));
         Cargo cargo = funcionario.getCargo();
 
         Funcionario funcionario = funcionarioService.atualizarCargo(1, cargo);
@@ -130,10 +168,11 @@ public class FuncionarioServiceTeste {
 
     @Test
     public void atualizarcargoCaminhoNegativo() {
-        Mockito.when(funcionarioRepository.findById(2)).thenReturn(Optional.ofNullable(funcionario));
+        Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
+       funcionario.setStatus(Status.INATIVO);
 
-        Assertions.assertThrows(FuncionarioNaoEncontradoException.class, () ->
-                funcionarioService.atualizarCargo(1, this.cargo));
+        Assertions.assertThrows(FuncionarioComStatusInativoException.class, () ->
+                funcionarioService.atualizarCargo(1, cargo));
     }
 
     @Test
@@ -147,10 +186,12 @@ public class FuncionarioServiceTeste {
 
     @Test
     public void atualizarStatusCaminhoFalso() {
-        Mockito.when(funcionarioRepository.findById(2)).thenReturn(Optional.empty());
+        Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
+        status = Status.INATIVO;
+        funcionario.setTotalHorasTrabalhadas(60);
 
-        Assertions.assertThrows(FuncionarioNaoEncontradoException.class, () ->
-                funcionarioService.atualizarStatus(Mockito.anyInt(), Status.ATIVO));
+        Assertions.assertThrows(MaisDeCinquentaHorasTrabalhadasException.class, () ->
+                funcionarioService.atualizarStatus(1, status));
     }
 
     @Test
@@ -166,14 +207,23 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void testarExibicaDeFuncionarios_quandoStatusNaoForNulo(){
+    public void testarExibicaDeFuncionarios_quandoStatusNaoForNulo() {
         status = Status.ATIVO;
         Mockito.when(funcionarioRepository.findAllByStatus(status)).thenReturn(List.of(funcionario));
 
         List<Funcionario> funcionariosAtivos = funcionarioService.exibirTodosFuncionarios(status);
-        for (Funcionario funcionarioReferencia: funcionariosAtivos) {
+        for (Funcionario funcionarioReferencia : funcionariosAtivos) {
             Assertions.assertEquals(funcionarioReferencia.getStatus(), Status.ATIVO);
         }
         Mockito.verify(funcionarioRepository, Mockito.times(0)).findAll();
     }
+
+    @Test
+    public void testarDeletarHorasTrabalhadas() {
+        Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.of(funcionario));
+        funcionarioService.deletarHorasTrabalhadas(funcionario.getId());
+
+        Mockito.verify(funcionarioRepository).delete(funcionario);
+    }
+
 }
