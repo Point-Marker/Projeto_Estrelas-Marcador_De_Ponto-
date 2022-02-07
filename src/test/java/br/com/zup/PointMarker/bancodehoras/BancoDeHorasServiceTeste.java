@@ -133,7 +133,7 @@ public class BancoDeHorasServiceTeste {
 
     @Test
     public void atualizarHorasTrabalhadasEntradaCaminhoVerdadeiro() {
-        bancoDeHoras.setEntrada(LocalTime.of(12,30));
+        bancoDeHoras.setEntrada(LocalTime.of(12, 30));
 
         Mockito.when(funcionarioService.buscarFuncionario(Mockito.anyInt())).thenReturn(funcionario);
         Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(bancoDeHoras.getDiaDoTrabalho()))
