@@ -62,7 +62,7 @@ public class FuncionarioServiceTeste {
 
         funcionario = new Funcionario();
         funcionario.setId(1);
-        funcionario.setNome("Afonso");
+        funcionario.setNome("Afonso Benedito de Souza   ");
         funcionario.setCpf("159.307.330-58");
         funcionario.setDataDeNascimento(LocalDate.of(1999, Month.JULY, 12));
         funcionario.setSalario(cargo.getSalario());

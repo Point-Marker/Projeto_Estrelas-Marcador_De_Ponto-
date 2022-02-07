@@ -2,6 +2,7 @@ package br.com.zup.PointMarker.funcionario;
 
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
+import br.com.zup.PointMarker.usuario.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,17 +34,20 @@ public class FuncionarioControllerTeste {
     private ObjectMapper objectMapper;
     private Funcionario funcionario;
     private Cargo cargo;
+    private Usuario usuario;
 
     @BeforeEach
     public void setUp() {
 
-        objectMapper = new ObjectMapper();
-        objectMapper.findAndRegisterModules();
-
         cargo = new Cargo();
+
         cargo.setNome("Estagiario");
         cargo.setSalario(700);
         cargo.setId(1);
+
+        usuario = new Usuario();
+        usuario.setNomeUsuario("Afonso");
+        usuario.setSenha("1234");
 
         funcionario = new Funcionario();
         funcionario.setId(1);
@@ -53,6 +57,8 @@ public class FuncionarioControllerTeste {
         funcionario.setSalario(cargo.getSalario());
         funcionario.setCargo(cargo);
         funcionario.setStatus(Status.ATIVO);
+
+        funcionario.setUsuario(usuario);
     }
 
     @Test
