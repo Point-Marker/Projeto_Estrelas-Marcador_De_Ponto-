@@ -71,7 +71,7 @@ public class FuncionarioService {
                     funcionario.getSalario() == funcionario.getCargo().getSalario()) {
 
                 if (salario > tetoFuncionario || salario > tetoCargo){
-                    throw new LimiteAumentoSalarioException("O aumento de salário não pode ser maior do que 50% o salário atual do " +
+                    throw new LimiteAumentoSalarioException("O aumento de salário não pode ser maior ou menor do que 50% o salário atual do " +
                             "funcionário ou do cargo do funcionário.");
                 }
 
@@ -81,7 +81,7 @@ public class FuncionarioService {
                     funcionario.getSalario() != funcionario.getCargo().getSalario()) {
 
                 if (salario > tetoFuncionario){
-                    throw new LimiteAumentoSalarioException("O aumento de salário não pode ser maior do que 50% o salário atual do " +
+                    throw new LimiteAumentoSalarioException("O aumento de salário não pode ser maior ou menor do que 50% o salário atual do " +
                             "funcionário ou do cargo do funcionário.");
                 }
 
@@ -113,10 +113,6 @@ public class FuncionarioService {
     }
 
     public Funcionario atualizarStatus(int id, Status status) {
-
-        Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(id);
-        optionalFuncionario.orElseThrow(() -> new FuncionarioNaoEncontradoException("Funcionário não encontrado."));
-
         Funcionario funcionario = buscarFuncionario(id);
         if (status.equals(Status.INATIVO)) {
             if (funcionario.getTotalHorasTrabalhadas() > 50) {
