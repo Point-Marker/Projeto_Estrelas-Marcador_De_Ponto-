@@ -25,9 +25,9 @@ public class ValidaHoras {
 
                 int horasTrabalhadas = saida - entrada;
 
-                if (horasTrabalhadas != funcionario.getCargo().getCargoHoraria()) {
+                if (horasTrabalhadas != funcionario.getCargo().getCargahoraria()) {
                     throw new ASuaCargaHorariaException("A sua Carga Horaria é de: "
-                            + funcionario.getCargo().getCargoHoraria());
+                            + funcionario.getCargo().getCargahoraria());
                 }
 
                 if (funcionario.getTotalHorasTrabalhadas() <= LIMITE_DE_HORAS_TRABALHADAS) {
@@ -70,12 +70,12 @@ public class ValidaHoras {
 
         int horasTrabalhadas = saida - entrada;
 
-        if (horasTrabalhadas == bancoDeHoras.getFuncionario().getCargo().getCargoHoraria()) {
+        if (horasTrabalhadas == bancoDeHoras.getFuncionario().getCargo().getCargahoraria()) {
             return horasTrabalhadas;
         }
 
         throw new ASuaCargaHorariaException("A sua Carga Horaria é de: "
-                + bancoDeHoras.getFuncionario().getCargo().getCargoHoraria());
+                + bancoDeHoras.getFuncionario().getCargo().getCargahoraria());
     }
 
 }
