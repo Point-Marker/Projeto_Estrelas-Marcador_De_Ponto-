@@ -64,18 +64,4 @@ public class ValidaHoras {
         return true;
     }
 
-    private static int contadorDeHoras(BancoDeHoras bancoDeHoras) {
-        int entrada = bancoDeHoras.getEntrada().getHour();
-        int saida = bancoDeHoras.getSaida().getHour();
-
-        int horasTrabalhadas = saida - entrada;
-
-        if (horasTrabalhadas == bancoDeHoras.getFuncionario().getCargo().getCargahoraria()) {
-            return horasTrabalhadas;
-        }
-
-        throw new ASuaCargaHorariaException("A sua Carga Horaria é de: "
-                + bancoDeHoras.getFuncionario().getCargo().getCargahoraria());
-    }
-
 }
