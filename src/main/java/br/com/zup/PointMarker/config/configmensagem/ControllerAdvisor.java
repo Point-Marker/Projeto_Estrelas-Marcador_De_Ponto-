@@ -118,4 +118,10 @@ public class ControllerAdvisor {
         return new MensagemDeErro(maisDeCinquentaHorasTrabalhadasException.getMessage());
     }
 
+    @ExceptionHandler(StatusInvalidoException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public MensagemDeErro statusInvalido(StatusInvalidoException statusInvalidoException) {
+        return new MensagemDeErro(statusInvalidoException.getLocalizedMessage());
+    }
+
 }
