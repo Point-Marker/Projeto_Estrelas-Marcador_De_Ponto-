@@ -11,6 +11,7 @@ import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import br.com.zup.PointMarker.usuario.Usuario;
+import org.assertj.core.internal.bytebuddy.pool.TypePool;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @SpringBootTest
@@ -154,6 +156,15 @@ public class BancoDeHorasServiceTeste {
             Assertions.assertEquals(bancoDeHorasReferencia, bancoDeHoras);
         }
 
+    }
+
+    @Test
+    public void testarDeletarHorasTrabalhadas() {
+        Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
+
+        bancoDeHorasService.removerHorasFuncionario(1);
+        List<BancoDeHoras> bancoDeHorasExibidos = bancoDeHorasRepository.findAllByFuncionario(funcionario);
+       Assertions.assertTrue(bancoDeHorasExibidos.isEmpty());
     }
 
 }
