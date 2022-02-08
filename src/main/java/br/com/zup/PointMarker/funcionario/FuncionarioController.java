@@ -4,6 +4,7 @@ import br.com.zup.PointMarker.funcionario.dtos.FuncionarioDetailsDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,8 +22,8 @@ public class FuncionarioController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/{id}'")
-    public FuncionarioDetailsDTO exibirFuncionarioId(int id) {
+    @GetMapping("/{id}")
+    public FuncionarioDetailsDTO exibirFuncionarioId(@PathVariable int id) {
         Funcionario idFuncionario = funcionarioService.buscarFuncionario(id);
 
         return modelMapper.map(idFuncionario, FuncionarioDetailsDTO.class);

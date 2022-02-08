@@ -38,7 +38,7 @@ public class FuncionarioService {
             return funcionarioRepository.save(entradafuncionario);
         }
 
-        throw new RuntimeException();
+        throw new NomeDeUsuarioJaCadastrado();
     }
 
     public List<Funcionario> exibirTodosFuncionarios(Status status) {
