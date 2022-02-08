@@ -82,12 +82,12 @@ public class BancoDeHorasService {
 
     public void removerHorasFuncionario(int id) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
-        funcionarioService.deletarHorasTrabalhadas(id);
 
-        BancoDeHoras banco = new BancoDeHoras();
-        banco.setFuncionario(funcionario);
-        bancoDeHorasRepository.delete(banco);
+        List<BancoDeHoras> bancoDeHorasList = bancoDeHorasRepository.findAllByFuncionario(funcionario);
 
+        for (BancoDeHoras bancoReferencia : bancoDeHorasList) {
+            bancoDeHorasRepository.delete(bancoReferencia);
+        }
     }
 
     public List<BancoDeHoras> horasExtrasTrabalhadas(LocalDate mes) {
