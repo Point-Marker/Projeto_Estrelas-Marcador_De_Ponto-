@@ -145,5 +145,15 @@ public class BancoDeHorasServiceTeste {
         Assertions.assertEquals(bancoComHoraDeEntradaAtualizado.getEntrada(), bancoDeHoras.getEntrada());
     }
 
+    @Test
+    public void testarExibirTodosBancosDeHoras() {
+        Mockito.when(bancoDeHorasRepository.findAll()).thenReturn(List.of(bancoDeHoras));
+
+        List<BancoDeHoras> bancoDeHorasExibidos = bancoDeHorasService.exibirTodosBancosDeHoras();
+        for (BancoDeHoras bancoDeHorasReferencia : bancoDeHorasExibidos) {
+            Assertions.assertEquals(bancoDeHorasReferencia, bancoDeHoras);
+        }
+
+    }
 
 }
