@@ -3,12 +3,14 @@ package br.com.zup.PointMarker.bancohoras;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.BancoDeHorasNãoEncontradoException;
 import br.com.zup.PointMarker.exceptions.CargaHorariaUltrapassadaException;
+import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -56,22 +58,24 @@ public class BancoDeHorasService {
         return bancoDeHorasRepository.findAllByFuncionario(bancoDeHoras.getFuncionario());
     }
 
-    public BancoDeHoras atualizarHorasTrabalhadasEntrada(int id, LocalDate data, BancoDeHoras bancoDeHoras) {
+    public BancoDeHoras atualizarHorasTrabalhadas(int id, LocalDate data, BancoDeHoras bancoDeHoras) {
+
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
 
         BancoDeHoras banco = bancoDeHorasRepository.findByDiaDoTrabalho(data);
-        banco.setEntrada(bancoDeHoras.getEntrada());
-        bancoDeHorasRepository.save(banco);
 
-        return bancoDeHoras;
-    }
+        try{
 
-    public BancoDeHoras atualizarHorasTrabalhadasSaida(int id, LocalDate data, BancoDeHoras bancoDeHoras) {
-        Funcionario funcionario = funcionarioService.buscarFuncionario(id);
-
-        BancoDeHoras banco = bancoDeHorasRepository.findByDiaDoTrabalho(data);
-        banco.setSaida(bancoDeHoras.getSaida());
-        bancoDeHorasRepository.save(banco);
+            if(ValidaHoras.validarHorasLancadas(bancoDeHoras, bancoDeHorasRepository)){
+                banco.setEntrada(bancoDeHoras.getEntrada());
+                banco.setSaida(bancoDeHoras.getSaida());
+                bancoDeHorasRepository.save(banco);
+            }
+        }catch(HorarioInvalidoException horarioInvalidoException){
+            banco.setEntrada(bancoDeHoras.getEntrada());
+            banco.setSaida(bancoDeHoras.getSaida());
+            bancoDeHorasRepository.save(banco);
+        }
 
         return bancoDeHoras;
     }
