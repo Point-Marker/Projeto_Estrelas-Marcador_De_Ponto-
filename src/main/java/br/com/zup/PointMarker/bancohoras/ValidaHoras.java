@@ -1,11 +1,13 @@
 package br.com.zup.PointMarker.bancohoras;
 
 import br.com.zup.PointMarker.exceptions.ASuaCargaHorariaException;
+import br.com.zup.PointMarker.exceptions.HoraLimiteEntradaESaidaException;
 import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class ValidaHoras {
@@ -40,6 +42,21 @@ public class ValidaHoras {
         } catch (HorarioInvalidoException horarioInvalido) {
             throw new HorarioInvalidoException(horarioInvalido.getMessage());
         }
+    }
+
+    public static boolean validarHorasEntradaESaida(BancoDeHoras bancoDeHoras) {
+
+        LocalTime horaLimiteEntrada = LocalTime.of(7, 59);
+        LocalTime horaLimiteSaida = LocalTime.of(22, 00);
+
+        if (bancoDeHoras.getEntrada().isBefore(horaLimiteEntrada) || bancoDeHoras.getEntrada().isAfter(horaLimiteSaida)) {
+            throw new HoraLimiteEntradaESaidaException("A hora registrada não pode ser antes das 08:00 da manhã ou depois das 22:00 da noite.");
+
+        } else if (bancoDeHoras.getSaida().isBefore(horaLimiteEntrada) || bancoDeHoras.getSaida().isAfter(horaLimiteSaida)) {
+            throw new HoraLimiteEntradaESaidaException("A hora registrada não pode ser antes das 08:00 da manhã ou depois das 22:00 da noite.");
+        }
+
+        return true;
     }
 
     public static boolean validarHorasLancadas(BancoDeHoras bancoDeHoras, BancoDeHorasRepository bancoDeHorasRepository) {

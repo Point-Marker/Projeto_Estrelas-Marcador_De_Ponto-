@@ -139,7 +139,7 @@ public class BancoDeHorasServiceTeste {
         Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(bancoDeHoras.getDiaDoTrabalho()))
                 .thenReturn(bancoDeHoras);
 
-        BancoDeHoras bancoComHoraDeEntradaAtualizado = bancoDeHorasService.atualizarHorasTrabalhadasEntrada(1,
+        BancoDeHoras bancoComHoraDeEntradaAtualizado = bancoDeHorasService.atualizarHorasTrabalhadas(1,
                 LocalDate.now(), bancoDeHoras);
 
         Assertions.assertEquals(bancoComHoraDeEntradaAtualizado.getEntrada(), bancoDeHoras.getEntrada());
