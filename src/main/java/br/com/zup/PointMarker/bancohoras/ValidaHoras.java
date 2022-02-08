@@ -49,14 +49,16 @@ public class ValidaHoras {
         LocalTime horaLimiteEntrada = LocalTime.of(7, 59);
         LocalTime horaLimiteSaida = LocalTime.of(22, 00);
 
-        if (bancoDeHoras.getEntrada().isBefore(horaLimiteEntrada) || bancoDeHoras.getEntrada().isAfter(horaLimiteSaida)) {
-            throw new HoraLimiteEntradaESaidaException("A hora registrada não pode ser antes das 08:00 da manhã ou depois das 22:00 da noite.");
-
-        } else if (bancoDeHoras.getSaida().isBefore(horaLimiteEntrada) || bancoDeHoras.getSaida().isAfter(horaLimiteSaida)) {
-            throw new HoraLimiteEntradaESaidaException("A hora registrada não pode ser antes das 08:00 da manhã ou depois das 22:00 da noite.");
+        if (!bancoDeHoras.getEntrada().isBefore(horaLimiteEntrada) & !bancoDeHoras.getSaida().isAfter(horaLimiteSaida)) {
+            if (!bancoDeHoras.getEntrada().isAfter(bancoDeHoras.getSaida()) & !bancoDeHoras.getSaida().isBefore(bancoDeHoras.getEntrada())) {
+                if (verificarCargaHorariaDeAcordoComAsHorasTrabalhadas(bancoDeHoras)) {
+                    return true;
+                }
+            }
+            throw new HorarioInvalidoException("A hora de entrada não pode ser depois da hora de saida do trabalho.");
         }
 
-        return true;
+        return false;
     }
 
     public static boolean validarHorasLancadas(BancoDeHoras bancoDeHoras, BancoDeHorasRepository bancoDeHorasRepository) {
@@ -77,6 +79,19 @@ public class ValidaHoras {
             if (referencia.getDiaDoTrabalho().equals(LocalDate.now())) {
                 throw new HorarioInvalidoException("O dia informado já foi cadastrado!");
             }
+        }
+        return true;
+    }
+
+    public static boolean verificarCargaHorariaDeAcordoComAsHorasTrabalhadas(BancoDeHoras bancoDeHoras) {
+        int entrada = bancoDeHoras.getEntrada().getHour();
+        int saida = bancoDeHoras.getSaida().getHour();
+
+        int horasTrabalhadas = saida - entrada;
+
+        if (horasTrabalhadas != bancoDeHoras.getFuncionario().getCargo().getCargahoraria()) {
+            throw new ASuaCargaHorariaException("A sua Carga Horaria é de: "
+                    + bancoDeHoras.getFuncionario().getCargo().getCargahoraria());
         }
         return true;
     }
