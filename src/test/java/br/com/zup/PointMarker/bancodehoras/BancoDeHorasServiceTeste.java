@@ -11,10 +11,10 @@ import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import br.com.zup.PointMarker.usuario.Usuario;
-import org.assertj.core.internal.bytebuddy.pool.TypePool;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,9 +22,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-
 
 @SpringBootTest
 public class BancoDeHorasServiceTeste {
@@ -164,7 +163,25 @@ public class BancoDeHorasServiceTeste {
 
         bancoDeHorasService.removerHorasFuncionario(1);
         List<BancoDeHoras> bancoDeHorasExibidos = bancoDeHorasRepository.findAllByFuncionario(funcionario);
-       Assertions.assertTrue(bancoDeHorasExibidos.isEmpty());
+        Assertions.assertTrue(bancoDeHorasExibidos.isEmpty());
+    }
+
+    @Test
+    public void testarAtualizarHorasTrabalhadasEntradaCaminhoPositivo() {
+        Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
+        Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(LocalDate.now())).thenReturn(bancoDeHoras);
+        Mockito.when(bancoDeHorasRepository.save(Mockito.any(BancoDeHoras.class))).thenReturn(bancoDeHoras);
+
+
+        BancoDeHoras bancoDeHorasASerAtualizado = new BancoDeHoras();
+        bancoDeHorasASerAtualizado.setEntrada(LocalTime.of(10, 00));
+        bancoDeHorasASerAtualizado.setSaida(LocalTime.of(16, 00));
+        bancoDeHorasASerAtualizado.setFuncionario(funcionario);
+
+        BancoDeHoras bancoDeHorasComHorarioAtualizado = bancoDeHorasService.atualizarHorasTrabalhadas(1, LocalDate.now(),
+                bancoDeHorasASerAtualizado);
+
+        Assertions.assertEquals(bancoDeHorasComHorarioAtualizado.getEntrada(), LocalTime.of(10, 0));
     }
 
 }
