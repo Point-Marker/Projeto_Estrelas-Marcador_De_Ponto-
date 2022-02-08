@@ -89,5 +89,20 @@ public class FuncionarioControllerTeste {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @Test
+    @WithMockUser(username = "Afonso", authorities = "USER")
+    public void testarExbicaoDeFuncionarioPeloId_QuandoOFuncionarioNaoForEncontrado() throws Exception {
+        Mockito.doThrow(FuncionarioNaoEncontradoException.class).when(funcionarioService)
+                .buscarFuncionario(Mockito.anyInt());
+
+        ResultActions resultActions = mockMvc.perform
+                        (MockMvcRequestBuilders.get("/funcionario/3")
+                                .header("Authorization", "xablau")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+
+    }
+
+
 }
 
