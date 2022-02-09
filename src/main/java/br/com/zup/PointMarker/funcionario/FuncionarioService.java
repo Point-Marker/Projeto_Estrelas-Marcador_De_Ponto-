@@ -32,8 +32,8 @@ public class FuncionarioService {
 
     public Funcionario salvarFuncionario(Funcionario entradafuncionario) {
         Optional<Cargo> cargoOptional = cargoRepository.findById(entradafuncionario.getCargo().getId());
-        entradafuncionario.setCargo(cargoOptional.get());
         cargoOptional.orElseThrow();
+        entradafuncionario.setCargo(cargoOptional.get());
 
         Optional<Usuario> usuarioOptional = usuarioRepository.findByNomeUsuario(entradafuncionario.getUsuario().getNomeUsuario());
 
