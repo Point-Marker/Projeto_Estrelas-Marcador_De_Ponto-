@@ -47,8 +47,10 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
         http.cors().configurationSource(configurarCors());
 
         http.authorizeRequests().antMatchers(HttpMethod.POST, END_POINTS_PUBLICO).permitAll()
+                .antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui", "/swagger-resources",
+                        "/swagger-resources/configuration/security", "/swagger-ui/**", "/webjars/**").permitAll()
                 .and().authorizeRequests().antMatchers(HttpMethod.POST, END_POINTS_POST).hasAnyAuthority("USER", "ADMIN")
-                .antMatchers(HttpMethod.GET, END_POINTS_GET).hasAnyAuthority("USER","ADMIN")
+                .antMatchers(HttpMethod.GET, END_POINTS_GET).hasAnyAuthority("USER", "ADMIN")
                 .and().authorizeRequests().anyRequest().hasAuthority("ADMIN");
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilter(new FiltroDeAutenticacaoJWT(jwtComponent, authenticationManager()));
