@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -42,9 +43,16 @@ public class BancoDeHorasController {
     }
 
     @GetMapping
-    public List<BancoDeHoras> exibirTodosBancosDeHoras() {
+    public List<BancoDeHorasResumoDTO> exibirTodosBancosDeHoras() {
         List<BancoDeHoras> todosBancosDeHoras = bancoDeHorasService.exibirTodosBancosDeHoras();
-        return todosBancosDeHoras;
+        List<BancoDeHorasResumoDTO> listaResumoBancoDeHoras = new ArrayList<>();
+
+        for(BancoDeHoras refencia : todosBancosDeHoras ){
+            BancoDeHorasResumoDTO bancoDeHorasResumoDTO = modelMapper.map(refencia, BancoDeHorasResumoDTO.class);
+            listaResumoBancoDeHoras.add(bancoDeHorasResumoDTO);
+        }
+
+        return listaResumoBancoDeHoras;
     }
 
     @GetMapping("/{id}")

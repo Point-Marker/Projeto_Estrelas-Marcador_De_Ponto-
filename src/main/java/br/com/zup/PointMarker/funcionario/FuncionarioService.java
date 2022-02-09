@@ -4,7 +4,8 @@ import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.cargo.CargoRepository;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.*;
-import javassist.bytecode.StackMapTable;
+import br.com.zup.PointMarker.usuario.Usuario;
+import br.com.zup.PointMarker.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,25 +19,33 @@ public class FuncionarioService {
     private FuncionarioRepository funcionarioRepository;
     private CargoRepository cargoRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
-    public FuncionarioService(FuncionarioRepository funcionarioRepository, CargoRepository cargoRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, CargoRepository cargoRepository,
+                              BCryptPasswordEncoder bCryptPasswordEncoder, UsuarioRepository usuarioRepository) {
         this.funcionarioRepository = funcionarioRepository;
         this.cargoRepository = cargoRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public Funcionario salvarFuncionario(Funcionario entradafuncionario) {
         Optional<Cargo> cargoOptional = cargoRepository.findById(entradafuncionario.getCargo().getId());
-        entradafuncionario.setCargo(cargoOptional.get());
         cargoOptional.orElseThrow();
+        entradafuncionario.setCargo(cargoOptional.get());
 
-        String senhaEscondida = bCryptPasswordEncoder.encode(entradafuncionario.getUsuario().getSenha());
-        entradafuncionario.getUsuario().setSenha(senhaEscondida);
-        entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
-        entradafuncionario.setStatus(Status.ATIVO);
-        return funcionarioRepository.save(entradafuncionario);
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByNomeUsuario(entradafuncionario.getUsuario().getNomeUsuario());
 
+        if (usuarioOptional.isEmpty()) {
+            String senhaEscondida = bCryptPasswordEncoder.encode(entradafuncionario.getUsuario().getSenha());
+            entradafuncionario.getUsuario().setSenha(senhaEscondida);
+            entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
+            entradafuncionario.setStatus(Status.ATIVO);
+            return funcionarioRepository.save(entradafuncionario);
+        }
+
+        throw new NomeDeUsuarioJaCadastrado();
     }
 
     public List<Funcionario> exibirTodosFuncionarios(Status status) {
@@ -49,7 +58,7 @@ public class FuncionarioService {
             throw new StatusInvalidoException("Informe o status do funcionário como ATIVO ou INATIVO.");
         }
 
-       return (List<Funcionario>) funcionarioRepository.findAll();
+        return (List<Funcionario>) funcionarioRepository.findAll();
     }
 
     public Funcionario buscarFuncionario(int id) {

@@ -68,7 +68,7 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(HoraLimiteEntradaESaidaException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public MensagemDeErro manipularMensagemDeErroParaHoraLimite(HoraLimiteEntradaESaidaException horaLimiteEntradaESaidaException){
+    public MensagemDeErro manipularMensagemDeErroParaHoraLimite(HoraLimiteEntradaESaidaException horaLimiteEntradaESaidaException) {
         return new MensagemDeErro(horaLimiteEntradaESaidaException.getMessage());
     }
 
@@ -85,42 +85,42 @@ public class ControllerAdvisor {
     }
 
     @ExceptionHandler(CargaHorariaUltrapassadaException.class)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public MensagemDeErro voceExcedeuAsHorasTrabalhadas(CargaHorariaUltrapassadaException
-                                                                    voceExcedeuAsHorasTrabalhadasException) {
-        return new MensagemDeErro(voceExcedeuAsHorasTrabalhadasException.getMessage());
+                                                                exceptionCargaHoraria) {
+        return new MensagemDeErro(exceptionCargaHoraria.getMessage());
     }
 
-    @ExceptionHandler(ASuaCargaHorariaException.class)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public MensagemDeErro aSuaCargaHoraria(ASuaCargaHorariaException aSuaCargaHorariaException) {
-        return new MensagemDeErro(aSuaCargaHorariaException.getMessage());
+    @ExceptionHandler(TotalDeHorasTrabalhadasUltrapassadaException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro aSuaCargaHoraria(TotalDeHorasTrabalhadasUltrapassadaException exception) {
+        return new MensagemDeErro(exception.getMessage());
     }
 
     @ExceptionHandler(HoraJaInseridaNoSistemaException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public MensagemDeErro horaJaInseridaNoSistema(HoraJaInseridaNoSistemaException
-                                                              horaJaInseridaNoSistemaException){
+                                                          horaJaInseridaNoSistemaException) {
         return new MensagemDeErro(horaJaInseridaNoSistemaException.getMessage());
     }
 
     @ExceptionHandler(BancoDeHorasNãoEncontradoException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public MensagemDeErro bancoDeHorasNaoEncontrado(BancoDeHorasNãoEncontradoException
-                                                                bancoDeHorasNãoEncontradoException) {
+                                                            bancoDeHorasNãoEncontradoException) {
         return new MensagemDeErro(bancoDeHorasNãoEncontradoException.getMessage());
     }
 
     @ExceptionHandler(LimiteAumentoSalarioException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public MensagemDeErro limiteAumentoSalario(LimiteAumentoSalarioException limiteAumentoSalarioException){
+    public MensagemDeErro limiteAumentoSalario(LimiteAumentoSalarioException limiteAumentoSalarioException) {
         return new MensagemDeErro(limiteAumentoSalarioException.getMessage());
     }
 
     @ExceptionHandler(MaisDeCinquentaHorasTrabalhadasException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public MensagemDeErro maisDeCinquentaHoras(MaisDeCinquentaHorasTrabalhadasException
-                                                           maisDeCinquentaHorasTrabalhadasException){
+                                                       maisDeCinquentaHorasTrabalhadasException) {
         return new MensagemDeErro(maisDeCinquentaHorasTrabalhadasException.getMessage());
     }
 

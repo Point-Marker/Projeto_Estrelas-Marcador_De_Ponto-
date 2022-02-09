@@ -3,8 +3,12 @@ package br.com.zup.PointMarker.funcionario;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.cargo.CargoRepository;
 import br.com.zup.PointMarker.enums.Status;
-import br.com.zup.PointMarker.exceptions.*;
+import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
+import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
+import br.com.zup.PointMarker.exceptions.LimiteAumentoSalarioException;
+import br.com.zup.PointMarker.exceptions.MaisDeCinquentaHorasTrabalhadasException;
 import br.com.zup.PointMarker.usuario.Usuario;
+import br.com.zup.PointMarker.usuario.UsuarioRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,10 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -40,6 +41,9 @@ public class FuncionarioServiceTeste {
     @InjectMocks
     private FuncionarioService funcionarioService;
 
+    @Mock
+    private UsuarioRepository usuarioRepository;
+
 
     private Funcionario funcionario;
     private Cargo cargo;
@@ -62,7 +66,7 @@ public class FuncionarioServiceTeste {
 
         funcionario = new Funcionario();
         funcionario.setId(1);
-        funcionario.setNome("Afonso Benedito de Souza   ");
+        funcionario.setNome("Afonso Benedito de Souza");
         funcionario.setCpf("159.307.330-58");
         funcionario.setDataDeNascimento(LocalDate.of(1999, Month.JULY, 12));
         funcionario.setSalario(cargo.getSalario());
@@ -75,6 +79,7 @@ public class FuncionarioServiceTeste {
     @Test
     public void testarCadastroDeFuncionarioCaminhoBom() {
         Mockito.when(cargoRepository.findById(1)).thenReturn(Optional.of(cargo));
+        Mockito.when(usuarioRepository.findByNomeUsuario(usuario.getNomeUsuario())).thenReturn(Optional.empty());
         Mockito.when(bCryptPasswordEncoder.encode(funcionario.getUsuario().getSenha())).thenReturn("senhaCripto");
         Mockito.when(funcionarioRepository.save(Mockito.any(Funcionario.class))).thenReturn(funcionario);
 
@@ -100,6 +105,16 @@ public class FuncionarioServiceTeste {
         Mockito.verify(funcionarioRepository, Mockito.times(0)).save(funcionario);
 
     }
+
+    @Test
+    public void testarCadastroDeFuncionario_QuandoONomeDeUsuarioJaEstaCadastrado() {
+        Mockito.when(cargoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(cargo));
+        Mockito.when(usuarioRepository.findByNomeUsuario(usuario.getNomeUsuario())).thenReturn(Optional.of(usuario));
+
+        Assertions.assertThrows(RuntimeException.class, () ->
+                funcionarioService.salvarFuncionario(funcionario));
+    }
+
 
     @Test
     public void buscarFuncionarioCaminhoVerdadeiro() {
@@ -160,7 +175,7 @@ public class FuncionarioServiceTeste {
     @Test
     public void atualizarCargoCaminhoNegativo() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
-       funcionario.setStatus(Status.INATIVO);
+        funcionario.setStatus(Status.INATIVO);
 
         Assertions.assertThrows(FuncionarioComStatusInativoException.class, () ->
                 funcionarioService.atualizarCargo(1, cargo));
@@ -229,5 +244,6 @@ public class FuncionarioServiceTeste {
 
         Mockito.verify(funcionarioRepository).delete(funcionario);
     }
+
 
 }
