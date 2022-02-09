@@ -3,6 +3,7 @@ package br.com.zup.PointMarker.bancohoras;
 import br.com.zup.PointMarker.exceptions.CargaHorariaUltrapassadaException;
 import br.com.zup.PointMarker.exceptions.HoraLimiteEntradaESaidaException;
 import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
+import br.com.zup.PointMarker.exceptions.TotalDeHorasTrabalhadasUltrapassadaException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 
@@ -92,7 +93,7 @@ public class ValidaHoras {
         if (horasTrabalhadas != bancoDeHoras.getFuncionario().getCargo().getCargahoraria()) {
             int horaExtra = bancoDeHoras.getFuncionario().getCargo().getCargahoraria() + 2;
             if (horasTrabalhadas > horaExtra) {
-                throw new ASuaCargaHorariaException("A sua Carga Horária é de: "
+                throw new CargaHorariaUltrapassadaException("A sua Carga Horária é de: "
                         + bancoDeHoras.getFuncionario().getCargo().getCargahoraria());
             }
         }
