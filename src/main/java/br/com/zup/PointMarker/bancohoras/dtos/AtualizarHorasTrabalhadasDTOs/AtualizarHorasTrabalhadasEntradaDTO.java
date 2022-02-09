@@ -12,4 +12,5 @@ import java.time.LocalTime;
 public class AtualizarHorasTrabalhadasEntradaDTO {
 
     private LocalTime entrada;
+    private LocalTime saida;
 }
