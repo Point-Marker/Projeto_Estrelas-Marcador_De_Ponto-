@@ -1,11 +1,21 @@
 package br.com.zup.PointMarker.gestor;
 
 import br.com.zup.PointMarker.cargo.Cargo;
+import br.com.zup.PointMarker.component.Conversor;
 import br.com.zup.PointMarker.config.security.JWT.JWTComponent;
+import br.com.zup.PointMarker.config.security.UsuarioLogadoService;
 import br.com.zup.PointMarker.enums.Status;
+import br.com.zup.PointMarker.exceptions.FuncionarioComStatusInativoException;
+import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
+import br.com.zup.PointMarker.exceptions.LimiteAumentoSalarioException;
+import br.com.zup.PointMarker.exceptions.MaisDeCinquentaHorasTrabalhadasException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
+import br.com.zup.PointMarker.funcionario.dtos.AtualizarCargoDTO.AtualizarCargoEntradaDTO;
+import br.com.zup.PointMarker.funcionario.dtos.AtualizarSalarioDTO.AtualizarSalarioEntradaDTO;
+import br.com.zup.PointMarker.funcionario.dtos.AtualizarStatusDTO.AtualizarStatusEntradaDTO;
 import br.com.zup.PointMarker.usuario.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.With;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,7 +33,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 import java.time.Month;
 
-@WebMvcTest({GestorController.class, JWTComponent.class})
+import static br.com.zup.PointMarker.enums.Status.ATIVO;
+import static br.com.zup.PointMarker.enums.Status.INATIVO;
+
+@WebMvcTest({GestorController.class, JWTComponent.class, UsuarioLogadoService.class, Conversor.class})
 public class GestorControllerTest {
 
     @MockBean
@@ -31,19 +45,31 @@ public class GestorControllerTest {
     @MockBean
     private ModelMapper modelMapper;
 
+    @MockBean
+    private UsuarioLogadoService usuarioLogadoService;
+
     @Autowired
     private MockMvc mockMvc;
+
 
     private ObjectMapper objectMapper;
     private Funcionario funcionario;
     private Cargo cargo;
     private Usuario usuario;
+    private Status status;
+    private AtualizarSalarioEntradaDTO atualizarSalarioEntradaDTO;
+    private AtualizarCargoEntradaDTO atualizarCargoEntradaDTO;
+    private AtualizarStatusEntradaDTO atualizarStatusEntradaDTO;
+
+
 
     @BeforeEach
     public void setUp() {
 
-        cargo = new Cargo();
+        objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
 
+        cargo = new Cargo();
         cargo.setNome("Estagiario");
         cargo.setSalario(700);
         cargo.setId(1);
@@ -54,18 +80,27 @@ public class GestorControllerTest {
 
         funcionario = new Funcionario();
         funcionario.setId(1);
-        funcionario.setNome("Afonso Benedito de Souza   ");
+        funcionario.setNome("Afonso Lima de Oliveira");
         funcionario.setCpf("159.307.330-58");
         funcionario.setDataDeNascimento(LocalDate.of(1999, Month.JULY, 12));
         funcionario.setSalario(cargo.getSalario());
         funcionario.setCargo(cargo);
-        funcionario.setStatus(Status.ATIVO);
-
+        funcionario.setStatus(ATIVO);
         funcionario.setUsuario(usuario);
+
+        atualizarSalarioEntradaDTO = new AtualizarSalarioEntradaDTO();
+        atualizarSalarioEntradaDTO.setSalario(200);
+
+        atualizarStatusEntradaDTO = new AtualizarStatusEntradaDTO();
+        atualizarStatusEntradaDTO.setStatus(INATIVO);
+
+        atualizarCargoEntradaDTO = new AtualizarCargoEntradaDTO();
+        atualizarCargoEntradaDTO.setCargo(cargo);
     }
 
 
     @Test
+    @WithMockUser(username = "admin", authorities = "ADMIN")
     public void testarCadastroDeFuncionario_QuandoTodosOsDadosForemEnviadosComSucesso() throws Exception {
         Mockito.when(gestorService.cadastrarFuncionario(funcionario)).thenReturn(funcionario);
 
@@ -75,10 +110,12 @@ public class GestorControllerTest {
                 mockMvc.perform(MockMvcRequestBuilders.post("/dashboard/cadastro/funcionarios")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(MockMvcResultMatchers.status().isCreated());
+                        .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
     }
 
+
     @Test
+    @WithMockUser(username = "admin", authorities = "ADMIN")
     public void testarCadastroDeFuncionario_QuandoOCampoNomeEstiverVazioNaoDeveCadastrarOFuncionario() throws Exception {
 
         Mockito.when(gestorService.cadastrarFuncionario(funcionario)).thenReturn(funcionario);
@@ -88,13 +125,14 @@ public class GestorControllerTest {
 
 
         ResultActions resultActions =
-                mockMvc.perform(MockMvcRequestBuilders.post("/funcionario")
+                mockMvc.perform(MockMvcRequestBuilders.post("/dashboard/cadastro/funcionarios")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
     }
 
     @Test
+    @WithMockUser(username = "admin", authorities = "ADMIN")
     public void testarCadastroDeFuncionario_QuandoONomeNaoEstiverComDezCaracters() throws Exception {
 
         Mockito.when(gestorService.cadastrarFuncionario(funcionario)).thenReturn(funcionario);
@@ -104,13 +142,14 @@ public class GestorControllerTest {
 
 
         ResultActions resultActions =
-                mockMvc.perform(MockMvcRequestBuilders.post("/funcionario")
+                mockMvc.perform(MockMvcRequestBuilders.post("/dashboard/cadastro/funcionarios")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
     }
 
     @Test
+    @WithMockUser(username = "admin", authorities = "ADMIN")
     public void testarCadastroDeFuncionario_QuandoONomeNaoEstiverComMenosDoQueTrintaCaracters() throws Exception {
 
         Mockito.when(gestorService.cadastrarFuncionario(funcionario)).thenReturn(funcionario);
@@ -120,81 +159,94 @@ public class GestorControllerTest {
 
 
         ResultActions resultActions =
-                mockMvc.perform(MockMvcRequestBuilders.post("/funcionario")
+                mockMvc.perform(MockMvcRequestBuilders.post("/dashboard/cadastro/funcionarios")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
     }
 
     @Test
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
     public void atualizarSalarioCaminhoPositivo() throws Exception {
         String json = objectMapper.writeValueAsString(funcionario);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .put("/funcionario/salario/{id}", 1)
+                                .put("/dashboard/salario/1")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    public void atualizarSalarioCaminhoNegativo() throws Exception {
-        String json = objectMapper.writeValueAsString(funcionario);
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
+    public void atualizarSalarioCaminhoNegativoCasoSalarioSejaMaiorQueSalarioFuncionario() throws Exception {
+        Mockito.doThrow(LimiteAumentoSalarioException.class).when(gestorService).atualizarSalario(1, 800);
+        atualizarSalarioEntradaDTO.setSalario(800);
+        String json = objectMapper.writeValueAsString(atualizarSalarioEntradaDTO);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .put("/funcionario/salario/{id}", "")
+                                .put("/dashboard/salario/1")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
     }
 
     @Test
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
     public void atualizarCargoCaminhoPositivo() throws Exception {
         String json = objectMapper.writeValueAsString(funcionario);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .put("/funcionario/cargo/{id}", 1)
+                                .put("/dashboard/cargo/1" )
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    public void atualizarCargoCaminhoNegativo() throws Exception {
-        String json = objectMapper.writeValueAsString(funcionario);
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
+    public void atualizarCargoCaminhoNegativoCasoFuncionarioInformadoNaoForValido() throws Exception {
+        funcionario.setStatus(INATIVO);
+        Mockito.doThrow(FuncionarioComStatusInativoException.class).when(gestorService).atualizarCargo(1, cargo);
+        String json = objectMapper.writeValueAsString(atualizarCargoEntradaDTO);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .put("/funcionario/cargo/{id}", "")
+                                .put("/dashboard/cargo/1")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
     }
 
     @Test
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
     public void atualizarStatusCaminhoPositivo() throws Exception {
-        String json = objectMapper.writeValueAsString(funcionario);
+        String json = objectMapper.writeValueAsString(atualizarStatusEntradaDTO);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .put("/funcionario/status/{id}", 1)
+                                .put("/dashboard/status/1")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
     public void atualizarStatusCaminhoNegativo() throws Exception {
-        String json = objectMapper.writeValueAsString(funcionario);
+        funcionario.setTotalHorasTrabalhadas(99);
+        Mockito.doThrow(MaisDeCinquentaHorasTrabalhadasException.class).when(gestorService).atualizarStatus(1, status);
+
+        String json = objectMapper.writeValueAsString(atualizarSalarioEntradaDTO);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .put("/funcionario/status/{id}", "")
+                                .put("/dashboard/status/1")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
     }
 }
