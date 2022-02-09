@@ -7,6 +7,7 @@ import br.com.zup.PointMarker.config.security.UsuarioLogadoService;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.FuncionarioNaoEncontradoException;
 import br.com.zup.PointMarker.usuario.Usuario;
+import br.com.zup.PointMarker.usuario.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,9 @@ public class FuncionarioControllerTeste {
 
     @MockBean
     private UsuarioLogadoService usuarioLogadoService;
+
+    @MockBean
+    private UsuarioService usuarioService;
 
     @MockBean
     private JWTComponent jwtComponent;
@@ -83,7 +87,7 @@ public class FuncionarioControllerTeste {
         Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
 
         ResultActions resultActions = mockMvc.perform
-                        (MockMvcRequestBuilders.get("/funcionario/1")
+                        (MockMvcRequestBuilders.get("/funcionario")
                                 .header("Authorization", "xablau")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
