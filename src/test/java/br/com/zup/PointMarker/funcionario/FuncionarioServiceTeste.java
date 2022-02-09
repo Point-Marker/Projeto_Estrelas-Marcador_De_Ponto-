@@ -62,7 +62,7 @@ public class FuncionarioServiceTeste {
 
         funcionario = new Funcionario();
         funcionario.setId(1);
-        funcionario.setNome("Afonso Benedito de Souza   ");
+        funcionario.setNome("Afonso Benedito de Souza");
         funcionario.setCpf("159.307.330-58");
         funcionario.setDataDeNascimento(LocalDate.of(1999, Month.JULY, 12));
         funcionario.setSalario(cargo.getSalario());
@@ -75,6 +75,7 @@ public class FuncionarioServiceTeste {
     @Test
     public void testarCadastroDeFuncionarioCaminhoBom() {
         Mockito.when(cargoRepository.findById(1)).thenReturn(Optional.of(cargo));
+        Mockito.when(funcionarioRepository.findByUsuario(usuario.getNomeUsuario())).thenReturn(null);
         Mockito.when(bCryptPasswordEncoder.encode(funcionario.getUsuario().getSenha())).thenReturn("senhaCripto");
         Mockito.when(funcionarioRepository.save(Mockito.any(Funcionario.class))).thenReturn(funcionario);
 
@@ -100,6 +101,16 @@ public class FuncionarioServiceTeste {
         Mockito.verify(funcionarioRepository, Mockito.times(0)).save(funcionario);
 
     }
+
+    @Test
+    public void testarCadastroDeFuncionario_QuandoONomeDeUsuarioJaEstaCadastrado(){
+        Mockito.when(cargoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(cargo));
+        Mockito.when(funcionarioRepository.findByUsuario(usuario.getNomeUsuario())).thenReturn(usuario);
+
+        Assertions.assertThrows(RuntimeException.class, () ->
+                funcionarioService.salvarFuncionario(funcionario));
+    }
+
 
     @Test
     public void buscarFuncionarioCaminhoVerdadeiro() {
@@ -229,5 +240,6 @@ public class FuncionarioServiceTeste {
 
         Mockito.verify(funcionarioRepository).delete(funcionario);
     }
+
 
 }

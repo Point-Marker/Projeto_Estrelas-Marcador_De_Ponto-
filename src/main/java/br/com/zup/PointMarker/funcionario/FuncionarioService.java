@@ -4,6 +4,7 @@ import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.cargo.CargoRepository;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.*;
+
 import javassist.bytecode.StackMapTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,12 +32,15 @@ public class FuncionarioService {
         entradafuncionario.setCargo(cargoOptional.get());
         cargoOptional.orElseThrow();
 
-        String senhaEscondida = bCryptPasswordEncoder.encode(entradafuncionario.getUsuario().getSenha());
-        entradafuncionario.getUsuario().setSenha(senhaEscondida);
-        entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
-        entradafuncionario.setStatus(Status.ATIVO);
-        return funcionarioRepository.save(entradafuncionario);
+        if (funcionarioRepository.findByUsuario(entradafuncionario.getUsuario().getNomeUsuario()) == null) {
+            String senhaEscondida = bCryptPasswordEncoder.encode(entradafuncionario.getUsuario().getSenha());
+            entradafuncionario.getUsuario().setSenha(senhaEscondida);
+            entradafuncionario.setSalario(entradafuncionario.getCargo().getSalario());
+            entradafuncionario.setStatus(Status.ATIVO);
+            return funcionarioRepository.save(entradafuncionario);
+        }
 
+        throw new NomeDeUsuarioJaCadastrado();
     }
 
     public List<Funcionario> exibirTodosFuncionarios(Status status) {
