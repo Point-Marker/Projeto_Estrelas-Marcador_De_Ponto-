@@ -108,9 +108,10 @@ public class GestorController {
 
     @PutMapping("/cargo/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public AtualizarCargoSaidaDTO atualizarCargo(@PathVariable int id, @RequestBody AtualizarCargoEntradaDTO atualizarCargoEntradaDTO) {
+    public AtualizarCargoSaidaDTO atualizarCargo(@PathVariable int id, @RequestBody @Valid AtualizarCargoEntradaDTO atualizarCargoEntradaDTO) {
+        Cargo cargo = modelMapper.map(atualizarCargoEntradaDTO, Cargo.class);
 
-        Funcionario funcionario = gestorService.atualizarCargo(id, atualizarCargoEntradaDTO.getCargo());
+        Funcionario funcionario = gestorService.atualizarCargo(id, cargo);
         return modelMapper.map(funcionario, AtualizarCargoSaidaDTO.class);
     }
 
