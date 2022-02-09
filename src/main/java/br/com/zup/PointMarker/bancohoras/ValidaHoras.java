@@ -55,7 +55,7 @@ public class ValidaHoras {
                     return true;
                 }
             }
-            throw new HorarioInvalidoException("A hora de entrada não pode ser depois da hora de saida do trabalho.");
+            throw new HorarioInvalidoException("A hora de entrada não pode ser depois da hora de saída do trabalho.");
         }
 
         return false;
@@ -64,7 +64,7 @@ public class ValidaHoras {
     public static boolean validarHorasLancadas(BancoDeHoras bancoDeHoras, BancoDeHorasRepository bancoDeHorasRepository) {
 
         if (bancoDeHoras.getEntrada().isAfter(bancoDeHoras.getSaida()) & bancoDeHoras.getSaida().isBefore(bancoDeHoras.getEntrada())) {
-            throw new HorarioInvalidoException("A Hora De Entrada Não Pode ser Depois da Hora de Saida Do Trabalho.");
+            throw new HorarioInvalidoException("A hora de entrada não pode ser depois da hora de saída do trabalho.");
         }
 
         horaJaInseridaNoSistema(bancoDeHorasRepository, bancoDeHoras);
@@ -90,9 +90,14 @@ public class ValidaHoras {
         int horasTrabalhadas = saida - entrada;
 
         if (horasTrabalhadas != bancoDeHoras.getFuncionario().getCargo().getCargahoraria()) {
-            throw new ASuaCargaHorariaException("A sua Carga Horaria é de: "
-                    + bancoDeHoras.getFuncionario().getCargo().getCargahoraria());
+            int horaExtra = bancoDeHoras.getFuncionario().getCargo().getCargahoraria() + 2;
+            if (horasTrabalhadas > horaExtra) {
+                throw new ASuaCargaHorariaException("A sua Carga Horária é de: "
+                        + bancoDeHoras.getFuncionario().getCargo().getCargahoraria());
+            }
         }
+        int totalHorasExtras = horasTrabalhadas - bancoDeHoras.getFuncionario().getCargo().getCargahoraria();
+        bancoDeHoras.getFuncionario().setHorasExtras(bancoDeHoras.getFuncionario().getHorasExtras() + totalHorasExtras);
         return true;
     }
 
