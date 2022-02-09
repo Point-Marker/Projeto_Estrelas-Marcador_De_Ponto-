@@ -75,7 +75,7 @@ public class FuncionarioServiceTeste {
     @Test
     public void testarCadastroDeFuncionarioCaminhoBom() {
         Mockito.when(cargoRepository.findById(1)).thenReturn(Optional.of(cargo));
-        Mockito.when(funcionarioRepository.findByUsuario(usuario.getNomeUsuario())).thenReturn(null);
+        Mockito.when(funcionarioRepository.findByUsuario(usuario)).thenReturn(null);
         Mockito.when(bCryptPasswordEncoder.encode(funcionario.getUsuario().getSenha())).thenReturn("senhaCripto");
         Mockito.when(funcionarioRepository.save(Mockito.any(Funcionario.class))).thenReturn(funcionario);
 
@@ -105,7 +105,7 @@ public class FuncionarioServiceTeste {
     @Test
     public void testarCadastroDeFuncionario_QuandoONomeDeUsuarioJaEstaCadastrado(){
         Mockito.when(cargoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(cargo));
-        Mockito.when(funcionarioRepository.findByUsuario(usuario.getNomeUsuario())).thenReturn(usuario);
+        Mockito.when(funcionarioRepository.findByUsuario(usuario)).thenReturn(Optional.of(usuario));
 
         Assertions.assertThrows(RuntimeException.class, () ->
                 funcionarioService.salvarFuncionario(funcionario));
