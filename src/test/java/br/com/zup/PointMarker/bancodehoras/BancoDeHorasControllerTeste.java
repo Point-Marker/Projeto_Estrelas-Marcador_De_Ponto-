@@ -9,11 +9,19 @@ import br.com.zup.PointMarker.config.security.JWT.JWTComponent;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.usuario.Usuario;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,10 +33,21 @@ public class BancoDeHorasControllerTeste {
     @MockBean
     private BancoDeHorasService bancoDeHorasService;
 
-    Funcionario funcionario;
-    BancoDeHoras bancoDeHoras;
-    Cargo cargo;
-    Usuario usuario;
+    @MockBean
+    private BancoDeHorasController bancoDeHorasController;
+
+    @MockBean
+    private BancoDeHorasRepository bancoDeHorasRepository;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    private ObjectMapper objectMapper;
+    private Funcionario funcionario;
+    private BancoDeHoras bancoDeHoras;
+    private Cargo cargo;
+    private Usuario usuario;
+    private Status status;
 
     @BeforeEach
     public void setUp() {
@@ -40,7 +59,7 @@ public class BancoDeHorasControllerTeste {
         cargo.setCargahoraria(6);
 
         usuario = new Usuario();
-        usuario.setNomeUsuario("Afonso351");
+        usuario.setNomeUsuario("Afonso");
         usuario.setSenha("1234");
 
         funcionario = new Funcionario();
@@ -51,6 +70,7 @@ public class BancoDeHorasControllerTeste {
         funcionario.setCpf("098.918.470-63");
         funcionario.setUsuario(usuario);
         funcionario.setCargo(cargo);
+        funcionario.setStatus(Status.ATIVO);
 
 
         bancoDeHoras = new BancoDeHoras();
@@ -61,9 +81,16 @@ public class BancoDeHorasControllerTeste {
         bancoDeHoras.setSaida(LocalTime.of(15, 0));
 
     }
-//
-//    public void testarCadastroDeBancoDeHoras(){
-//
-//    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = "ADMIN")
+    public void testarDeletarHorasFuncionario() throws Exception {
+        Mockito.doNothing().when(bancoDeHorasService).removerHorasFuncionario(1);
+
+        ResultActions resultActions = mockMvc.perform
+                (MockMvcRequestBuilders.delete("/bancohoras/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect((MockMvcResultMatchers.status().is((204))));
+    }
 
 }
