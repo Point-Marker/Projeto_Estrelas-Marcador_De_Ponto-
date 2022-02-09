@@ -3,6 +3,7 @@ package br.com.zup.PointMarker.bancohoras;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.BancoDeHorasNãoEncontradoException;
 import br.com.zup.PointMarker.exceptions.CargaHorariaUltrapassadaException;
+import br.com.zup.PointMarker.exceptions.HoraLimiteEntradaESaidaException;
 import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
 import br.com.zup.PointMarker.exceptions.TotalDeHorasTrabalhadasUltrapassadaException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -26,7 +26,6 @@ public class BancoDeHorasService {
         this.funcionarioService = funcionarioService;
     }
 
-
     public BancoDeHoras salvarHorasTrabalhadas(BancoDeHoras bancoDeHoras) {
 
         if (verificarHorasTrabalhadadas(bancoDeHoras)) {
@@ -35,6 +34,7 @@ public class BancoDeHorasService {
         }
         throw new TotalDeHorasTrabalhadasUltrapassadaException("Você excedeu seu total hora de trabalho neste mês.");
     }
+
 
     public boolean verificarHorasTrabalhadadas(BancoDeHoras bancoDeHoras) {
 
@@ -60,35 +60,18 @@ public class BancoDeHorasService {
     }
 
     public BancoDeHoras atualizarHorasTrabalhadas(int id, LocalDate data, BancoDeHoras bancoDeHoras) {
-
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
-
         BancoDeHoras banco = bancoDeHorasRepository.findByDiaDoTrabalho(data);
 
-        try{
+        if (ValidaHoras.validarHorasEntradaESaida(bancoDeHoras)) {
 
-            if(ValidaHoras.validarHorasLancadas(bancoDeHoras, bancoDeHorasRepository)){
-                banco.setEntrada(bancoDeHoras.getEntrada());
-                banco.setSaida(bancoDeHoras.getSaida());
-                bancoDeHorasRepository.save(banco);
-            }
-        }catch(HorarioInvalidoException horarioInvalidoException){
             banco.setEntrada(bancoDeHoras.getEntrada());
             banco.setSaida(bancoDeHoras.getSaida());
             bancoDeHorasRepository.save(banco);
+
+            return bancoDeHoras;
         }
-
-        return bancoDeHoras;
-    }
-
-    public void removerHorasFuncionario(int id) {
-        Funcionario funcionario = funcionarioService.buscarFuncionario(id);
-        funcionarioService.deletarHorasTrabalhadas(id);
-
-        BancoDeHoras banco = new BancoDeHoras();
-        banco.setFuncionario(funcionario);
-        bancoDeHorasRepository.delete(banco);
-
+        throw new HoraLimiteEntradaESaidaException("A hora registrada não pode ser antes das 08:00 ou depois das 22:00.");
     }
 
     public List<BancoDeHoras> horasExtrasTrabalhadas(LocalDate mes) {
@@ -109,6 +92,16 @@ public class BancoDeHorasService {
         }
 
         throw new BancoDeHorasNãoEncontradoException("O banco de horas solicitado não pôde ser encontrado!");
+    }
+
+    public void removerHorasFuncionario(int id) {
+        Funcionario funcionario = funcionarioService.buscarFuncionario(id);
+
+        List<BancoDeHoras> bancoDeHorasList = bancoDeHorasRepository.findAllByFuncionario(funcionario);
+
+        for (BancoDeHoras bancoReferencia : bancoDeHorasList) {
+            bancoDeHorasRepository.delete(bancoReferencia);
+        }
     }
 
 }

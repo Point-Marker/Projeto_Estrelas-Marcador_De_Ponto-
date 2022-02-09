@@ -173,7 +173,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void atualizarcargoCaminhoNegativo() {
+    public void atualizarCargoCaminhoNegativo() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
         funcionario.setStatus(Status.INATIVO);
 
