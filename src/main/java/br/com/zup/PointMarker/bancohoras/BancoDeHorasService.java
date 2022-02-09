@@ -33,6 +33,7 @@ public class BancoDeHorasService {
         throw new CargaHorariaUltrapassadaException("Você excedeu sua carga horária de trabalho!");
     }
 
+
     public boolean verificarHorasTrabalhadadas(BancoDeHoras bancoDeHoras) {
 
         if (ValidaHoras.calcularHorasDeTrabalho(bancoDeHoras, funcionarioService, bancoDeHorasRepository) <= 50) {
@@ -68,7 +69,7 @@ public class BancoDeHorasService {
 
             return bancoDeHoras;
         }
-        throw new HoraLimiteEntradaESaidaException("A hora registrada não pode ser antes das 08:00 da manhã ou depois das 22:00 da noite.");
+        throw new HoraLimiteEntradaESaidaException("A hora registrada não pode ser antes das 08:00 ou depois das 22:00.");
     }
 
     public List<BancoDeHoras> horasExtrasTrabalhadas(LocalDate mes) {

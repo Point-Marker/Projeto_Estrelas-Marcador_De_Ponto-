@@ -99,7 +99,6 @@ public class BancoDeHorasServiceTeste {
         BancoDeHoras bancoDeHorasSalvo = bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras);
 
         Assertions.assertEquals(bancoDeHorasSalvo, bancoDeHoras);
-
     }
 
     @Test
@@ -111,6 +110,18 @@ public class BancoDeHorasServiceTeste {
 
         Assertions.assertThrows(CargaHorariaUltrapassadaException.class, () ->
                 bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras));
+
+    }
+
+    @Test
+    public void testarCadastroDeHorasQuandoExcedeACargaHoraria() {
+        Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
+        Mockito.when(bancoDeHorasService.verificarHorasTrabalhadadas(bancoDeHoras)).thenReturn(false);
+
+      if (funcionario.getTotalHorasTrabalhadas() > funcionario.getCargo().getCargahoraria()) {
+          Assertions.assertThrows(CargaHorariaUltrapassadaException.class, () ->
+                  bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras));
+      }
 
     }
 
@@ -160,6 +171,12 @@ public class BancoDeHorasServiceTeste {
     }
 
     @Test
+    public void testarExibirHorasExtrasTrabalhadasCaminhoPositivo() {
+        Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
+
+    }
+
+    @Test
     public void testarDeletarHorasTrabalhadas() {
         Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
 
@@ -173,7 +190,6 @@ public class BancoDeHorasServiceTeste {
         Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
         Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(LocalDate.now())).thenReturn(bancoDeHoras);
         Mockito.when(bancoDeHorasRepository.save(Mockito.any(BancoDeHoras.class))).thenReturn(bancoDeHoras);
-
 
         BancoDeHoras bancoDeHorasASerAtualizado = new BancoDeHoras();
         bancoDeHorasASerAtualizado.setEntrada(LocalTime.of(10, 00));
