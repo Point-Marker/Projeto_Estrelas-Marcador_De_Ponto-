@@ -4,14 +4,12 @@ import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.BancoDeHorasNãoEncontradoException;
 import br.com.zup.PointMarker.exceptions.CargaHorariaUltrapassadaException;
 import br.com.zup.PointMarker.exceptions.HoraLimiteEntradaESaidaException;
-import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -25,7 +23,6 @@ public class BancoDeHorasService {
         this.bancoDeHorasRepository = bancoDeHorasRepository;
         this.funcionarioService = funcionarioService;
     }
-
 
     public BancoDeHoras salvarHorasTrabalhadas(BancoDeHoras bancoDeHoras) {
 
@@ -63,7 +60,7 @@ public class BancoDeHorasService {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
         BancoDeHoras banco = bancoDeHorasRepository.findByDiaDoTrabalho(data);
 
-        if(ValidaHoras.validarHorasEntradaESaida(bancoDeHoras)) {
+        if (ValidaHoras.validarHorasEntradaESaida(bancoDeHoras)) {
 
             banco.setEntrada(bancoDeHoras.getEntrada());
             banco.setSaida(bancoDeHoras.getSaida());
@@ -72,16 +69,6 @@ public class BancoDeHorasService {
             return bancoDeHoras;
         }
         throw new HoraLimiteEntradaESaidaException("A hora registrada não pode ser antes das 08:00 da manhã ou depois das 22:00 da noite.");
-    }
-
-    public void removerHorasFuncionario(int id) {
-        Funcionario funcionario = funcionarioService.buscarFuncionario(id);
-
-        List<BancoDeHoras> bancoDeHorasList = bancoDeHorasRepository.findAllByFuncionario(funcionario);
-
-        for (BancoDeHoras bancoReferencia : bancoDeHorasList) {
-            bancoDeHorasRepository.delete(bancoReferencia);
-        }
     }
 
     public List<BancoDeHoras> horasExtrasTrabalhadas(LocalDate mes) {
@@ -102,6 +89,16 @@ public class BancoDeHorasService {
         }
 
         throw new BancoDeHorasNãoEncontradoException("O banco de horas solicitado não pôde ser encontrado!");
+    }
+
+    public void removerHorasFuncionario(int id) {
+        Funcionario funcionario = funcionarioService.buscarFuncionario(id);
+
+        List<BancoDeHoras> bancoDeHorasList = bancoDeHorasRepository.findAllByFuncionario(funcionario);
+
+        for (BancoDeHoras bancoReferencia : bancoDeHorasList) {
+            bancoDeHorasRepository.delete(bancoReferencia);
+        }
     }
 
 }

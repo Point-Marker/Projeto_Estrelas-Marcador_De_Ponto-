@@ -7,6 +7,7 @@ import br.com.zup.PointMarker.bancohoras.ValidaHoras;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.CargaHorariaUltrapassadaException;
+import br.com.zup.PointMarker.exceptions.HoraLimiteEntradaESaidaException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
@@ -184,4 +185,33 @@ public class BancoDeHorasServiceTeste {
         Assertions.assertEquals(bancoDeHorasComHorarioAtualizado.getEntrada(), LocalTime.of(10, 0));
     }
 
+    @Test
+    public void testarAtualizarHorasTrabalhadasEntradaCaminhoNegativoRecebendoEntradaErrada() {
+        Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
+        Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(LocalDate.now())).thenReturn(bancoDeHoras);
+        Mockito.when(bancoDeHorasRepository.save(Mockito.any(BancoDeHoras.class))).thenReturn(bancoDeHoras);
+
+        BancoDeHoras bancoDeHorasASerAtualizado = new BancoDeHoras();
+        bancoDeHorasASerAtualizado.setEntrada(LocalTime.of(7, 00));
+        bancoDeHorasASerAtualizado.setSaida(LocalTime.of(16, 00));
+        bancoDeHorasASerAtualizado.setFuncionario(funcionario);
+
+        Assertions.assertThrows(HoraLimiteEntradaESaidaException.class, () ->
+                bancoDeHorasService.atualizarHorasTrabalhadas(1, LocalDate.now(), bancoDeHorasASerAtualizado));
+    }
+
+    @Test
+    public void testarAtualizarHorasTrabalhadasEntradaCaminhoNegativo() {
+        Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
+        Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(LocalDate.now())).thenReturn(bancoDeHoras);
+        Mockito.when(bancoDeHorasRepository.save(Mockito.any(BancoDeHoras.class))).thenReturn(bancoDeHoras);
+
+        BancoDeHoras bancoDeHorasASerAtualizado = new BancoDeHoras();
+        bancoDeHorasASerAtualizado.setEntrada(LocalTime.of(8, 00));
+        bancoDeHorasASerAtualizado.setSaida(LocalTime.of(23, 00));
+        bancoDeHorasASerAtualizado.setFuncionario(funcionario);
+
+        Assertions.assertThrows(HoraLimiteEntradaESaidaException.class, () ->
+                bancoDeHorasService.atualizarHorasTrabalhadas(1, LocalDate.now(), bancoDeHorasASerAtualizado));
+    }
 }
