@@ -66,6 +66,12 @@ public class ControllerAdvisor {
         return new MensagemDeErro(valorInvalido.getMessage());
     }
 
+    @ExceptionHandler(HoraLimiteEntradaESaidaException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro manipularMensagemDeErroParaHoraLimite(HoraLimiteEntradaESaidaException horaLimiteEntradaESaidaException){
+        return new MensagemDeErro(horaLimiteEntradaESaidaException.getMessage());
+    }
+
     @ExceptionHandler(HorarioInvalidoException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public MensagemDeErro manipularMensagemDeErroParaHorarioInvalido(HorarioInvalidoException horarioInvalido) {
@@ -116,6 +122,12 @@ public class ControllerAdvisor {
     public MensagemDeErro maisDeCinquentaHoras(MaisDeCinquentaHorasTrabalhadasException
                                                            maisDeCinquentaHorasTrabalhadasException){
         return new MensagemDeErro(maisDeCinquentaHorasTrabalhadasException.getMessage());
+    }
+
+    @ExceptionHandler(StatusInvalidoException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public MensagemDeErro statusInvalido(StatusInvalidoException statusInvalidoException) {
+        return new MensagemDeErro(statusInvalidoException.getLocalizedMessage());
     }
 
 }

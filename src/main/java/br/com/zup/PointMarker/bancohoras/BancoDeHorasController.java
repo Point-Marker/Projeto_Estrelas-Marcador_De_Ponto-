@@ -74,7 +74,7 @@ public class BancoDeHorasController {
                                                                            atualizarHorasTrabalhadasEntradaDTO) {
 
         BancoDeHoras banco = modelMapper.map(atualizarHorasTrabalhadasEntradaDTO, BancoDeHoras.class);
-        bancoDeHorasService.atualizarHorasTrabalhadasEntrada(idFuncionario, data, banco);
+        bancoDeHorasService.atualizarHorasTrabalhadas(idFuncionario, data, banco);
         return modelMapper.map(banco, AtualizarHorasTrabalhadasSaidaDTO.class);
     }
 
@@ -87,7 +87,7 @@ public class BancoDeHorasController {
                                                                          atualizarHorasTrabalhadasEntradaDTO) {
 
         BancoDeHoras banco = modelMapper.map(atualizarHorasTrabalhadasEntradaDTO, BancoDeHoras.class);
-        bancoDeHorasService.atualizarHorasTrabalhadasSaida(idFuncionario, data, banco);
+        bancoDeHorasService.atualizarHorasTrabalhadas(idFuncionario, data, banco);
         return modelMapper.map(banco, AtualizarHorasTrabalhadasSaidaDTO.class);
     }
 
