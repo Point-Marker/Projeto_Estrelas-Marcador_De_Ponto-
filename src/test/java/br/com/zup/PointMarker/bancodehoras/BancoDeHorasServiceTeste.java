@@ -201,7 +201,7 @@ public class BancoDeHorasServiceTeste {
     }
 
     @Test
-    public void testarAtualizarHorasTrabalhadasEntradaCaminhoNegativo() {
+    public void testarAtualizarHorasTrabalhadasEntradaCaminhoNegativoRecebendoSaidaErrada() {
         Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
         Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(LocalDate.now())).thenReturn(bancoDeHoras);
         Mockito.when(bancoDeHorasRepository.save(Mockito.any(BancoDeHoras.class))).thenReturn(bancoDeHoras);
@@ -214,4 +214,5 @@ public class BancoDeHorasServiceTeste {
         Assertions.assertThrows(HoraLimiteEntradaESaidaException.class, () ->
                 bancoDeHorasService.atualizarHorasTrabalhadas(1, LocalDate.now(), bancoDeHorasASerAtualizado));
     }
+
 }
