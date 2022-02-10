@@ -14,9 +14,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,9 +25,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
@@ -82,7 +78,6 @@ public class BancoDeHorasControllerTeste {
         funcionario.setCargo(cargo);
         funcionario.setStatus(Status.ATIVO);
 
-
         bancoDeHoras = new BancoDeHoras();
         bancoDeHoras.setId(1);
         bancoDeHoras.setFuncionario(funcionario);
@@ -90,8 +85,6 @@ public class BancoDeHorasControllerTeste {
         bancoDeHoras.setEntrada(LocalTime.of(9, 0));
         bancoDeHoras.setSaida(LocalTime.of(15, 0));
 
-        objectMapper = new ObjectMapper();
-        objectMapper.findAndRegisterModules();
     }
 
     @Test
@@ -99,12 +92,10 @@ public class BancoDeHorasControllerTeste {
     public void testarExibirTodosBancosDeHoras() throws Exception {
         Mockito.when(bancoDeHorasService.exibirTodosBancosDeHoras()).thenReturn(Arrays.asList(bancoDeHoras));
 
-
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/bancohoras")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is(200))
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
-
 
         String jsonResposta = resultActions.andReturn().getResponse().getContentAsString();
         List<BancoDeHorasResumoDTO> todosBancosDeHoras =
@@ -145,5 +136,6 @@ public class BancoDeHorasControllerTeste {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect((MockMvcResultMatchers.status().isOk()));
     }
+
 }
 
