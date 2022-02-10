@@ -4,11 +4,13 @@ import br.com.zup.PointMarker.bancohoras.BancoDeHoras;
 import br.com.zup.PointMarker.bancohoras.BancoDeHorasController;
 import br.com.zup.PointMarker.bancohoras.BancoDeHorasRepository;
 import br.com.zup.PointMarker.bancohoras.BancoDeHorasService;
+import br.com.zup.PointMarker.bancohoras.dtos.ResumoSaidaDTO.BancoDeHorasResumoDTO;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.config.security.JWT.JWTComponent;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.usuario.Usuario;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,9 +25,12 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 
 @WebMvcTest({BancoDeHorasController.class, JWTComponent.class})
 public class BancoDeHorasControllerTeste {
@@ -80,6 +85,26 @@ public class BancoDeHorasControllerTeste {
         bancoDeHoras.setEntrada(LocalTime.of(9, 0));
         bancoDeHoras.setSaida(LocalTime.of(15, 0));
 
+        objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
+    }
+
+    @Test
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
+    public void testarExibirTodosBancosDeHoras() throws Exception {
+        Mockito.when(bancoDeHorasService.exibirTodosBancosDeHoras()).thenReturn(Arrays.asList(bancoDeHoras));
+
+
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/bancohoras")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+
+
+        String jsonResposta = resultActions.andReturn().getResponse().getContentAsString();
+        List<BancoDeHorasResumoDTO> todosBancosDeHoras =
+                objectMapper.readValue(jsonResposta, new TypeReference<List<BancoDeHorasResumoDTO>>() {
+                });
     }
 
     @Test
@@ -88,8 +113,8 @@ public class BancoDeHorasControllerTeste {
         Mockito.doNothing().when(bancoDeHorasService).removerHorasFuncionario(1);
 
         ResultActions resultActions = mockMvc.perform
-                (MockMvcRequestBuilders.delete("/bancohoras/1")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        (MockMvcRequestBuilders.delete("/bancohoras/1")
+                                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect((MockMvcResultMatchers.status().is((204))));
     }
 
