@@ -90,17 +90,6 @@ public class BancoDeHorasControllerTeste {
     }
 
     @Test
-    @WithMockUser(username = "admin", authorities = "ADMIN")
-    public void testarDeletarHorasFuncionario() throws Exception {
-        Mockito.doNothing().when(bancoDeHorasService).removerHorasFuncionario(1);
-
-        ResultActions resultActions = mockMvc.perform
-                        (MockMvcRequestBuilders.delete("/bancohoras/1")
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect((MockMvcResultMatchers.status().is((204))));
-    }
-
-    @Test
     @WithMockUser(username = "Afonso", authorities = "ADMIN")
     public void testarExibirTodosBancosDeHoras() throws Exception {
         Mockito.when(bancoDeHorasService.exibirTodosBancosDeHoras()).thenReturn(Arrays.asList(bancoDeHoras));
@@ -116,6 +105,17 @@ public class BancoDeHorasControllerTeste {
         List<BancoDeHorasResumoDTO> todosBancosDeHoras =
                 objectMapper.readValue(jsonResposta, new TypeReference<List<BancoDeHorasResumoDTO>>() {
                 });
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = "ADMIN")
+    public void testarDeletarHorasFuncionario() throws Exception {
+        Mockito.doNothing().when(bancoDeHorasService).removerHorasFuncionario(1);
+
+        ResultActions resultActions = mockMvc.perform
+                        (MockMvcRequestBuilders.delete("/bancohoras/1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect((MockMvcResultMatchers.status().is((204))));
     }
 
 }
