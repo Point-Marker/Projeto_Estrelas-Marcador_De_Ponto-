@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -52,6 +53,9 @@ public class BancoDeHorasControllerTeste {
     @BeforeEach
     public void setUp() {
 
+        objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
+
         cargo = new Cargo();
         cargo.setId(1);
         cargo.setNome("Jovem Aprendiz");
@@ -88,9 +92,18 @@ public class BancoDeHorasControllerTeste {
         Mockito.doNothing().when(bancoDeHorasService).removerHorasFuncionario(1);
 
         ResultActions resultActions = mockMvc.perform
-                (MockMvcRequestBuilders.delete("/bancohoras/1")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        (MockMvcRequestBuilders.delete("/bancohoras/1")
+                                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect((MockMvcResultMatchers.status().is((204))));
     }
 
+    @Test
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
+    public void testeExibirBancoDeHorasDeUmUnicoFuncionario() throws Exception {
+        ResultActions resultActions = mockMvc.perform
+                        (MockMvcRequestBuilders.get("/bancohoras/1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect((MockMvcResultMatchers.status().isOk()));
+    }
 }
+
