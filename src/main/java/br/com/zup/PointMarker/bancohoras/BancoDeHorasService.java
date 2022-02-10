@@ -57,8 +57,8 @@ public class BancoDeHorasService {
         return bancoDeHorasRepository.findAllByFuncionario(bancoDeHoras.getFuncionario());
     }
 
-    public BancoDeHoras atualizarHorasTrabalhadas(int id, LocalDate data, BancoDeHoras bancoDeHoras) {
-        Funcionario funcionario = funcionarioService.buscarFuncionario(id);
+    public BancoDeHoras atualizarHorasTrabalhadas(LocalDate data, BancoDeHoras bancoDeHoras) {
+        Funcionario funcionario = funcionarioService.buscarFuncionarioPeloCpf(bancoDeHoras.getFuncionario().getCpf());
         bancoDeHoras.setFuncionario(funcionario);
         if (ValidaHoras.validarHorasEntradaESaida(bancoDeHoras)) {
             BancoDeHoras banco = bancoDeHorasRepository.findByDiaDoTrabalho(data);
