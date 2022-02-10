@@ -118,9 +118,10 @@ public class FuncionarioService {
             funcionario.setSalario(cargoOptional.get().getSalario());
             funcionarioRepository.save(funcionario);
             return funcionario;
+        }else if (funcionario.getStatus().equals(Status.INATIVO)){
+            throw new FuncionarioComStatusInativoException("Este Funcionario está INATIVO.");
         }
-        throw new FuncionarioComStatusInativoException("Este Funcionario está INATIVO.");
-
+        return funcionario;
     }
 
     public Funcionario atualizarStatus(int id, Status status) {

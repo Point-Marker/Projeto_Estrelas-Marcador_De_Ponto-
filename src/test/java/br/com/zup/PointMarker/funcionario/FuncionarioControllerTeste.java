@@ -58,7 +58,6 @@ public class FuncionarioControllerTeste {
     public void setUp() {
 
         cargo = new Cargo();
-
         cargo.setNome("Estagiario");
         cargo.setSalario(700);
         cargo.setId(1);
@@ -75,7 +74,6 @@ public class FuncionarioControllerTeste {
         funcionario.setSalario(cargo.getSalario());
         funcionario.setCargo(cargo);
         funcionario.setStatus(Status.ATIVO);
-
         funcionario.setUsuario(usuario);
 
     }

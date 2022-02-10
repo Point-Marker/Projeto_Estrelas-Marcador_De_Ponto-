@@ -21,7 +21,6 @@ public class BancoDeHorasController {
     private BancoDeHorasService bancoDeHorasService;
     private ModelMapper modelMapper;
 
-
     @Autowired
     public BancoDeHorasController(BancoDeHorasService bancoDeHorasService, ModelMapper modelMapper) {
         this.bancoDeHorasService = bancoDeHorasService;
