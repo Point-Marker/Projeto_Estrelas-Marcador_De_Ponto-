@@ -1,9 +1,7 @@
 package br.com.zup.PointMarker.bancohoras;
 
 import br.com.zup.PointMarker.exceptions.CargaHorariaUltrapassadaException;
-import br.com.zup.PointMarker.exceptions.HoraLimiteEntradaESaidaException;
 import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
-import br.com.zup.PointMarker.exceptions.TotalDeHorasTrabalhadasUltrapassadaException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 
@@ -28,10 +26,16 @@ public class ValidaHoras {
 
                 int horasTrabalhadas = saida - entrada;
 
-                if (horasTrabalhadas != funcionario.getCargo().getCargahoraria()) {
-                    throw new CargaHorariaUltrapassadaException("A sua Carga Horaria é de: "
-                            + funcionario.getCargo().getCargahoraria());
+                if (horasTrabalhadas != bancoDeHoras.getFuncionario().getCargo().getCargahoraria()) {
+                    int horaExtra = bancoDeHoras.getFuncionario().getCargo().getCargahoraria() + 2;
+                    if (horasTrabalhadas > horaExtra) {
+                        throw new CargaHorariaUltrapassadaException("A sua Carga Horária é de: "
+                                + bancoDeHoras.getFuncionario().getCargo().getCargahoraria());
+                    }
                 }
+                int totalHorasExtras = horasTrabalhadas - bancoDeHoras.getFuncionario().getCargo().getCargahoraria();
+                bancoDeHoras.getFuncionario().setHorasExtras(bancoDeHoras.getFuncionario().getHorasExtras()
+                        + totalHorasExtras);
 
                 if (funcionario.getTotalHorasTrabalhadas() <= LIMITE_DE_HORAS_TRABALHADAS) {
                     funcionario.setTotalHorasTrabalhadas(funcionario.getTotalHorasTrabalhadas() + horasTrabalhadas);
@@ -91,15 +95,9 @@ public class ValidaHoras {
         int horasTrabalhadas = saida - entrada;
 
         if (horasTrabalhadas != bancoDeHoras.getFuncionario().getCargo().getCargahoraria()) {
-            int horaExtra = bancoDeHoras.getFuncionario().getCargo().getCargahoraria() + 2;
-            if (horasTrabalhadas > horaExtra) {
-                throw new CargaHorariaUltrapassadaException("A sua Carga Horária é de: "
-                        + bancoDeHoras.getFuncionario().getCargo().getCargahoraria());
-            }
+            throw new CargaHorariaUltrapassadaException("A sua Carga Horária é de: "
+                    + bancoDeHoras.getFuncionario().getCargo().getCargahoraria());
         }
-        int totalHorasExtras = horasTrabalhadas - bancoDeHoras.getFuncionario().getCargo().getCargahoraria();
-        bancoDeHoras.getFuncionario().setHorasExtras(bancoDeHoras.getFuncionario().getHorasExtras() + totalHorasExtras);
         return true;
     }
-
 }

@@ -110,7 +110,7 @@ public class GestorControllerTest {
                 mockMvc.perform(MockMvcRequestBuilders.post("/dashboard/cadastro/funcionarios")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
+                        .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
 
