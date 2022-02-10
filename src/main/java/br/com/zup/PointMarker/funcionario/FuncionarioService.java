@@ -143,4 +143,12 @@ public class FuncionarioService {
         funcionarioRepository.delete(funcionario);
     }
 
+    public Funcionario buscarFuncionarioPeloCpf(String cpf) {
+        Optional<Funcionario> optionalFuncionario = funcionarioRepository.findByCpf(cpf);
+
+        if (optionalFuncionario.isEmpty()) {
+            throw new FuncionarioNaoEncontradoException("Funcionário não encontrado.");
+        }
+        return optionalFuncionario.get();
+    }
 }

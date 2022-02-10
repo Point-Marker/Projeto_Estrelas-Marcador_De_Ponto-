@@ -26,16 +26,15 @@ public class ValidaHoras {
 
                 int horasTrabalhadas = saida - entrada;
 
-                if (horasTrabalhadas != bancoDeHoras.getFuncionario().getCargo().getCargahoraria()) {
+                if (horasTrabalhadas != funcionario.getCargo().getCargahoraria()) {
                     int horaExtra = bancoDeHoras.getFuncionario().getCargo().getCargahoraria() + 2;
                     if (horasTrabalhadas > horaExtra) {
                         throw new CargaHorariaUltrapassadaException("A sua Carga Horária é de: "
-                                + bancoDeHoras.getFuncionario().getCargo().getCargahoraria());
+                                + funcionario.getCargo().getCargahoraria());
                     }
                 }
-                int totalHorasExtras = horasTrabalhadas - bancoDeHoras.getFuncionario().getCargo().getCargahoraria();
-                bancoDeHoras.getFuncionario().setHorasExtras(bancoDeHoras.getFuncionario().getHorasExtras()
-                        + totalHorasExtras);
+                int totalHorasExtras = horasTrabalhadas - funcionario.getCargo().getCargahoraria();
+                funcionario.setHorasExtras(funcionario.getHorasExtras() + totalHorasExtras);
 
                 if (funcionario.getTotalHorasTrabalhadas() <= LIMITE_DE_HORAS_TRABALHADAS) {
                     funcionario.setTotalHorasTrabalhadas(funcionario.getTotalHorasTrabalhadas() + horasTrabalhadas);

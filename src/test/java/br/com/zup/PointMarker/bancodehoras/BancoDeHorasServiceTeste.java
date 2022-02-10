@@ -147,12 +147,12 @@ public class BancoDeHorasServiceTeste {
         bancoDeHoras.setEntrada(LocalTime.of(8, 00));
         bancoDeHoras.setSaida(LocalTime.of(14, 00));
 
-        Mockito.when(funcionarioService.buscarFuncionario(Mockito.anyInt())).thenReturn(funcionario);
+        Mockito.when(funcionarioService.buscarFuncionarioPeloCpf(Mockito.anyString())).thenReturn(funcionario);
         Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(bancoDeHoras.getDiaDoTrabalho()))
                 .thenReturn(bancoDeHoras);
 
-        BancoDeHoras bancoComHoraDeEntradaAtualizado = bancoDeHorasService.atualizarHorasTrabalhadas(1,
-                LocalDate.now(), bancoDeHoras);
+        BancoDeHoras bancoComHoraDeEntradaAtualizado = bancoDeHorasService.atualizarHorasTrabalhadas(LocalDate.now(),
+                bancoDeHoras);
 
         Assertions.assertEquals(bancoComHoraDeEntradaAtualizado.getEntrada(), bancoDeHoras.getEntrada());
     }
@@ -185,7 +185,7 @@ public class BancoDeHorasServiceTeste {
 
     @Test
     public void testarAtualizarHorasTrabalhadasEntradaCaminhoPositivo() {
-        Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
+        Mockito.when(funcionarioService.buscarFuncionarioPeloCpf(Mockito.anyString())).thenReturn(funcionario);
         Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(LocalDate.now())).thenReturn(bancoDeHoras);
         Mockito.when(bancoDeHorasRepository.save(Mockito.any(BancoDeHoras.class))).thenReturn(bancoDeHoras);
 
@@ -194,7 +194,7 @@ public class BancoDeHorasServiceTeste {
         bancoDeHorasASerAtualizado.setSaida(LocalTime.of(16, 00));
         bancoDeHorasASerAtualizado.setFuncionario(funcionario);
 
-        BancoDeHoras bancoDeHorasComHorarioAtualizado = bancoDeHorasService.atualizarHorasTrabalhadas(1, LocalDate.now(),
+        BancoDeHoras bancoDeHorasComHorarioAtualizado = bancoDeHorasService.atualizarHorasTrabalhadas(LocalDate.now(),
                 bancoDeHorasASerAtualizado);
 
         Assertions.assertEquals(bancoDeHorasComHorarioAtualizado.getEntrada(), LocalTime.of(10, 0));
@@ -202,7 +202,7 @@ public class BancoDeHorasServiceTeste {
 
     @Test
     public void testarAtualizarHorasTrabalhadasEntradaCaminhoNegativoRecebendoEntradaErrada() {
-        Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
+        Mockito.when(funcionarioService.buscarFuncionarioPeloCpf(Mockito.anyString())).thenReturn(funcionario);
         Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(LocalDate.now())).thenReturn(bancoDeHoras);
         Mockito.when(bancoDeHorasRepository.save(Mockito.any(BancoDeHoras.class))).thenReturn(bancoDeHoras);
 
@@ -212,12 +212,12 @@ public class BancoDeHorasServiceTeste {
         bancoDeHorasASerAtualizado.setFuncionario(funcionario);
 
         Assertions.assertThrows(HoraLimiteEntradaESaidaException.class, () ->
-                bancoDeHorasService.atualizarHorasTrabalhadas(1, LocalDate.now(), bancoDeHorasASerAtualizado));
+                bancoDeHorasService.atualizarHorasTrabalhadas(LocalDate.now(), bancoDeHorasASerAtualizado));
     }
 
     @Test
     public void testarAtualizarHorasTrabalhadasEntradaCaminhoNegativoRecebendoSaidaErrada() {
-        Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
+        Mockito.when(funcionarioService.buscarFuncionarioPeloCpf(Mockito.anyString())).thenReturn(funcionario);
         Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(LocalDate.now())).thenReturn(bancoDeHoras);
         Mockito.when(bancoDeHorasRepository.save(Mockito.any(BancoDeHoras.class))).thenReturn(bancoDeHoras);
 
@@ -227,7 +227,7 @@ public class BancoDeHorasServiceTeste {
         bancoDeHorasASerAtualizado.setFuncionario(funcionario);
 
         Assertions.assertThrows(HoraLimiteEntradaESaidaException.class, () ->
-                bancoDeHorasService.atualizarHorasTrabalhadas(1, LocalDate.now(), bancoDeHorasASerAtualizado));
+                bancoDeHorasService.atualizarHorasTrabalhadas(LocalDate.now(), bancoDeHorasASerAtualizado));
     }
 
 }
