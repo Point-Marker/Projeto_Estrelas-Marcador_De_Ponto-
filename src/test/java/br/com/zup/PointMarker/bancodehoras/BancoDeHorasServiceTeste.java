@@ -15,7 +15,6 @@ import br.com.zup.PointMarker.usuario.Usuario;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +22,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collections;
 import java.util.List;
 
 @SpringBootTest
@@ -71,7 +69,6 @@ public class BancoDeHorasServiceTeste {
         funcionario.setUsuario(usuario);
         funcionario.setCargo(cargo);
 
-
         bancoDeHoras = new BancoDeHoras();
         bancoDeHoras.setId(1);
         bancoDeHoras.setFuncionario(funcionario);
@@ -118,10 +115,10 @@ public class BancoDeHorasServiceTeste {
         Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
         Mockito.when(bancoDeHorasService.verificarHorasTrabalhadadas(bancoDeHoras)).thenReturn(false);
 
-      if (funcionario.getTotalHorasTrabalhadas() > funcionario.getCargo().getCargahoraria()) {
-          Assertions.assertThrows(CargaHorariaUltrapassadaException.class, () ->
-                  bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras));
-      }
+        if (funcionario.getTotalHorasTrabalhadas() > funcionario.getCargo().getCargahoraria()) {
+            Assertions.assertThrows(CargaHorariaUltrapassadaException.class, () ->
+                    bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras));
+        }
 
     }
 
@@ -147,7 +144,7 @@ public class BancoDeHorasServiceTeste {
     @Test
     public void atualizarHorasTrabalhadasEntradaCaminhoVerdadeiro() {
         bancoDeHoras.setEntrada(LocalTime.of(8, 00));
-        bancoDeHoras.setSaida(LocalTime.of(14,00));
+        bancoDeHoras.setSaida(LocalTime.of(14, 00));
 
         Mockito.when(funcionarioService.buscarFuncionario(Mockito.anyInt())).thenReturn(funcionario);
         Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(bancoDeHoras.getDiaDoTrabalho()))
