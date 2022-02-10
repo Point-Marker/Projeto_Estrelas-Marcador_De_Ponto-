@@ -21,4 +21,5 @@ public class BancoDeHorasResumoDTO {
     private LocalTime entrada;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime saida;
+
 }

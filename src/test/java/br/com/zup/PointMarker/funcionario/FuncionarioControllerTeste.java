@@ -78,7 +78,6 @@ public class FuncionarioControllerTeste {
 
     }
 
-
     @Test
     @WithMockUser(username = "Afonso", authorities = "USER")
     public void testarExbicaoDeFuncionarioPeloId_QuandoOFuncionarioForEncontrado() throws Exception {
@@ -104,7 +103,6 @@ public class FuncionarioControllerTeste {
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
 
     }
-
 
 }
 
