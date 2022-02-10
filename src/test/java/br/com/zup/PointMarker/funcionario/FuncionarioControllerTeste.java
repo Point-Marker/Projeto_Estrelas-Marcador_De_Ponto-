@@ -81,7 +81,7 @@ public class FuncionarioControllerTeste {
 
     @Test
     @WithMockUser(username = "Afonso", authorities = "USER")
-    public void testarExbicaoDeFuncionarioPeloId_QuandoOFuncionarioForEncontrado() throws Exception {
+    public void testarExbicaoDeFuncionarioPeloIdQuandoOFuncionarioForEncontrado() throws Exception {
         Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
 
         ResultActions resultActions = mockMvc.perform
@@ -93,7 +93,7 @@ public class FuncionarioControllerTeste {
 
     @Test
     @WithMockUser(username = "Afonso", authorities = "USER")
-    public void testarExbicaoDeFuncionarioPeloId_QuandoOFuncionarioNaoForEncontrado() throws Exception {
+    public void testarExbicaoDeFuncionarioPeloIdQuandoOFuncionarioNaoForEncontrado() throws Exception {
         Mockito.doThrow(FuncionarioNaoEncontradoException.class).when(funcionarioService)
                 .buscarFuncionario(Mockito.anyInt());
 

@@ -62,7 +62,6 @@ public class GestorControllerTest {
     private AtualizarStatusEntradaDTO atualizarStatusEntradaDTO;
 
 
-
     @BeforeEach
     public void setUp() {
 
@@ -200,7 +199,7 @@ public class GestorControllerTest {
 
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .put("/dashboard/cargo/1" )
+                                .put("/dashboard/cargo/1")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());

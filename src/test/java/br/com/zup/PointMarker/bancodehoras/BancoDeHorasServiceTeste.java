@@ -83,7 +83,7 @@ public class BancoDeHorasServiceTeste {
     }
 
     @Test
-    public void testarVerificacaoDeHoras_QuandoRetornaTrue() {
+    public void testarVerificacaoDeHorasQuandoRetornarTrue() {
         Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
 
         boolean valorTrue = bancoDeHorasService.verificarHorasTrabalhadadas(bancoDeHoras);
@@ -92,7 +92,7 @@ public class BancoDeHorasServiceTeste {
     }
 
     @Test
-    public void testarCadastroDeHoras() {
+    public void testarCadastroDeHorasQuandoTodosOsDadosForemEnviadosComSucesso() {
         Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
         Mockito.when(bancoDeHorasService.verificarHorasTrabalhadadas(bancoDeHoras)).thenReturn(true);
         Mockito.when(bancoDeHorasRepository.save(Mockito.any(BancoDeHoras.class))).thenReturn(bancoDeHoras);
@@ -103,7 +103,7 @@ public class BancoDeHorasServiceTeste {
     }
 
     @Test
-    public void testarCadastroDeHoras_QuandoOTotalDeHorasEstaMaiorQueCinquentaHorasTrabalhadas() {
+    public void testarCadastroDeHorasQuandoOTotalDeHorasEstaMaiorQueCinquentaHorasTrabalhadas() {
         bancoDeHoras.getFuncionario().setTotalHorasTrabalhadas(50);
 
         Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
@@ -127,7 +127,7 @@ public class BancoDeHorasServiceTeste {
     }
 
     @Test
-    public void exibirHorasTrabalhadasCaminhoVerdadeiro() {
+    public void testarExibirHorasTrabalhadasQuandoTodosOsDadosForemEnviadosComSucesso() {
         Mockito.when(funcionarioService.buscarFuncionario(Mockito.anyInt())).thenReturn(funcionario);
         bancoDeHoras = new BancoDeHoras();
         bancoDeHoras.setFuncionario(funcionario);
@@ -138,7 +138,7 @@ public class BancoDeHorasServiceTeste {
     }
 
     @Test
-    public void exibirHorasTrabalhadasCaminhoEntradaCaminhoFalso() {
+    public void testarExibirHorasTrabalhadasCaminhoEntradaCaminhoNegativoCasoFuncionarioRetorneNull() {
         Mockito.when(funcionarioService.buscarFuncionario(2)).thenReturn(null);
         List<BancoDeHoras> bancoList = bancoDeHorasService.exibirHorasTrabalhadas(2);
 
@@ -146,7 +146,7 @@ public class BancoDeHorasServiceTeste {
     }
 
     @Test
-    public void atualizarHorasTrabalhadasEntradaCaminhoVerdadeiro() {
+    public void testarAtualizarHorasTrabalhadasEntradaQuandoTodosOsDadosForemEnviadosComSucesso() {
         bancoDeHoras.setEntrada(LocalTime.of(8, 00));
         bancoDeHoras.setSaida(LocalTime.of(14,00));
 
@@ -161,7 +161,7 @@ public class BancoDeHorasServiceTeste {
     }
 
     @Test
-    public void testarExibirTodosBancosDeHoras() {
+    public void testarExibirTodosBancosDeHorasQuandoTodosOsDadosForemEnviadosComSucesso() {
         Mockito.when(bancoDeHorasRepository.findAll()).thenReturn(List.of(bancoDeHoras));
 
         List<BancoDeHoras> bancoDeHorasExibidos = bancoDeHorasService.exibirTodosBancosDeHoras();
@@ -172,7 +172,7 @@ public class BancoDeHorasServiceTeste {
     }
 
     @Test
-    public void testarExibirHorasExtrasTrabalhadasCaminhoPositivo() {
+    public void testarExibirHorasExtrasTrabalhadasQuandoTodosOsDadosForemEnviadosComSucesso() {
         Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
 
     }
