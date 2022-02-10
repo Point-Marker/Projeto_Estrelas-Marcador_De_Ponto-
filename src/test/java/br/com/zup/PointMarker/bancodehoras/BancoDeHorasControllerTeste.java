@@ -12,6 +12,7 @@ import br.com.zup.PointMarker.usuario.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +102,7 @@ public class BancoDeHorasControllerTeste {
     }
 
     @Test
-    @WithMockUser(username = "admin", authorities = "ADMIN")
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
     public void testarDeletarHorasFuncionario() throws Exception {
         Mockito.doNothing().when(bancoDeHorasService).removerHorasFuncionario(1);
 
