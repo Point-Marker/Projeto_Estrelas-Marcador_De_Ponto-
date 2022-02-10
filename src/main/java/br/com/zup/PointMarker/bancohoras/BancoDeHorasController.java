@@ -63,17 +63,15 @@ public class BancoDeHorasController {
         return bancoDeHorasService.horasExtrasTrabalhadas(mesDeFiltro);
     }
 
-    @PutMapping("/{idFuncionario}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public AtualizarHorasTrabalhadasSaidaDTO atualizarHorasEntrada(@PathVariable int idFuncionario,
-                                                                   @RequestParam
-                                                                           String data,
+    public AtualizarHorasTrabalhadasSaidaDTO atualizarHorasEntrada(@RequestParam String data,
                                                                    @RequestBody AtualizarHorasTrabalhadasEntradaDTO
-                                                                           atualizarHorasTrabalhadasEntradaDTO) {
+                                                                           atualizarHorasTrabalhadas) {
         LocalDate dataDaUrl = LocalDate.parse(data);
 
-        BancoDeHoras bancoComHoraASerAtualizada = modelMapper.map(atualizarHorasTrabalhadasEntradaDTO, BancoDeHoras.class);
-        BancoDeHoras bancoDeHorasComHorasAtualizada = bancoDeHorasService.atualizarHorasTrabalhadas(idFuncionario, dataDaUrl, bancoComHoraASerAtualizada);
+        BancoDeHoras bancoComHoraASerAtualizada = modelMapper.map(atualizarHorasTrabalhadas, BancoDeHoras.class);
+        BancoDeHoras bancoDeHorasComHorasAtualizada = bancoDeHorasService.atualizarHorasTrabalhadas(dataDaUrl, bancoComHoraASerAtualizada);
         return modelMapper.map(bancoDeHorasComHorasAtualizada, AtualizarHorasTrabalhadasSaidaDTO.class);
     }
 
