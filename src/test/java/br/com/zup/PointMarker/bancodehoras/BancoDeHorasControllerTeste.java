@@ -4,11 +4,13 @@ import br.com.zup.PointMarker.bancohoras.BancoDeHoras;
 import br.com.zup.PointMarker.bancohoras.BancoDeHorasController;
 import br.com.zup.PointMarker.bancohoras.BancoDeHorasRepository;
 import br.com.zup.PointMarker.bancohoras.BancoDeHorasService;
+import br.com.zup.PointMarker.bancohoras.dtos.ResumoSaidaDTO.BancoDeHorasResumoDTO;
 import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.config.security.JWT.JWTComponent;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.usuario.Usuario;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,8 +26,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 
 @WebMvcTest({BancoDeHorasController.class, JWTComponent.class})
 public class BancoDeHorasControllerTeste {
@@ -52,6 +55,9 @@ public class BancoDeHorasControllerTeste {
     @BeforeEach
     public void setUp() {
 
+        objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
+
         cargo = new Cargo();
         cargo.setId(1);
         cargo.setNome("Jovem Aprendiz");
@@ -72,7 +78,6 @@ public class BancoDeHorasControllerTeste {
         funcionario.setCargo(cargo);
         funcionario.setStatus(Status.ATIVO);
 
-
         bancoDeHoras = new BancoDeHoras();
         bancoDeHoras.setId(1);
         bancoDeHoras.setFuncionario(funcionario);
@@ -83,14 +88,54 @@ public class BancoDeHorasControllerTeste {
     }
 
     @Test
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
+    public void testarExibirTodosBancosDeHoras() throws Exception {
+        Mockito.when(bancoDeHorasService.exibirTodosBancosDeHoras()).thenReturn(Arrays.asList(bancoDeHoras));
+
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/bancohoras")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+
+        String jsonResposta = resultActions.andReturn().getResponse().getContentAsString();
+        List<BancoDeHorasResumoDTO> todosBancosDeHoras =
+                objectMapper.readValue(jsonResposta, new TypeReference<List<BancoDeHorasResumoDTO>>() {
+                });
+    }
+
+    @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
+    public void testarCadastroDeBancoDeHorasDeUmFuncionarioComSucesso() throws Exception {
+        Mockito.when(bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras)).thenReturn(bancoDeHoras);
+
+        String json = objectMapper.writeValueAsString(bancoDeHoras);
+
+        ResultActions resultadoDaRequisicao =
+                mockMvc.perform(MockMvcRequestBuilders.post("/bancohoras")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+    @Test
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
     public void testarDeletarHorasFuncionario() throws Exception {
         Mockito.doNothing().when(bancoDeHorasService).removerHorasFuncionario(1);
 
         ResultActions resultActions = mockMvc.perform
-                (MockMvcRequestBuilders.delete("/bancohoras/1")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        (MockMvcRequestBuilders.delete("/bancohoras/1")
+                                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect((MockMvcResultMatchers.status().is((204))));
     }
 
+    @Test
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
+    public void testeExibirBancoDeHorasDeUmUnicoFuncionario() throws Exception {
+        ResultActions resultActions = mockMvc.perform
+                        (MockMvcRequestBuilders.get("/bancohoras/1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect((MockMvcResultMatchers.status().isOk()));
+    }
+
 }
+
