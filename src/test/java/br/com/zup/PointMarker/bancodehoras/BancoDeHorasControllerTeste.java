@@ -14,7 +14,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -56,6 +58,9 @@ public class BancoDeHorasControllerTeste {
 
     @BeforeEach
     public void setUp() {
+
+        objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
 
         cargo = new Cargo();
         cargo.setId(1);
@@ -109,6 +114,20 @@ public class BancoDeHorasControllerTeste {
 
     @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
+    public void testarCadastroDeBancoDeHorasDeUmFuncionarioComSucesso() throws Exception {
+        Mockito.when(bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras)).thenReturn(bancoDeHoras);
+
+        String json = objectMapper.writeValueAsString(bancoDeHoras);
+
+        ResultActions resultadoDaRequisicao =
+                mockMvc.perform(MockMvcRequestBuilders.post("/bancohoras")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+    @Test
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
     public void testarDeletarHorasFuncionario() throws Exception {
         Mockito.doNothing().when(bancoDeHorasService).removerHorasFuncionario(1);
 
@@ -118,4 +137,13 @@ public class BancoDeHorasControllerTeste {
                 .andExpect((MockMvcResultMatchers.status().is((204))));
     }
 
+    @Test
+    @WithMockUser(username = "Afonso", authorities = "ADMIN")
+    public void testeExibirBancoDeHorasDeUmUnicoFuncionario() throws Exception {
+        ResultActions resultActions = mockMvc.perform
+                        (MockMvcRequestBuilders.get("/bancohoras/1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect((MockMvcResultMatchers.status().isOk()));
+    }
 }
+

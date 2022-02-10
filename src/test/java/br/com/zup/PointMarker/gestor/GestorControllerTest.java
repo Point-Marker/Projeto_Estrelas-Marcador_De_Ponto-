@@ -209,13 +209,17 @@ public class GestorControllerTest {
     @Test
     @WithMockUser(username = "Afonso", authorities = "ADMIN")
     public void atualizarCargoCaminhoNegativoCasoFuncionarioInformadoNaoForValido() throws Exception {
-        funcionario.setStatus(INATIVO);
-        Mockito.doThrow(FuncionarioComStatusInativoException.class).when(gestorService).atualizarCargo(1, cargo);
-        String json = objectMapper.writeValueAsString(atualizarCargoEntradaDTO);
+
+        Funcionario funcionarioStatus = new Funcionario();
+        funcionarioStatus.setStatus(INATIVO);
+        funcionarioStatus.setId(3);
+
+        Mockito.doThrow(FuncionarioComStatusInativoException.class).when(gestorService).atualizarCargo(3, cargo);
+        String json = objectMapper.writeValueAsString(funcionarioStatus);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .put("/dashboard/cargo/1")
+                                .put("/dashboard/cargo/3")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
