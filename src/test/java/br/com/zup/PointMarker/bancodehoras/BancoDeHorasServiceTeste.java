@@ -8,6 +8,7 @@ import br.com.zup.PointMarker.cargo.Cargo;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.CargaHorariaUltrapassadaException;
 import br.com.zup.PointMarker.exceptions.HoraLimiteEntradaESaidaException;
+import br.com.zup.PointMarker.exceptions.TotalDeHorasTrabalhadasUltrapassadaException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioRepository;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
@@ -108,7 +109,7 @@ public class BancoDeHorasServiceTeste {
         Mockito.when(funcionarioService.buscarFuncionario(1)).thenReturn(funcionario);
         Mockito.when(bancoDeHorasService.verificarHorasTrabalhadadas(bancoDeHoras)).thenReturn(false);
 
-        Assertions.assertThrows(CargaHorariaUltrapassadaException.class, () ->
+        Assertions.assertThrows(TotalDeHorasTrabalhadasUltrapassadaException.class, () ->
                 bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras));
 
     }

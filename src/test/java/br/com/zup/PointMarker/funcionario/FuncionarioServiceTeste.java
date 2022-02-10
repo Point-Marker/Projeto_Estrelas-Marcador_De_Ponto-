@@ -77,7 +77,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void testarCadastroDeFuncionarioCaminhoBom() {
+    public void testarCadastroDeFuncionarioQuandoTodosOsDadosForemEnviadosComSucesso() {
         Mockito.when(cargoRepository.findById(1)).thenReturn(Optional.of(cargo));
         Mockito.when(usuarioRepository.findByNomeUsuario(usuario.getNomeUsuario())).thenReturn(Optional.empty());
         Mockito.when(bCryptPasswordEncoder.encode(funcionario.getUsuario().getSenha())).thenReturn("senhaCripto");
@@ -90,7 +90,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void testarCadastroDeFuncionarioCaminhoRuim_CargoNaoEncontrado() {
+    public void testarCadastroDeFuncionarioCaminhoNegativoQuandoOCargoDoFuncionarioNaoForEncontrado() {
         var cargoNaoCadastrado = new Cargo();
         cargoNaoCadastrado.setId(2);
 
@@ -107,7 +107,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void testarCadastroDeFuncionario_QuandoONomeDeUsuarioJaEstaCadastrado() {
+    public void testarCadastroDeFuncionarioQuandoONomeDeUsuarioJaEstaCadastrado() {
         Mockito.when(cargoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(cargo));
         Mockito.when(usuarioRepository.findByNomeUsuario(usuario.getNomeUsuario())).thenReturn(Optional.of(usuario));
 
@@ -117,7 +117,7 @@ public class FuncionarioServiceTeste {
 
 
     @Test
-    public void buscarFuncionarioCaminhoVerdadeiro() {
+    public void testarBuscarFuncionarioQuandoTodosOsDadosForemEnviadosComSucesso() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
 
         Funcionario funcionarioEncontrado = funcionarioService.buscarFuncionario(1);
@@ -126,7 +126,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void buscarFuncionarioCaminhoFalso() {
+    public void testarBuscarFuncionarioCaminhoNegativoQuandoOFuncionarioNaoForEncontrado() {
         Mockito.when(funcionarioRepository.findById(2)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(FuncionarioNaoEncontradoException.class, () -> {
@@ -135,7 +135,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void atualizarSalarioCaminhoVerdadeiro() {
+    public void testarAtualizarSalarioQuandoTodosOsDadosForemEnviadosComSucesso() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
         funcionario.setSalario(1000);
         Funcionario funcionario = funcionarioService.atualizarSalario(1, 350);
@@ -144,7 +144,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void atualizarSalarioCaminhoFalso_quandoSalarioForMaiorQueTetoSalarialDoCargo() {
+    public void testarAtualizarSalarioCaminhoNegativoQuandoSalarioForMaiorQueOTetoSalarialDoCargo() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
         cargo.setSalario(800);
         funcionario.setSalario(1000);
@@ -153,7 +153,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void atualizarSalarioCaminhoFalso_quandoSalarioForMaiorQueTetoSalarialDoFuncionario() {
+    public void testarAtualizarSalarioCaminhoNegativoQuandoSalarioForMaiorQueTetoSalarialDoFuncionario() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
         cargo.setSalario(1000);
         funcionario.setSalario(800);
@@ -162,7 +162,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void atualizarCargoCaminhoPositivo() {
+    public void testarAtualizarCargoQuandoTodosOsDadosForemEnviadosComSucesso() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
         Mockito.when(cargoRepository.findById(1)).thenReturn(Optional.ofNullable(cargo));
         Cargo cargo = funcionario.getCargo();
@@ -173,7 +173,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void atualizarCargoCaminhoNegativo() {
+    public void testarAtualizarCargoCaminhoNegativoQuandoStatusDoFuncionarioForInativo() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
         funcionario.setStatus(Status.INATIVO);
 
@@ -182,7 +182,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void atualizarStatusCaminhoVerdadeiro() {
+    public void testarAtualizarStatusQuandoTodosOsDadosForemEnviadosComSucesso() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
 
         Funcionario funcionario = funcionarioService.atualizarStatus(1, Status.ATIVO);
@@ -191,7 +191,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void atualizarStatusCaminhoFalso() {
+    public void testarAtualizarStatusDoFuncionarioCaminhoNegativoCasoFuncionarioTenhaMaisDeCinquentaHorasTrabalhadas() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.ofNullable(funcionario));
         status = Status.INATIVO;
         funcionario.setTotalHorasTrabalhadas(60);
@@ -201,7 +201,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void testarExibicaoDeFuncionarios_quandoStatusForNulo() {
+    public void testarExibicaoDeFuncionariosQuandoStatusForNulo() {
         status = null;
         Mockito.when(funcionarioRepository.findAll()).thenReturn(List.of(funcionario));
 
@@ -213,7 +213,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void testarExibicaDeFuncionarios_quandoStatusForAtivo() {
+    public void testarExibicaDeFuncionariosQuandoStatusForAtivo() {
         status = Status.ATIVO;
         Mockito.when(funcionarioRepository.findAllByStatus(status)).thenReturn(List.of(funcionario));
 
@@ -225,7 +225,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void testarExibicaDeFuncionarios_quandoStatusForInativo() {
+    public void testarExibicaDeFuncionariosQuandoStatusForInativo() {
         status = Status.INATIVO;
         funcionario.setStatus(status);
         Mockito.when(funcionarioRepository.findAllByStatus(status)).thenReturn(List.of(funcionario));
@@ -238,7 +238,7 @@ public class FuncionarioServiceTeste {
     }
 
     @Test
-    public void testarDeletarHorasTrabalhadas() {
+    public void testarDeletarHorasTrabalhadasDeUmFuncionario() {
         Mockito.when(funcionarioRepository.findById(1)).thenReturn(Optional.of(funcionario));
         funcionarioService.deletarHorasTrabalhadas(funcionario.getId());
 
