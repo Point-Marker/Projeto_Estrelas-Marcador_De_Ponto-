@@ -1,6 +1,8 @@
 package br.com.zup.PointMarker.bancohoras.dtos.AtualizarHorasTrabalhadasDTOs;
 
 import br.com.zup.PointMarker.funcionario.Funcionario;
+import br.com.zup.PointMarker.funcionario.dtos.ResumoDTO.ResumoFuncionarioDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,8 +15,12 @@ import java.time.LocalTime;
 @Setter
 public class AtualizarHorasTrabalhadasSaidaDTO {
 
-    private Funcionario id_funcionario;
+    private ResumoFuncionarioDTO funcionario;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate diaDoTrabalho;
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime entrada;
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime saida;
 }
+
