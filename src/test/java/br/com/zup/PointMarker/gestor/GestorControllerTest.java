@@ -101,7 +101,7 @@ public class GestorControllerTest {
 
     @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
-    public void testarCadastroDeFuncionario_QuandoTodosOsDadosForemEnviadosComSucesso() throws Exception {
+    public void testarCadastroDeUmFuncionarioQuandoTodosOsDadosForemEnviadosComSucesso() throws Exception {
         Mockito.when(gestorService.cadastrarFuncionario(funcionario)).thenReturn(funcionario);
 
         String json = objectMapper.writeValueAsString(funcionario);
@@ -116,7 +116,7 @@ public class GestorControllerTest {
 
     @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
-    public void testarCadastroDeFuncionario_QuandoOCampoNomeEstiverVazioNaoDeveCadastrarOFuncionario() throws Exception {
+    public void testarCadastroDeUmFuncionarioQuandoOCampoNomeEstiverVazioNaoDeveCadastrarOFuncionario() throws Exception {
 
         Mockito.when(gestorService.cadastrarFuncionario(funcionario)).thenReturn(funcionario);
         funcionario.setNome("");
@@ -133,7 +133,7 @@ public class GestorControllerTest {
 
     @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
-    public void testarCadastroDeFuncionario_QuandoONomeNaoEstiverComDezCaracters() throws Exception {
+    public void testarCadastroDeUmFuncionarioQuandoONomeNaoEstiverComDezCaracteres() throws Exception {
 
         Mockito.when(gestorService.cadastrarFuncionario(funcionario)).thenReturn(funcionario);
         funcionario.setNome("Alonso");
@@ -150,7 +150,7 @@ public class GestorControllerTest {
 
     @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
-    public void testarCadastroDeFuncionario_QuandoONomeNaoEstiverComMenosDoQueTrintaCaracters() throws Exception {
+    public void testarCadastroDeFuncionario_QuandoONomeNaoEstiverComMenosDoQueTrintaCaracteres() throws Exception {
 
         Mockito.when(gestorService.cadastrarFuncionario(funcionario)).thenReturn(funcionario);
         funcionario.setNome("Alonso Conrado Francisco De Juapinba Nevez Meireles");
@@ -167,7 +167,7 @@ public class GestorControllerTest {
 
     @Test
     @WithMockUser(username = "Afonso", authorities = "ADMIN")
-    public void atualizarSalarioCaminhoPositivo() throws Exception {
+    public void testarAtualizarSalarioQuandoTodosOsDadosForemEnviadosComSucesso() throws Exception {
         String json = objectMapper.writeValueAsString(funcionario);
 
         mockMvc.perform(
@@ -180,7 +180,7 @@ public class GestorControllerTest {
 
     @Test
     @WithMockUser(username = "Afonso", authorities = "ADMIN")
-    public void atualizarSalarioCaminhoNegativoCasoSalarioSejaMaiorQueSalarioFuncionario() throws Exception {
+    public void testarAtualizarSalarioCaminhoNegativoCasoSalarioSejaMaiorQueSalarioFuncionario() throws Exception {
         Mockito.doThrow(LimiteAumentoSalarioException.class).when(gestorService).atualizarSalario(1, 800);
         atualizarSalarioEntradaDTO.setSalario(800);
         String json = objectMapper.writeValueAsString(atualizarSalarioEntradaDTO);
@@ -195,7 +195,7 @@ public class GestorControllerTest {
 
     @Test
     @WithMockUser(username = "Afonso", authorities = "ADMIN")
-    public void atualizarCargoCaminhoPositivo() throws Exception {
+    public void testarAtualizarCargoQuandoTodosOsDadosForemEnviadosComSucesso() throws Exception {
         String json = objectMapper.writeValueAsString(funcionario);
 
         mockMvc.perform(
@@ -208,7 +208,7 @@ public class GestorControllerTest {
 
     @Test
     @WithMockUser(username = "Afonso", authorities = "ADMIN")
-    public void atualizarCargoCaminhoNegativoCasoFuncionarioInformadoNaoForValido() throws Exception {
+    public void testarAtualizarCargoCaminhoNegativoCasoFuncionarioInformadoNaoForValido() throws Exception {
 
         Funcionario funcionarioStatus = new Funcionario();
         funcionarioStatus.setStatus(INATIVO);
@@ -227,7 +227,7 @@ public class GestorControllerTest {
 
     @Test
     @WithMockUser(username = "Afonso", authorities = "ADMIN")
-    public void atualizarStatusCaminhoPositivo() throws Exception {
+    public void atualizarStatusQuandoTodosOsDadosForemEnviadosComSucesso() throws Exception {
         String json = objectMapper.writeValueAsString(atualizarStatusEntradaDTO);
 
         mockMvc.perform(
@@ -240,7 +240,7 @@ public class GestorControllerTest {
 
     @Test
     @WithMockUser(username = "Afonso", authorities = "ADMIN")
-    public void atualizarStatusCaminhoNegativo() throws Exception {
+    public void testarAtualizarStatusCaminhoNegativoCasoTotalDeHorasTrabalhadasForMaiorQueCinquenta() throws Exception {
         funcionario.setTotalHorasTrabalhadas(99);
         Mockito.doThrow(MaisDeCinquentaHorasTrabalhadasException.class).when(gestorService).atualizarStatus(1, status);
 
