@@ -2,9 +2,7 @@ package br.com.zup.PointMarker.bancohoras;
 
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.BancoDeHorasNãoEncontradoException;
-import br.com.zup.PointMarker.exceptions.CargaHorariaUltrapassadaException;
 import br.com.zup.PointMarker.exceptions.HoraLimiteEntradaESaidaException;
-import br.com.zup.PointMarker.exceptions.HorarioInvalidoException;
 import br.com.zup.PointMarker.exceptions.TotalDeHorasTrabalhadasUltrapassadaException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
@@ -61,15 +59,15 @@ public class BancoDeHorasService {
 
     public BancoDeHoras atualizarHorasTrabalhadas(int id, LocalDate data, BancoDeHoras bancoDeHoras) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
-        BancoDeHoras banco = bancoDeHorasRepository.findByDiaDoTrabalho(data);
-
+        bancoDeHoras.setFuncionario(funcionario);
         if (ValidaHoras.validarHorasEntradaESaida(bancoDeHoras)) {
-
+            BancoDeHoras banco = bancoDeHorasRepository.findByDiaDoTrabalho(data);
             banco.setEntrada(bancoDeHoras.getEntrada());
             banco.setSaida(bancoDeHoras.getSaida());
+            banco.setFuncionario(funcionario);
             bancoDeHorasRepository.save(banco);
 
-            return bancoDeHoras;
+            return banco;
         }
         throw new HoraLimiteEntradaESaidaException("A hora registrada não pode ser antes das 08:00 ou depois das 22:00.");
     }
