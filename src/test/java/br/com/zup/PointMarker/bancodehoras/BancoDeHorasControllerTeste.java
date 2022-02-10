@@ -88,6 +88,20 @@ public class BancoDeHorasControllerTeste {
 
     @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
+    public void testarCadastroDeBancoDeHorasDeUmFuncionarioComSucesso() throws Exception {
+        Mockito.when(bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras)).thenReturn(bancoDeHoras);
+
+        String json = objectMapper.writeValueAsString(bancoDeHoras);
+
+        ResultActions resultadoDaRequisicao =
+                mockMvc.perform(MockMvcRequestBuilders.post("/bancohoras")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = "ADMIN")
     public void testarDeletarHorasFuncionario() throws Exception {
         Mockito.doNothing().when(bancoDeHorasService).removerHorasFuncionario(1);
 
