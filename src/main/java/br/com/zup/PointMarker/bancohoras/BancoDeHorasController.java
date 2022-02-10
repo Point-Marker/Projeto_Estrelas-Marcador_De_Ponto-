@@ -5,7 +5,6 @@ import br.com.zup.PointMarker.bancohoras.dtos.AtualizarHorasTrabalhadasDTOs.Atua
 import br.com.zup.PointMarker.bancohoras.dtos.ResumoSaidaDTO.BancoDeHorasResumoDTO;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.dtos.ResumoDTO.ResumoFuncionarioDTO;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,7 +46,7 @@ public class BancoDeHorasController {
         List<BancoDeHoras> todosBancosDeHoras = bancoDeHorasService.exibirTodosBancosDeHoras();
         List<BancoDeHorasResumoDTO> listaResumoBancoDeHoras = new ArrayList<>();
 
-        for(BancoDeHoras refencia : todosBancosDeHoras ){
+        for (BancoDeHoras refencia : todosBancosDeHoras) {
             BancoDeHorasResumoDTO bancoDeHorasResumoDTO = modelMapper.map(refencia, BancoDeHorasResumoDTO.class);
             listaResumoBancoDeHoras.add(bancoDeHorasResumoDTO);
         }
@@ -65,30 +64,18 @@ public class BancoDeHorasController {
         return bancoDeHorasService.horasExtrasTrabalhadas(mesDeFiltro);
     }
 
-    @PutMapping("/marcador/entrada/{idFuncionario}")
+    @PutMapping("/{idFuncionario}")
     @ResponseStatus(HttpStatus.OK)
     public AtualizarHorasTrabalhadasSaidaDTO atualizarHorasEntrada(@PathVariable int idFuncionario,
-                                                                   @RequestParam @JsonFormat(pattern = "dd/mm/yyyy")
-                                                                           LocalDate data,
+                                                                   @RequestParam
+                                                                           String data,
                                                                    @RequestBody AtualizarHorasTrabalhadasEntradaDTO
                                                                            atualizarHorasTrabalhadasEntradaDTO) {
+        LocalDate dataDaUrl = LocalDate.parse(data);
 
-        BancoDeHoras banco = modelMapper.map(atualizarHorasTrabalhadasEntradaDTO, BancoDeHoras.class);
-        bancoDeHorasService.atualizarHorasTrabalhadas(idFuncionario, data, banco);
-        return modelMapper.map(banco, AtualizarHorasTrabalhadasSaidaDTO.class);
-    }
-
-    @PutMapping("/marcador/saida/{idFuncionario}")
-    @ResponseStatus(HttpStatus.OK)
-    public AtualizarHorasTrabalhadasSaidaDTO atualizarHorasSaida(@PathVariable int idFuncionario,
-                                                                 @RequestParam @JsonFormat(pattern = "dd/mm/yyyy")
-                                                                         LocalDate data,
-                                                                 @RequestBody AtualizarHorasTrabalhadasEntradaDTO
-                                                                         atualizarHorasTrabalhadasEntradaDTO) {
-
-        BancoDeHoras banco = modelMapper.map(atualizarHorasTrabalhadasEntradaDTO, BancoDeHoras.class);
-        bancoDeHorasService.atualizarHorasTrabalhadas(idFuncionario, data, banco);
-        return modelMapper.map(banco, AtualizarHorasTrabalhadasSaidaDTO.class);
+        BancoDeHoras bancoComHoraASerAtualizada = modelMapper.map(atualizarHorasTrabalhadasEntradaDTO, BancoDeHoras.class);
+        BancoDeHoras bancoDeHorasComHorasAtualizada = bancoDeHorasService.atualizarHorasTrabalhadas(idFuncionario, dataDaUrl, bancoComHoraASerAtualizada);
+        return modelMapper.map(bancoDeHorasComHorasAtualizada, AtualizarHorasTrabalhadasSaidaDTO.class);
     }
 
     @DeleteMapping("/{id}")
