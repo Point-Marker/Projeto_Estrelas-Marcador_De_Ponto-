@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @NoArgsConstructor
@@ -15,6 +16,8 @@ import java.time.LocalTime;
 public class AtualizarHorasTrabalhadasEntradaDTO {
     @Valid
     private CpfDoFuncionarioDTO funcionario;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate diaDoTrabalho;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime entrada;
     @JsonFormat(pattern = "HH:mm")
