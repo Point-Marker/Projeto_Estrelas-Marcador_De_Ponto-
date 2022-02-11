@@ -3,6 +3,7 @@ package br.com.zup.PointMarker.bancohoras;
 import br.com.zup.PointMarker.bancohoras.dtos.AtualizarHorasTrabalhadasDTOs.AtualizarHorasTrabalhadasEntradaDTO;
 import br.com.zup.PointMarker.bancohoras.dtos.AtualizarHorasTrabalhadasDTOs.AtualizarHorasTrabalhadasSaidaDTO;
 import br.com.zup.PointMarker.bancohoras.dtos.ResumoSaidaDTO.BancoDeHorasResumoDTO;
+import br.com.zup.PointMarker.bancohoras.dtos.cadastrodebancodehorasdto.CadastroEntradaBancoDeHorasDTO;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.dtos.ResumoDTO.ResumoFuncionarioDTO;
 import org.modelmapper.ModelMapper;
@@ -29,8 +30,10 @@ public class BancoDeHorasController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BancoDeHorasResumoDTO cadastrarHorasTrabalhadas(@RequestBody BancoDeHoras bancoDeHoras) {
-        BancoDeHoras bancoDeHorasSalvo = bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHoras);
+    public BancoDeHorasResumoDTO cadastrarHorasTrabalhadas(@RequestBody CadastroEntradaBancoDeHorasDTO entradaBanco) {
+
+        BancoDeHoras bancoDeHorasASerSalvo = modelMapper.map(entradaBanco, BancoDeHoras.class);
+        BancoDeHoras bancoDeHorasSalvo = bancoDeHorasService.salvarHorasTrabalhadas(bancoDeHorasASerSalvo);
         Funcionario funcionario = bancoDeHorasSalvo.getFuncionario();
         ResumoFuncionarioDTO resumoFuncionarioDTO = modelMapper.map(funcionario, ResumoFuncionarioDTO.class);
 
@@ -66,10 +69,10 @@ public class BancoDeHorasController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public AtualizarHorasTrabalhadasSaidaDTO atualizarHorasEntrada(@RequestBody AtualizarHorasTrabalhadasEntradaDTO
-                                                                               atualizarHorasTrabalhadas) {
+                                                                           atualizarHorasTrabalhadas) {
 
         BancoDeHoras bancoComHoraASerAtualizada = modelMapper.map(atualizarHorasTrabalhadas, BancoDeHoras.class);
-        BancoDeHoras bancoDeHorasComHorasAtualizada = bancoDeHorasService.atualizarHorasTrabalhadas(bancoComHoraASerAtualizada.getDiaDoTrabalho(),
+        BancoDeHoras bancoDeHorasComHorasAtualizada = bancoDeHorasService.atualizarHorasTrabalhadas(
                 bancoComHoraASerAtualizada);
         return modelMapper.map(bancoDeHorasComHorasAtualizada, AtualizarHorasTrabalhadasSaidaDTO.class);
     }
