@@ -14,6 +14,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class AtualizarHorasTrabalhadasEntradaDTO {
+    private int id;
     @Valid
     private CpfDoFuncionarioDTO funcionario;
     @JsonFormat(pattern = "dd/MM/yyyy")

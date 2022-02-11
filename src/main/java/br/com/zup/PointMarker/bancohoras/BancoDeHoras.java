@@ -23,9 +23,7 @@ public class BancoDeHoras {
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
     private Funcionario funcionario;
     private LocalDate diaDoTrabalho;
-    @JsonFormat(pattern = "HH:mm")
     private LocalTime entrada;
-    @JsonFormat(pattern = "HH:mm")
     private LocalTime saida;
 
 }
