@@ -95,13 +95,7 @@ public class BancoDeHorasService {
     }
 
     public void removerHorasFuncionario(int id) {
-        Funcionario funcionario = funcionarioService.buscarFuncionario(id);
-
-        List<BancoDeHoras> bancoDeHorasList = bancoDeHorasRepository.findAllByFuncionario(funcionario);
-
-        for (BancoDeHoras bancoReferencia : bancoDeHorasList) {
-            bancoDeHorasRepository.delete(bancoReferencia);
-        }
+        bancoDeHorasRepository.deleteById(id);
     }
 
 }
