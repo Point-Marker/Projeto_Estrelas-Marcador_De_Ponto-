@@ -20,7 +20,7 @@ public class BancoDeHoras {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
     private Funcionario funcionario;
     private LocalDate diaDoTrabalho;
     @JsonFormat(pattern = "HH:mm")
