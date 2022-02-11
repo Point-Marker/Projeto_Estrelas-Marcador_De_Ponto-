@@ -151,8 +151,7 @@ public class BancoDeHorasServiceTeste {
         Mockito.when(bancoDeHorasRepository.findByDiaDoTrabalho(bancoDeHoras.getDiaDoTrabalho()))
                 .thenReturn(bancoDeHoras);
 
-        BancoDeHoras bancoComHoraDeEntradaAtualizado = bancoDeHorasService.atualizarHorasTrabalhadas(LocalDate.now(),
-                bancoDeHoras);
+        BancoDeHoras bancoComHoraDeEntradaAtualizado = bancoDeHorasService.atualizarHorasTrabalhadas(bancoDeHoras);
 
         Assertions.assertEquals(bancoComHoraDeEntradaAtualizado.getEntrada(), bancoDeHoras.getEntrada());
     }
@@ -194,8 +193,7 @@ public class BancoDeHorasServiceTeste {
         bancoDeHorasASerAtualizado.setSaida(LocalTime.of(16, 00));
         bancoDeHorasASerAtualizado.setFuncionario(funcionario);
 
-        BancoDeHoras bancoDeHorasComHorarioAtualizado = bancoDeHorasService.atualizarHorasTrabalhadas(LocalDate.now(),
-                bancoDeHorasASerAtualizado);
+        BancoDeHoras bancoDeHorasComHorarioAtualizado = bancoDeHorasService.atualizarHorasTrabalhadas(bancoDeHorasASerAtualizado);
 
         Assertions.assertEquals(bancoDeHorasComHorarioAtualizado.getEntrada(), LocalTime.of(10, 0));
     }
@@ -212,7 +210,7 @@ public class BancoDeHorasServiceTeste {
         bancoDeHorasASerAtualizado.setFuncionario(funcionario);
 
         Assertions.assertThrows(HoraLimiteEntradaESaidaException.class, () ->
-                bancoDeHorasService.atualizarHorasTrabalhadas(LocalDate.now(), bancoDeHorasASerAtualizado));
+                bancoDeHorasService.atualizarHorasTrabalhadas(bancoDeHorasASerAtualizado));
     }
 
     @Test
@@ -227,7 +225,7 @@ public class BancoDeHorasServiceTeste {
         bancoDeHorasASerAtualizado.setFuncionario(funcionario);
 
         Assertions.assertThrows(HoraLimiteEntradaESaidaException.class, () ->
-                bancoDeHorasService.atualizarHorasTrabalhadas(LocalDate.now(), bancoDeHorasASerAtualizado));
+                bancoDeHorasService.atualizarHorasTrabalhadas(bancoDeHorasASerAtualizado));
     }
 
 }

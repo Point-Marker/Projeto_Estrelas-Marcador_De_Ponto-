@@ -14,6 +14,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class BancoDeHorasResumoDTO {
+    private int id;
     private ResumoFuncionarioDTO funcionario;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate diaDoTrabalho;

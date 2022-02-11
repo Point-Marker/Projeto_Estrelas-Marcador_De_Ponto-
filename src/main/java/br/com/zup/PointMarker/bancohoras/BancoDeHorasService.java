@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BancoDeHorasService {
@@ -57,17 +58,18 @@ public class BancoDeHorasService {
         return bancoDeHorasRepository.findAllByFuncionario(bancoDeHoras.getFuncionario());
     }
 
-    public BancoDeHoras atualizarHorasTrabalhadas(LocalDate data, BancoDeHoras bancoDeHoras) {
+    public BancoDeHoras atualizarHorasTrabalhadas(BancoDeHoras bancoDeHoras) {
         Funcionario funcionario = funcionarioService.buscarFuncionarioPeloCpf(bancoDeHoras.getFuncionario().getCpf());
         bancoDeHoras.setFuncionario(funcionario);
         if (ValidaHoras.validarHorasEntradaESaida(bancoDeHoras)) {
-            BancoDeHoras banco = bancoDeHorasRepository.findByDiaDoTrabalho(data);
-            banco.setEntrada(bancoDeHoras.getEntrada());
-            banco.setSaida(bancoDeHoras.getSaida());
-            banco.setFuncionario(funcionario);
-            bancoDeHorasRepository.save(banco);
+            Optional<BancoDeHoras> banco = bancoDeHorasRepository.findById(bancoDeHoras.getId());
+            banco.orElseThrow();
+            banco.get().setEntrada(bancoDeHoras.getEntrada());
+            banco.get().setSaida(bancoDeHoras.getSaida());
+            banco.get().setFuncionario(funcionario);
+            bancoDeHorasRepository.save(banco.get());
 
-            return banco;
+            return banco.get();
         }
         throw new HoraLimiteEntradaESaidaException("A hora registrada não pode ser antes das 08:00 ou depois das 22:00.");
     }
@@ -93,13 +95,7 @@ public class BancoDeHorasService {
     }
 
     public void removerHorasFuncionario(int id) {
-        Funcionario funcionario = funcionarioService.buscarFuncionario(id);
-
-        List<BancoDeHoras> bancoDeHorasList = bancoDeHorasRepository.findAllByFuncionario(funcionario);
-
-        for (BancoDeHoras bancoReferencia : bancoDeHorasList) {
-            bancoDeHorasRepository.delete(bancoReferencia);
-        }
+        bancoDeHorasRepository.deleteById(id);
     }
 
 }
