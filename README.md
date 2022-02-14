@@ -228,7 +228,6 @@
 ```
 
 Rode o projeto e acesse o Swagger através deste link:
-localhost:8080/swagger-ui/index.html#
 http://localhost:8080/swagger-ui/index.html#/
 
 Segue o arquivo com as coleções do Postman para que você teste a nossa aplicação:
