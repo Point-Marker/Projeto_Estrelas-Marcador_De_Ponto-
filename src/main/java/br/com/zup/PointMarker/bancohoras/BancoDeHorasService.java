@@ -62,14 +62,16 @@ public class BancoDeHorasService {
         Funcionario funcionario = funcionarioService.buscarFuncionarioPeloCpf(bancoDeHoras.getFuncionario().getCpf());
         bancoDeHoras.setFuncionario(funcionario);
         if (ValidaHoras.validarHorasEntradaESaida(bancoDeHoras)) {
-            Optional<BancoDeHoras> banco = bancoDeHorasRepository.findById(bancoDeHoras.getId());
-            banco.orElseThrow();
-            banco.get().setEntrada(bancoDeHoras.getEntrada());
-            banco.get().setSaida(bancoDeHoras.getSaida());
-            banco.get().setFuncionario(funcionario);
-            bancoDeHorasRepository.save(banco.get());
-
-            return banco.get();
+            Optional<BancoDeHoras> banco = bancoDeHorasRepository.findByDiaDoTrabalhoAndFuncionario(
+                    bancoDeHoras.getDiaDoTrabalho(), bancoDeHoras.getFuncionario());
+            if(banco.isPresent()){
+                banco.get().setEntrada(bancoDeHoras.getEntrada());
+                banco.get().setSaida(bancoDeHoras.getSaida());
+                banco.get().setFuncionario(funcionario);
+                bancoDeHorasRepository.save(banco.get());
+                return banco.get();
+            }
+        throw new BancoDeHorasNãoEncontradoException("Este Funcionario Não Lançou Horas Neste Dia");
         }
         throw new HoraLimiteEntradaESaidaException("A hora registrada não pode ser antes das 08:00 ou depois das 22:00.");
     }
