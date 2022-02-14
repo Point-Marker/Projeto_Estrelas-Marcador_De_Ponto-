@@ -134,13 +134,13 @@ public class ControllerAdvisor {
     @ExceptionHandler(StatusInvalidoException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public MensagemDeErro manipularMensagemDeErroParaStatusInvalido(StatusInvalidoException statusInvalidoException) {
-        return new MensagemDeErro(statusInvalidoException.getLocalizedMessage());
+        return new MensagemDeErro(statusInvalidoException.getMessage());
     }
 
     @ExceptionHandler(CargoNaoCadastrado.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public MensagemDeErro manipularMensagemDeErroParaCargoNaoEncontrado(CargoNaoCadastrado cargoNaoCadastrado) {
-        return new MensagemDeErro(cargoNaoCadastrado.getLocalizedMessage());
+        return new MensagemDeErro(cargoNaoCadastrado.getMessage());
     }
 
 }
