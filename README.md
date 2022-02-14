@@ -1,4 +1,11 @@
 # Projeto_Estrelas-Marcador_De_Pontos
+<div align="center">
+ 
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/77360662/153928572-adecd44d-d296-40e4-867c-86b5d9f7ca71.gif)
+
+</div>
+ 
+
 <hr/>
 
 # Cadastro de Funcionários
