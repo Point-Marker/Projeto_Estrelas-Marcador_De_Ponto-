@@ -57,8 +57,17 @@ public class BancoDeHorasController {
     }
 
     @GetMapping("/{id}")
-    public List<BancoDeHoras> exibirBancoDeHorasFuncionario(@PathVariable int id) {
-        return bancoDeHorasService.exibirHorasTrabalhadas(id);
+    public List<BancoDeHorasResumoDTO> exibirBancoDeHorasFuncionario(@PathVariable int id) {
+        List<BancoDeHoras> todosBancosDeHorasDoFuncionario = bancoDeHorasService.exibirHorasTrabalhadas(id);
+
+        List<BancoDeHorasResumoDTO> listaResumoBancoDeHoras = new ArrayList<>();
+
+        for (BancoDeHoras refencia : todosBancosDeHorasDoFuncionario) {
+            BancoDeHorasResumoDTO bancoDeHorasResumoDTO = modelMapper.map(refencia, BancoDeHorasResumoDTO.class);
+            listaResumoBancoDeHoras.add(bancoDeHorasResumoDTO);
+        }
+
+        return listaResumoBancoDeHoras;
     }
 
     @GetMapping("/horasextras")
