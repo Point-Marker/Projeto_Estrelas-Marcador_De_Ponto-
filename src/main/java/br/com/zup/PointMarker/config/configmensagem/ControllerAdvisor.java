@@ -32,44 +32,48 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErroValidacao manipularMensagegParaCargoNaoEncontrado(NoSuchElementException exception) {
+    public ErroValidacao manipularMensagemParaCargoNaoEncontrado(NoSuchElementException exception) {
         return new ErroValidacao(exception.getLocalizedMessage(), exception.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public MensagemDeErro manipularMensagegParaDataDeNascimentoForaDoPadraoBrasileiro() {
-        return new MensagemDeErro("de acordo com o seguinte formato: 23/06/2001 -> dd/MM/AAAA.");
+    public MensagemDeErro manipularMensagemParaDataDeNascimentoForaDoPadraoBrasileiro() {
+        return new MensagemDeErro("de acordo com o seguinte formato: 23/06/2001 -> dd/MM/aaaa.");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public MensagemDeErro manipularMensagegParaCPFRepetido() {
+    public MensagemDeErro manipularMensagemParaCPFRepetido() {
         return new MensagemDeErro("Este CPF Já Está Cadastrado.");
     }
 
     @ExceptionHandler(FuncionarioComStatusInativoException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public MensagemDeErro manipularMensagemDeErroParaFuncionarioComStatusInativ(FuncionarioComStatusInativoException statusInativo) {
+    public MensagemDeErro manipularMensagemDeErroParaFuncionarioComStatusInativo(FuncionarioComStatusInativoException
+                                                                                             statusInativo) {
         return new MensagemDeErro(statusInativo.getMessage());
     }
 
     @ExceptionHandler(FuncionarioNaoEncontradoException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public MensagemDeErro manipularMensagemDeErroParaFuncionarioComStatusInativ(FuncionarioNaoEncontradoException naoEncontrado) {
-        return new MensagemDeErro(naoEncontrado.getMessage());
+    public MensagemDeErro manipularMensagemDeErroParaFuncionarioNaoEncontrado(FuncionarioNaoEncontradoException
+                                                                                    funcionarioNaoEncontrado) {
+        return new MensagemDeErro(funcionarioNaoEncontrado.getMessage());
     }
 
     @ExceptionHandler(AumentoDeSalarioInvalidoException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public MensagemDeErro manipularMensagemDeErroParaFuncionarioComStatusInativ(AumentoDeSalarioInvalidoException valorInvalido) {
-        return new MensagemDeErro(valorInvalido.getMessage());
+    public MensagemDeErro manipularMensagemDeErroParaAumentoDeSalarioInvalido(AumentoDeSalarioInvalidoException
+                                                                                          salarioInvalido) {
+        return new MensagemDeErro(salarioInvalido.getMessage());
     }
 
     @ExceptionHandler(HoraLimiteEntradaESaidaException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public MensagemDeErro manipularMensagemDeErroParaHoraLimite(HoraLimiteEntradaESaidaException horaLimiteEntradaESaidaException) {
-        return new MensagemDeErro(horaLimiteEntradaESaidaException.getMessage());
+    public MensagemDeErro manipularMensagemDeErroParaHoraLimite(HoraLimiteEntradaESaidaException
+                                                                            horaLimite) {
+        return new MensagemDeErro(horaLimite.getMessage());
     }
 
     @ExceptionHandler(HorarioInvalidoException.class)
@@ -80,54 +84,63 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(CargoJaCadastradoException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public MensagemDeErro cargoJaCadastrado(CargoJaCadastradoException cargoJaCadastradoException) {
+    public MensagemDeErro manipularMensagemDeErroParaCargoJaCadastrado(CargoJaCadastradoException
+                                                                                   cargoJaCadastradoException) {
         return new MensagemDeErro(cargoJaCadastradoException.getMessage());
     }
 
     @ExceptionHandler(CargaHorariaUltrapassadaException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public MensagemDeErro voceExcedeuAsHorasTrabalhadas(CargaHorariaUltrapassadaException
+    public MensagemDeErro manipularMensagemDeErroParaCargaHorariaUltrapassadaException(CargaHorariaUltrapassadaException
                                                                 exceptionCargaHoraria) {
         return new MensagemDeErro(exceptionCargaHoraria.getMessage());
     }
 
-    @ExceptionHandler(TotalDeHorasTrabalhadasUltrapassadaException.class)
+    @ExceptionHandler(TotalDeHorasUltrapassadaException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public MensagemDeErro aSuaCargaHoraria(TotalDeHorasTrabalhadasUltrapassadaException exception) {
-        return new MensagemDeErro(exception.getMessage());
+    public MensagemDeErro manipularMensagemDeErroParaTotalDeHorasUltrapassada(TotalDeHorasUltrapassadaException
+                                                                                          totalDeHorasUltrapassada) {
+        return new MensagemDeErro(totalDeHorasUltrapassada.getMessage());
     }
 
     @ExceptionHandler(HoraJaInseridaNoSistemaException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public MensagemDeErro horaJaInseridaNoSistema(HoraJaInseridaNoSistemaException
+    public MensagemDeErro manipularMensagemDeErroParaHoraJaInseridaNoSistema(HoraJaInseridaNoSistemaException
                                                           horaJaInseridaNoSistemaException) {
         return new MensagemDeErro(horaJaInseridaNoSistemaException.getMessage());
     }
 
     @ExceptionHandler(BancoDeHorasNãoEncontradoException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public MensagemDeErro bancoDeHorasNaoEncontrado(BancoDeHorasNãoEncontradoException
+    public MensagemDeErro manipularMensagemDeErroParaBancoDeHorasNaoEncontrado(BancoDeHorasNãoEncontradoException
                                                             bancoDeHorasNãoEncontradoException) {
         return new MensagemDeErro(bancoDeHorasNãoEncontradoException.getMessage());
     }
 
     @ExceptionHandler(LimiteAumentoSalarioException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public MensagemDeErro limiteAumentoSalario(LimiteAumentoSalarioException limiteAumentoSalarioException) {
+    public MensagemDeErro manipularMensagemDeErroParaLimiteAumentoSalario(LimiteAumentoSalarioException
+                                                                                      limiteAumentoSalarioException) {
         return new MensagemDeErro(limiteAumentoSalarioException.getMessage());
     }
 
     @ExceptionHandler(MaisDeCinquentaHorasTrabalhadasException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public MensagemDeErro maisDeCinquentaHoras(MaisDeCinquentaHorasTrabalhadasException
+    public MensagemDeErro manipularMensagemDeErroParaMaisDeCinquentaHoras(MaisDeCinquentaHorasTrabalhadasException
                                                        maisDeCinquentaHorasTrabalhadasException) {
         return new MensagemDeErro(maisDeCinquentaHorasTrabalhadasException.getMessage());
     }
 
     @ExceptionHandler(StatusInvalidoException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public MensagemDeErro statusInvalido(StatusInvalidoException statusInvalidoException) {
-        return new MensagemDeErro(statusInvalidoException.getLocalizedMessage());
+    public MensagemDeErro manipularMensagemDeErroParaStatusInvalido(StatusInvalidoException statusInvalidoException) {
+        return new MensagemDeErro(statusInvalidoException.getMessage());
+    }
+
+    @ExceptionHandler(CargoNaoCadastrado.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public MensagemDeErro manipularMensagemDeErroParaCargoNaoEncontrado(CargoNaoCadastrado cargoNaoCadastrado) {
+        return new MensagemDeErro(cargoNaoCadastrado.getMessage());
     }
 
 }

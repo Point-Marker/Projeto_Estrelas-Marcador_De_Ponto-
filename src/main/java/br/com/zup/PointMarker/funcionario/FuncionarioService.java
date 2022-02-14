@@ -1,7 +1,7 @@
 package br.com.zup.PointMarker.funcionario;
 
 import br.com.zup.PointMarker.cargo.Cargo;
-import br.com.zup.PointMarker.cargo.CargoRepository;
+import br.com.zup.PointMarker.cargo.CargoService;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.*;
 import br.com.zup.PointMarker.usuario.Usuario;
@@ -17,23 +17,23 @@ import java.util.Optional;
 public class FuncionarioService {
 
     private FuncionarioRepository funcionarioRepository;
-    private CargoRepository cargoRepository;
+    private CargoService cargoService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    public FuncionarioService(FuncionarioRepository funcionarioRepository, CargoRepository cargoRepository,
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, CargoService cargoService,
                               BCryptPasswordEncoder bCryptPasswordEncoder, UsuarioRepository usuarioRepository) {
         this.funcionarioRepository = funcionarioRepository;
-        this.cargoRepository = cargoRepository;
+        this.cargoService = cargoService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.usuarioRepository = usuarioRepository;
     }
 
     public Funcionario salvarFuncionario(Funcionario entradafuncionario) {
-        Optional<Cargo> cargoOptional = cargoRepository.findById(entradafuncionario.getCargo().getId());
-        cargoOptional.orElseThrow();
-        entradafuncionario.setCargo(cargoOptional.get());
+
+        Cargo cargo = cargoService.buscarCargo(entradafuncionario.getCargo().getId());
+        entradafuncionario.setCargo(cargo);
 
         Optional<Usuario> usuarioOptional = usuarioRepository.findByNomeUsuario(entradafuncionario.getUsuario().getNomeUsuario());
 
@@ -112,13 +112,14 @@ public class FuncionarioService {
         Funcionario funcionario = buscarFuncionario(idFuncionario);
 
         if (funcionario.getStatus().equals(Status.ATIVO)) {
+            Cargo cargo = cargoService.buscarCargo(idCargo.getId());
 
-            Optional<Cargo> cargoOptional = cargoRepository.findById(idCargo.getId());
-            funcionario.setCargo(cargoOptional.get());
-            funcionario.setSalario(cargoOptional.get().getSalario());
+            funcionario.setCargo(cargo);
+            funcionario.setSalario(cargo.getSalario());
             funcionarioRepository.save(funcionario);
+
             return funcionario;
-        }else if (funcionario.getStatus().equals(Status.INATIVO)){
+        } else if (funcionario.getStatus().equals(Status.INATIVO)) {
             throw new FuncionarioComStatusInativoException("Este Funcionario está INATIVO.");
         }
         return funcionario;

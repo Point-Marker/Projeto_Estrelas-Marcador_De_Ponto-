@@ -4,8 +4,10 @@ import br.com.zup.PointMarker.bancohoras.dtos.AtualizarHorasTrabalhadasDTOs.Atua
 import br.com.zup.PointMarker.bancohoras.dtos.AtualizarHorasTrabalhadasDTOs.AtualizarHorasTrabalhadasSaidaDTO;
 import br.com.zup.PointMarker.bancohoras.dtos.ResumoSaidaDTO.BancoDeHorasResumoDTO;
 import br.com.zup.PointMarker.bancohoras.dtos.cadastrodebancodehorasdto.CadastroEntradaBancoDeHorasDTO;
+import br.com.zup.PointMarker.bancohoras.dtos.horasExtras.BancoDeHorasExtrasDoFuncionario;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.dtos.ResumoDTO.ResumoFuncionarioDTO;
+import br.com.zup.PointMarker.funcionario.dtos.horasextras.HorasExtrasDoFuncionarioDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,8 +50,8 @@ public class BancoDeHorasController {
         List<BancoDeHoras> todosBancosDeHoras = bancoDeHorasService.exibirTodosBancosDeHoras();
         List<BancoDeHorasResumoDTO> listaResumoBancoDeHoras = new ArrayList<>();
 
-        for (BancoDeHoras refencia : todosBancosDeHoras) {
-            BancoDeHorasResumoDTO bancoDeHorasResumoDTO = modelMapper.map(refencia, BancoDeHorasResumoDTO.class);
+        for (BancoDeHoras referencia : todosBancosDeHoras) {
+            BancoDeHorasResumoDTO bancoDeHorasResumoDTO = modelMapper.map(referencia, BancoDeHorasResumoDTO.class);
             listaResumoBancoDeHoras.add(bancoDeHorasResumoDTO);
         }
 
@@ -57,13 +59,40 @@ public class BancoDeHorasController {
     }
 
     @GetMapping("/{id}")
-    public List<BancoDeHoras> exibirBancoDeHorasFuncionario(@PathVariable int id) {
-        return bancoDeHorasService.exibirHorasTrabalhadas(id);
+    public List<BancoDeHorasResumoDTO> exibirBancoDeHorasFuncionario(@PathVariable int id) {
+        List<BancoDeHoras> todosBancosDeHorasDoFuncionario = bancoDeHorasService.exibirHorasTrabalhadas(id);
+
+        List<BancoDeHorasResumoDTO> listaResumoBancoDeHoras = new ArrayList<>();
+
+        for (BancoDeHoras referencia : todosBancosDeHorasDoFuncionario) {
+            BancoDeHorasResumoDTO bancoDeHorasResumoDTO = modelMapper.map(referencia, BancoDeHorasResumoDTO.class);
+            listaResumoBancoDeHoras.add(bancoDeHorasResumoDTO);
+        }
+
+        return listaResumoBancoDeHoras;
     }
 
     @GetMapping("/horasextras")
-    public List<BancoDeHoras> exibirHorasExtrasTrabalhadas(@RequestParam LocalDate mesDeFiltro) {
-        return bancoDeHorasService.horasExtrasTrabalhadas(mesDeFiltro);
+    public List<BancoDeHorasExtrasDoFuncionario> exibirHorasExtrasTrabalhadas(@RequestParam String dataDoTrabalho) {
+        LocalDate diaDoTrabalho = LocalDate.parse(dataDoTrabalho);
+
+        List<BancoDeHoras> listaComHorasExtras = bancoDeHorasService.horasExtrasTrabalhadas(diaDoTrabalho);
+        List<BancoDeHorasExtrasDoFuncionario> listaResumoBancoDeHoras = new ArrayList<>();
+
+        for (BancoDeHoras referencia : listaComHorasExtras) {
+            Funcionario funcionario = referencia.getFuncionario();
+            HorasExtrasDoFuncionarioDTO horasExtrasDoFuncionarioDTO = modelMapper.map(funcionario,
+                    HorasExtrasDoFuncionarioDTO.class);
+
+            BancoDeHorasExtrasDoFuncionario bancoComHorasExtras = modelMapper.map(referencia,
+                    BancoDeHorasExtrasDoFuncionario.class);
+
+            bancoComHorasExtras.setFuncionario(horasExtrasDoFuncionarioDTO);
+            listaResumoBancoDeHoras.add(bancoComHorasExtras);
+        }
+
+        return listaResumoBancoDeHoras;
+
     }
 
     @PutMapping
