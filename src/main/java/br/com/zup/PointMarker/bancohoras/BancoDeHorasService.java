@@ -3,7 +3,7 @@ package br.com.zup.PointMarker.bancohoras;
 import br.com.zup.PointMarker.enums.Status;
 import br.com.zup.PointMarker.exceptions.BancoDeHorasNãoEncontradoException;
 import br.com.zup.PointMarker.exceptions.HoraLimiteEntradaESaidaException;
-import br.com.zup.PointMarker.exceptions.TotalDeHorasTrabalhadasUltrapassadaException;
+import br.com.zup.PointMarker.exceptions.TotalDeHorasUltrapassadaException;
 import br.com.zup.PointMarker.funcionario.Funcionario;
 import br.com.zup.PointMarker.funcionario.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class BancoDeHorasService {
             bancoDeHoras.setDiaDoTrabalho(LocalDate.now());
             return bancoDeHorasRepository.save(bancoDeHoras);
         }
-        throw new TotalDeHorasTrabalhadasUltrapassadaException("Você excedeu seu total hora de trabalho neste mês.");
+        throw new TotalDeHorasUltrapassadaException("Você excedeu seu total hora de trabalho neste mês.");
     }
 
 
