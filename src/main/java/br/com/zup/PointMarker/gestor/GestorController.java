@@ -49,7 +49,7 @@ public class GestorController {
 
     @PostMapping("/cadastro/cargos")
     @ResponseStatus(HttpStatus.CREATED)
-    public CargoCadastroSaidaDTO cadastrarCargo(@RequestBody CargoCadastroEntradaDTO cadastroEntradaDTO) {
+    public CargoCadastroSaidaDTO cadastrarCargo(@RequestBody @Valid CargoCadastroEntradaDTO cadastroEntradaDTO) {
 
         Cargo cargo = modelMapper.map(cadastroEntradaDTO, Cargo.class);
         gestorService.cadastrarCargo(cargo);
