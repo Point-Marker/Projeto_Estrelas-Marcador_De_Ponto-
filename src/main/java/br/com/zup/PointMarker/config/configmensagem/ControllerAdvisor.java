@@ -130,4 +130,10 @@ public class ControllerAdvisor {
         return new MensagemDeErro(statusInvalidoException.getLocalizedMessage());
     }
 
+    @ExceptionHandler(CargoNaoCadastrado.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public MensagemDeErro manipularMensagemDeErroParaCargoNaoEncontrado(CargoNaoCadastrado cargoNaoCadastrado) {
+        return new MensagemDeErro(cargoNaoCadastrado.getLocalizedMessage());
+    }
+
 }
