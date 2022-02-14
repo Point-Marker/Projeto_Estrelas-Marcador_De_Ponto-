@@ -83,12 +83,8 @@ public class BancoDeHorasService {
             Funcionario funcionario = funcionarioService.buscarFuncionario(referencia.getFuncionario().getId());
 
             if (funcionario.getStatus().equals(Status.ATIVO)) {
-                if (funcionario.getTotalHorasTrabalhadas() > 50) {
-                    int horasExtras = referencia.getFuncionario().getTotalHorasTrabalhadas() - 50;
-                    funcionario.setTotalHorasTrabalhadas(horasExtras);
                     referencia.setFuncionario(funcionario);
                     bancoDeHorasRepository.save(referencia);
-                }
             }
             return listaDeHorasExtras;
         }
