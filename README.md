@@ -228,7 +228,7 @@
 ```
 
 Rode o projeto e acesse o Swagger através deste link:
-http://localhost:8080/swagger-ui/index/html#/
+localhost:8080/swagger-ui/index.html#
 
 Segue o arquivo com as coleções do Postman para que você teste a nossa aplicação:
 [Projeto-Final_Estrelas.postman_collection.zip](https://github.com/Point-Marker/Projeto_Estrelas-Marcador_De_Ponto-/files/8063113/Projeto-Final_Estrelas.postman_collection.zip)
